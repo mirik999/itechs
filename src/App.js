@@ -1,21 +1,37 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Route, Switch } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { IntlProvider } from 'react-intl';
+import messages from './messages';
+//components
+import MainPage from './components/MainPage/MainPage';
+import SideNavBar from './components/LeftNavBar/LeftNavBar';
+
 
 class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
-    );
-  }
+	constructor(props) {
+		super(props)
+	}
+
+	render() {
+		const { location, lang } = this.props;
+		return (
+			<IntlProvider locale={lang} messages={messages[lang]}>
+				<div className="container-fluid">
+					<Switch>
+						<Route exact location={location} path="/" component={MainPage} />
+					</Switch>
+				</div>
+			</IntlProvider>
+		);
+	}
 }
 
-export default App;
+function mapStateToProps(state) {
+	return {
+		lang: state.locale.lang
+	}
+}
+
+
+export default connect(mapStateToProps)(App);
