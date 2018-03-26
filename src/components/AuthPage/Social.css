@@ -1,0 +1,12 @@
+.loginbtn {
+	border: none;
+}
+
+@media screen and (max-width: 400px) {
+	.wp {
+		width: 75px;
+	}
+	.loginbtn {
+		margin: 10px 2px 0 2px;
+	}
+}
