@@ -42,7 +42,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "deploy-prod": "yarn build && git add . && git commit -m 'deploy new release' && git push origin server",
+    "deploy-dev": "git add . && git commit -m 'deploy new release dev git' && git push origin master"
   },
   "devDependencies": {
     "webpack": "^4.1.1"
