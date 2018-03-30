@@ -15,13 +15,13 @@ export default {
 			return axios.post('/api/auth/gglogin', { data }).then(res => res.data.user)
 		},
 		editProfile: (data) => {
-			return axios.put('/api/profile/editing/:id', { data })
+			return axios.put(`/api/profile/editing/:email`, { data })
 		},
-		getProfile: (data) => {
-			return axios.get(`/api/profile/get-profile/${data}`, { data }).then(res => res.data.profile)
+		getProfile: (email) => {
+			return axios.get(`/api/profile/get-profile/${email}`).then(res => res.data.profile)
 		},
 		changeCover: (data) => {
-			return axios.put('/api/profile/change-cover/:id', { data }).then(res => res.data.profile)
+			return axios.put('/api/profile/change-cover/:email', { data }).then(res => res.data.profile)
 		}
 	},
 	article: {

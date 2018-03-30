@@ -54,7 +54,7 @@ class ArticleCard extends Component {
 		const { liked } = this.state;
 		
 		return (
-			<div className="col-12 col-md-10 col-lg-8 col-xl-6 my-2 animated bounceInLeft">
+			<div className="col-12 col-md-10 col-lg-8 col-xl-6 my-2">
 				<section className="artile-card" style={styles.card}>
 
 					<section style={styles.cardHeader}>

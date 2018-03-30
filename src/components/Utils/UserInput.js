@@ -16,7 +16,8 @@ class UserInput extends Component {
 	}
 
 	render() {
-		const { label, icon, type, name, value, errorLabel, className } = this.props;
+		const { label, icon, type, name, value, errorLabel, className, disabled, defaultValue } = this.props;
+
 		return (
 			<FormattedMessage id={ label }>
 				{
@@ -24,7 +25,8 @@ class UserInput extends Component {
 						<Fragment>
 							<Input
 								label={txt} icon={icon} type={type} name={name} value={value} onChange={this.onChange}
-								autoComplete="off" className={className}
+								autoComplete="off" className={className} disabled={disabled} defaultValue={defaultValue}
+								errorlabel={errorLabel}
 							/>
 							<span className="text-danger small float-right" style={styles.error}>{ errorLabel ? errorLabel : " " }</span><br />
 						</Fragment>
@@ -48,9 +50,11 @@ UserInput.propTypes = {
 	type: PropTypes.string,
 	name: PropTypes.string,
 	className: PropTypes.string,
-	errorLabel: PropTypes.object,
-	value: PropTypes.oneOfType([ PropTypes.string, PropTypes.object ]).isRequired,
+	errorLabel: PropTypes.oneOfType([ PropTypes.string, PropTypes.object ]),
+	value: PropTypes.oneOfType([ PropTypes.string, PropTypes.object ]),
 	onChange: PropTypes.func,
+	disabled: PropTypes.bool,
+	defaultValue: PropTypes.string,
 };
 
 UserInput.defaultProps = {
@@ -58,6 +62,7 @@ UserInput.defaultProps = {
 	icon: "user",
 	type: "text",
 	name: "input",
+	value: ""
 };
 
 function mapStateToProps(state) {
