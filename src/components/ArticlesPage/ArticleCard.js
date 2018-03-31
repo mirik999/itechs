@@ -102,6 +102,7 @@ class ArticleCard extends Component {
 						<Tooltip id="tooltip-icon" title={this.txt.shareOnFb}>
 							<Button tag="a" floating gradient="blue" size="sm"><Fa icon="share-alt" /></Button>
 						</Tooltip>
+						<span>test</span>
 					</section>
 
 				</section>
