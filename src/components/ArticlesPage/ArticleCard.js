@@ -39,6 +39,9 @@ class ArticleCard extends Component {
 
 
 	onVote = () => {
+
+		if (!_.isEmpty(this.props.user)) return null;
+		
 		const data = {
 			id: this.props.id,
 			name: this.props.user.username
