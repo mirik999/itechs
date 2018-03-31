@@ -39,9 +39,10 @@ class ArticleCard extends Component {
 
 
 	onVote = () => {
+		if (_.isEmpty(this.props.user)) {
+			return null;
+		}
 
-		if (!_.isEmpty(this.props.user)) return null;
-		
 		const data = {
 			id: this.props.id,
 			name: this.props.user.username
@@ -55,6 +56,8 @@ class ArticleCard extends Component {
 	render() {
 		const { avatar, author, tags, added, title, content } = this.props;
 		const { liked } = this.state;
+		
+		console.log(!_.isEmpty(this.props.user))
 		
 		return (
 			<div className="col-12 col-md-10 col-lg-8 col-xl-6 my-2">
