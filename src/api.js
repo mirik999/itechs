@@ -15,13 +15,16 @@ export default {
 			return axios.post('/api/auth/gglogin', { data }).then(res => res.data.user)
 		},
 		editProfile: (data) => {
-			return axios.put(`/api/profile/editing/:email`, { data })
+			return axios.put(`/api/profile/editing/:email`, { data }).then(res => res.data.userprofile)
 		},
 		getProfile: (email) => {
-			return axios.get(`/api/profile/get-profile/${email}`).then(res => res.data.profile)
+			return axios.get(`/api/profile/get-profile/${email}`).then(res => res.data.userprofile)
 		},
 		changeCover: (data) => {
-			return axios.put('/api/profile/change-cover/:email', { data }).then(res => res.data.profile)
+			return axios.put('/api/profile/change-cover/:email', { data }).then(res => res.data.userprofile)
+		},
+		follow: (data) => {
+			return axios.post('/api/profile/follow-user', { data }).then(res => res.data.userprofile)
 		}
 	},
 	article: {
@@ -31,8 +34,8 @@ export default {
 		getAllArticles: () => {
 			return axios.get('/api/article/get-all-articles').then(res => res.data.articles)
 		},
-		getOneArticles: (id) => {
-			return axios.get('/api/article/get-one-article/:id', { id }).then(res => res.data.oneArticle)
+		getArticle: (id) => {
+			return axios.get(`/api/article/get-one-article/${id}`).then(res => res.data.oneArticle)
 		},
 		like: (data) => {
 			return axios.post('/api/article/like', { data }).then(res => res.data.like)

@@ -26,14 +26,14 @@ export const getAllArticles = () => (dispatch) => {
 }
 
 //get one article
-export const getOneArticlesDispatch = (oneArticle) => ({
+export const getArticleDispatch = (oneArticle) => ({
 	type: GET_ONE_ARTICLE,
 	oneArticle
 })
 
-export const getOneArticles = (id) => (dispatch) => {
-	return api.article.getOneArticles(id).then(oneArticle => {
-		dispatch(getOneArticlesDispatch(oneArticle))
+export const getArticle = (id) => (dispatch) => {
+	return api.article.getArticle(id).then(article => {
+		dispatch(getArticleDispatch(article))
 	})
 }
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import registerServiceWorker from './registerServiceWorker';
 import { BrowserRouter, Route } from 'react-router-dom';
 import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
@@ -19,9 +20,10 @@ import '../node_modules/nprogress/nprogress.css';
 // user components
 import rootReducer from './reducer/rootReducer';
 import App from './App';
+//actions
 import { setlocale } from './actions/locale';
 import { LoginDispatch } from './actions/user';
-import registerServiceWorker from './registerServiceWorker';
+
 // initial locale languages
 addLocaleData(en)
 addLocaleData(ru)

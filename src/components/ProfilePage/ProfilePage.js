@@ -6,10 +6,8 @@ import ProvateProfile from './PrivateProfile';
 import Wrapper from '../Utils/Wrapper';
 //actions
 import { getAllArticles } from "../../actions/article";
-import { getProfile } from '../../actions/profile';
 //selector
 import { articlesSelector } from '../../reducer/article';
-import { profileSelector } from '../../reducer/profile';
 
 
 class ProfilePage extends Component {
@@ -20,18 +18,18 @@ class ProfilePage extends Component {
 
 	componentDidMount() {
 		this.props.getAllArticles()
-			.then(this.props.getProfile(this.props.user.email))
 			.then(() => NProgress.done())
 	}
 
 	render() {
-		const { user, articles, profile } = this.props;
+		const { articles, profile } = this.props;
+		console.log(profile)
 
-		if (Object.keys(this.props.profile).length === 0) return <div></div>
+		if (Object.keys(profile).length === 0) return <div></div>
 
 		return (
 			<Wrapper>
-				<ProvateProfile user={user} articles={articles} profile={profile} />
+				<ProvateProfile articles={articles} profile={profile} />
 			</Wrapper>
 		);
 	}
@@ -39,10 +37,8 @@ class ProfilePage extends Component {
 
 function mapStateToProps(state) {
 	return {
-		user: state.user,
-		articles: articlesSelector(state),
-		profile: profileSelector(state)
+		articles: articlesSelector(state)
 	}
 }
 
-export default connect(mapStateToProps, { getAllArticles, getProfile })(ProfilePage);
+export default connect(mapStateToProps, { getAllArticles })(ProfilePage);

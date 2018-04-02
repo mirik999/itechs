@@ -6,6 +6,7 @@ import Tooltip from 'material-ui/Tooltip';
 import { FormattedMessage } from 'react-intl';
 import Dropzone from 'react-dropzone';
 import sha1 from 'sha1';
+import _ from 'lodash';
 import superagent from 'superagent';
 import NProgress from 'nprogress';
 import validator from 'validator';
@@ -102,7 +103,7 @@ class PrivateProfile extends Component {
 			const data = {
 				bgImg,
 				smallImage,
-				email: this.props.user.email
+				email: this.props.profile.email
 			}
 			
 			if (Object.keys(this.state.errors).length === 0) {
@@ -132,7 +133,7 @@ class PrivateProfile extends Component {
 			this.setState({ errors });
 			if (Object.keys(errors).length === 0) {
 				const data = {
-					email: this.props.user.email,
+					email: this.props.profile.email,
 					about: this.state.data.about,
 					contact: this.state.data.contact,
 					portfolio: this.state.data.portfolio,
@@ -147,28 +148,43 @@ class PrivateProfile extends Component {
 
 	validate = (data) => {
 		const errors = {};
-		if (!validator.isLength(data.about, {min:0, max: 35})) errors.about = this.txt.aboutError;
-		if (!validator.isLength(data.contact, {min:0, max: 35})) errors.contact = this.txt.contactError;
-		if (!validator.isURL(data.portfolio, { protocols: ['http','https']})) errors.portfolio = this.txt.ptfError;
-		if (!validator.isURL(data.github, { protocols: ['http','https']})) errors.github = this.txt.githubError;
+		if (data.about && !validator.isLength(JSON.stringify(data.about), {min:0, max: 35})) {
+			errors.about = this.txt.aboutError;
+		}
+		if (data.contact && !validator.isLength(JSON.stringify(data.contact), {min:0, max: 35})) {
+			errors.contact = this.txt.contactError;
+		}
+		if (data.portfolio && (!validator.isURL(data.portfolio))) {
+			errors.portfolio = this.txt.ptfError;
+		}
+		if (data.github && (!validator.isURL(data.github))) {
+			errors.github = this.txt.githubError;
+		}
+		if (data.github && (!validator.contains(data.github, "github.com"))) {
+			errors.github = this.txt.githubError;
+		}
 		return errors;
 	}
 
 	onChange = (e) => {
-		this.setState({ ...this.state, data: { ...this.state.data, [e.target.name]: e.target.value } })
+		this.setState({
+			...this.state,
+			data: { ...this.state.data, [e.target.name]: e.target.value },
+			errors: { ...this.state.errors, [e.target.name]: '' }
+		})
 	}
 
 	renderNumbers = (category) => {
-		const { articles, user } = this.props;
+		const { articles, profile } = this.props;
 		if (articles && Object.keys(articles).length !== 0) {
-			if (category === "articleNums") return articles.filter(article => article.author === user.username).length
+			if (category === "articleNums") return articles.filter(article => article.author === profile.username).length
 			if (category === "commentNums") return articles.map(article => article.comments.map(art => art.author.name ===
-				user.username)).length
+				profile.username)).length
 		}
 	}
 
 	render() {
-		const { user } = this.props;
+		const { profile } = this.props;
 		const { edit, data, errors } = this.state;
 		const editable = edit && (Object.keys(errors).length === 0);
 
@@ -193,7 +209,7 @@ class PrivateProfile extends Component {
 						</Dropzone>
 						<CardBody>
 							<section className="float-left" style={styles.profileImageWrapper}>
-								<UserImage image={user.useravatar}
+								<UserImage image={profile.useravatar}
 								           load2image=" "
 								           alt="user profile"
 								           className="img-thumbnail"
@@ -201,8 +217,8 @@ class PrivateProfile extends Component {
 								/>
 							</section>
 							<section className="float-left" style={styles.contact}>
-								<span className="text-secondary"><Fa icon="user-secret"/> {user.username}</span><br/>
-								<small className="text-secondary font-weight-bold"><Fa icon="at"/> {user.email}</small>
+								<span className="text-secondary"><Fa icon="user-secret"/> {profile.username}</span><br/>
+								<small className="text-secondary font-weight-bold"><Fa icon="at"/> {profile.email}</small>
 							</section>
 							<section className="float-right d-none d-sm-block" style={styles.edit}>
 								{

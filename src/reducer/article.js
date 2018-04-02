@@ -1,15 +1,15 @@
 import { createSelector } from 'reselect';
-import _ from "lodash";
+import _ from 'lodash';
 import { ADD_NEW_ARTICLE, GET_ALL_ARTICLES, GET_ONE_ARTICLE } from '../types';
 
 export default function article(state = {}, action = {}) {
 	switch(action.type) {
 		case ADD_NEW_ARTICLE:
-			return Object.assign({}, action.article)
+			return action.article
 		case GET_ALL_ARTICLES:
-			return Object.assign({}, action.articles)
+			return action.articles
 		case GET_ONE_ARTICLE:
-			return Object.assign({}, action.oneArticle)
+			return action.oneArticle
 		default:
 			return state;
 	}
@@ -20,7 +20,7 @@ const allArticles = state => state.article
 
 export const articlesSelector = createSelector(
 	allArticles,
-	article => _.values(article)
+	article => [...article]
 );
 
 // each article

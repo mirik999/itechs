@@ -5,11 +5,14 @@ import NProgress from 'nprogress';
 //user components
 import Wrapper from '../Utils/Wrapper';
 import ArticleCard from './ArticleCard';
+import ArticleSearchPanel from "./ArticleSearchPanel";
 //actions
 import { getAllArticles } from '../../actions/article';
+import { getProfile } from '../../actions/profile';
 //selectors
 import { articlesSelector } from "../../reducer/article";
-import ArticleSearchPanel from "./ArticleSearchPanel";
+import { profileSelector } from "../../reducer/profile";
+
 
 function searching(word) {
 	return function(article) {
@@ -33,6 +36,8 @@ class ArticlesPage extends Component {
 		super(props);
 
 		this.state = {
+			articles: [],
+			profile: {},
 			searchTerm: ''
 		}
 
@@ -40,15 +45,18 @@ class ArticlesPage extends Component {
 		this.update = this.update.bind(this);
 	}
 
-	componentWillMount() {
+	UNSAFE_componentWillMount() {
 		NProgress.start();
 	}
 
 	componentDidMount() {
 		this.props.getAllArticles()
-			.then(() => {
-				NProgress.done();
-			})
+			.then(() => this.props.getProfile(this.props.user.email)
+				.then(() => this.setState({
+					articles: this.props.articles,
+					profile: this.props.profile
+				}, () => NProgress.done()))
+			)
 	}
 
 	handleSearchFilter = (word) => {
@@ -62,8 +70,10 @@ class ArticlesPage extends Component {
 	}
 
 	render() {
-		const { articles, user, lang } = this.props;
-		const { searchTerm } = this.state;
+		const { user, lang } = this.props;
+		const { articles, profile, searchTerm } = this.state;
+
+		if (!articles && !profile) return <div></div>;
 
 		return (
 			<Wrapper>
@@ -74,17 +84,13 @@ class ArticlesPage extends Component {
 								return (
 									<ArticleCard
 										key={idx}
-									  id={article._id}
-			              content={article.content}
-			              avatar={article.avatar}
-			              image={article.image}
-			              author={article.author}
-			              tags={article.tags}
-			              title={article.title}
-			              added={article.added}
+										id={article._id}
+										article={article}
+										articles={articles}
 										user={user}
 										update={this.update}
 										lang={lang}
+										profile={profile}
 									/>
 								)
 							})
@@ -104,9 +110,10 @@ function mapStateToProps(state) {
 	return {
 		lang: state.locale.lang,
 		articles: articlesSelector(state),
+		profile: profileSelector(state),
 		user: state.user
 	}
 }
 
 
-export default connect(mapStateToProps, { getAllArticles })(ArticlesPage);
+export default connect(mapStateToProps, { getAllArticles, getProfile })(ArticlesPage);

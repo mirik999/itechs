@@ -21,6 +21,11 @@ export const getProfileDispatch = (profile) => ({
 // CHANGE PROFILE COVER
 export const changeCover = (data) => (dispatch) => {
 	return api.user.changeCover(data).then(profile => {
-		getProfileDispatch(profile)
+		dispatch(getProfileDispatch(profile))
 	})
+}
+
+// FOLLOW USER
+export const follow = (data) => (dispatch) => {
+	return api.user.follow(data)
 }
