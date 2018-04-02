@@ -20,7 +20,7 @@ class ArticleCard extends Component {
 	}
 
 	render() {
-		const { article, id, user, lang, profile } = this.props;
+		const { article, id, lang, profile } = this.props;
 
 		return (
 			<div className="col-12 col-md-10 col-lg-8 col-xl-6 my-2">
@@ -56,7 +56,7 @@ class ArticleCard extends Component {
 					</section>
 
 					<section style={styles.cardFooter}>
-						<LikeShareButtons article={article} user={user} lang={lang} profile={profile} />
+						<LikeShareButtons article={article} lang={lang} profile={profile} />
 					</section>
 
 				</section>

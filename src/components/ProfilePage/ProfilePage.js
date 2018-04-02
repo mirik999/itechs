@@ -6,26 +6,28 @@ import ProvateProfile from './PrivateProfile';
 import Wrapper from '../Utils/Wrapper';
 //actions
 import { getAllArticles } from "../../actions/article";
+import { getProfile } from '../../actions/profile';
 //selector
 import { articlesSelector } from '../../reducer/article';
+import { profileSelector } from '../../reducer/profile';
 
 
 class ProfilePage extends Component {
 
-	componentWillMount() {
+	UNSAFE_componentWillMount() {
 		NProgress.start();
 	}
 
 	componentDidMount() {
 		this.props.getAllArticles()
+			.then(this.props.getProfile(this.props.user.email))
 			.then(() => NProgress.done())
 	}
 
 	render() {
 		const { articles, profile } = this.props;
-		console.log(profile)
 
-		if (Object.keys(profile).length === 0) return <div></div>
+		if (Object.keys(articles).length === 0 && Object.keys(profile).length === 0) return <div></div>
 
 		return (
 			<Wrapper>
@@ -37,8 +39,10 @@ class ProfilePage extends Component {
 
 function mapStateToProps(state) {
 	return {
-		articles: articlesSelector(state)
+		articles: articlesSelector(state),
+		profile: profileSelector(state),
+		user: state.user
 	}
 }
 
-export default connect(mapStateToProps, { getAllArticles })(ProfilePage);
+export default connect(mapStateToProps, { getAllArticles, getProfile })(ProfilePage);

@@ -23,13 +23,12 @@ class PrivateProfile extends Component {
 		super(props);
 
 		this.state = {
-			data: {
+			articles: [],
+			profile: {
 				about: '',
 				contact: '',
 				portfolio: '',
 				github: '',
-				bgImg: '',
-				smallImage: ''
 			},
 			edit: true,
 			errors: {}
@@ -53,20 +52,19 @@ class PrivateProfile extends Component {
 	}
 
 	static getDerivedStateFromProps(nextProps, prevState) {
-		if (nextProps.profile !== prevState.data) {
+		if (nextProps.profile !== prevState.profile || nextProps.articles !== prevState.articles) {
 			return {
 				...prevState,
-				data: { ...nextProps.profile }
+				profile: { ...nextProps.profile },
+				articles: nextProps.articles
 			}
 		}
 		return null;
 	}
 
 	componentDidMount() {
-		const {profile} = this.props;
-		this.setState({
-			data: { ...profile	}
-		})
+		const {profile, articles} = this.props;
+		this.setState({ profile, articles })
 	}
 
 	uploadFile = (files) => {
@@ -103,7 +101,7 @@ class PrivateProfile extends Component {
 			const data = {
 				bgImg,
 				smallImage,
-				email: this.props.profile.email
+				email: this.state.profile.email
 			}
 			
 			if (Object.keys(this.state.errors).length === 0) {
@@ -125,20 +123,15 @@ class PrivateProfile extends Component {
 	}
 
 	onSave = (e) => {
+		const { email, about, contact, portfolio, github } = this.state.profile;
 		this.setState((prevState) => {
 			return { edit: !prevState.edit }
 		})
 		if (e.target.name === "save") {
-			const errors = this.validate(this.state.data);
+			const errors = this.validate(this.state.profile);
 			this.setState({ errors });
 			if (Object.keys(errors).length === 0) {
-				const data = {
-					email: this.props.profile.email,
-					about: this.state.data.about,
-					contact: this.state.data.contact,
-					portfolio: this.state.data.portfolio,
-					github: this.state.data.github
-				}
+				const data = { email, about, contact, portfolio, github}
 				this.props.editProfile(data)
 					.then(() => this.props.getProfile(data.email))
 					.catch(err => this.setState({errors: {global: err.message}}))
@@ -146,21 +139,21 @@ class PrivateProfile extends Component {
 		}
 	}
 
-	validate = (data) => {
+	validate = (profile) => {
 		const errors = {};
-		if (data.about && !validator.isLength(JSON.stringify(data.about), {min:0, max: 35})) {
+		if (profile.about && !validator.isLength(JSON.stringify(profile.about), {min:0, max: 35})) {
 			errors.about = this.txt.aboutError;
 		}
-		if (data.contact && !validator.isLength(JSON.stringify(data.contact), {min:0, max: 35})) {
+		if (profile.contact && !validator.isLength(JSON.stringify(profile.contact), {min:0, max: 35})) {
 			errors.contact = this.txt.contactError;
 		}
-		if (data.portfolio && (!validator.isURL(data.portfolio))) {
+		if (profile.portfolio && (!validator.isURL(profile.portfolio))) {
 			errors.portfolio = this.txt.ptfError;
 		}
-		if (data.github && (!validator.isURL(data.github))) {
+		if (profile.github && (!validator.isURL(profile.github))) {
 			errors.github = this.txt.githubError;
 		}
-		if (data.github && (!validator.contains(data.github, "github.com"))) {
+		if (profile.github && (!validator.contains(profile.github, "github.com"))) {
 			errors.github = this.txt.githubError;
 		}
 		return errors;
@@ -169,24 +162,27 @@ class PrivateProfile extends Component {
 	onChange = (e) => {
 		this.setState({
 			...this.state,
-			data: { ...this.state.data, [e.target.name]: e.target.value },
+			profile: { ...this.state.profile, [e.target.name]: e.target.value },
 			errors: { ...this.state.errors, [e.target.name]: '' }
 		})
 	}
 
 	renderNumbers = (category) => {
-		const { articles, profile } = this.props;
+		const { articles, profile } = this.state;
 		if (articles && Object.keys(articles).length !== 0) {
 			if (category === "articleNums") return articles.filter(article => article.author === profile.username).length
-			if (category === "commentNums") return articles.map(article => article.comments.map(art => art.author.name ===
-				profile.username)).length
+			if (category === "commentNums") return articles.filter(art => art.comments).reduce((acc, art) => acc.concat(art.comments), [])
+				.filter(cmt => cmt.author.name === profile.username).length
+			if (category === "followers") return profile.followedUsers.length
+			if (category === "following") return profile.myFollows.length
 		}
 	}
 
 	render() {
-		const { profile } = this.props;
-		const { edit, data, errors } = this.state;
+		const { edit, profile, errors } = this.state;
 		const editable = edit && (Object.keys(errors).length === 0);
+		
+		if (Object.keys(profile).length === 0) return <div></div>
 
 		return (
 			<div className="row justify-content-center">
@@ -194,8 +190,8 @@ class PrivateProfile extends Component {
 					<Card reverse className="mt-3">
 						<section>
 							<UserImage className="img-fluid w-100"
-							           image={data.bgImg}
-							           load2image={data.smallImage}
+							           image={profile.bgImg}
+							           load2image={profile.smallImage}
 							           style={styles.img}
 							/>
 						</section>
@@ -253,11 +249,11 @@ class PrivateProfile extends Component {
 								</div>
 								<div className="col-6 col-lg-3 text-center text-secondary px-3 pb-4">
 									<small className="font-weight-bold"><Fa icon="user-plus"/> Following</small>
-									<p>0</p>
+									<p>{this.renderNumbers("following")}</p>
 								</div>
 								<div className="col-6 col-lg-3 text-center text-secondary px-3 pb-4">
 									<small className="font-weight-bold"><Fa icon="users"/> Followers</small>
-									<p>0</p>
+									<p>{this.renderNumbers("followers")}</p>
 								</div>
 							</section>
 							{
@@ -265,13 +261,13 @@ class PrivateProfile extends Component {
 									<div className="row justify-content-center">
 										<div className="col-12 col-md-6">
 											<UserInput label="profile.about" icon="user-secret" name="about" onChange={this.onChange}
-											           value={data.about || ''} defaultValue={data.about || ''} disabled={editable}
+											           value={profile.about} defaultValue={profile.about} disabled={editable}
 											           errorLabel={errors.about}
 											/>
 										</div>
 										<div className="col-12 col-md-6">
 											<UserInput label="profile.contact" icon="address-card-o" name="contact" onChange={this.onChange}
-											           value={data.contact || ''} defaultValue={data.contact || ''} disabled={editable}
+											           value={profile.contact} defaultValue={profile.contact} disabled={editable}
 											           errorLabel={errors.contact}
 											/>
 										</div>
@@ -279,13 +275,13 @@ class PrivateProfile extends Component {
 									<div className="row justify-content-center">
 										<div className="col-12 col-md-6">
 											<UserInput label="profile.ptf" icon="file-code-o" name="portfolio" onChange={this.onChange}
-											           value={data.portfolio || ''} defaultValue={data.portfolio || ''} disabled={editable}
+											           value={profile.portfolio} defaultValue={profile.portfolio} disabled={editable}
 											           errorLabel={errors.portfolio}
 											/>
 										</div>
 										<div className="col-12 col-md-6">
 											<UserInput label="profile.git" icon="code-fork" name="github" onChange={this.onChange}
-											           value={data.github || ''} defaultValue={data.github || ''} disabled={editable}
+											           value={profile.github} defaultValue={profile.github} disabled={editable}
 											           errorLabel={errors.github}
 											/>
 										</div>

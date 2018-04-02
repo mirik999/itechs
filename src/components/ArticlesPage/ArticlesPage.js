@@ -70,7 +70,7 @@ class ArticlesPage extends Component {
 	}
 
 	render() {
-		const { user, lang } = this.props;
+		const { lang } = this.props;
 		const { articles, profile, searchTerm } = this.state;
 
 		if (!articles && !profile) return <div></div>;
@@ -87,7 +87,6 @@ class ArticlesPage extends Component {
 										id={article._id}
 										article={article}
 										articles={articles}
-										user={user}
 										update={this.update}
 										lang={lang}
 										profile={profile}

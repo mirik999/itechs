@@ -3,10 +3,10 @@ import { connect } from 'react-redux';
 import { Route, Redirect } from 'react-router-dom';
 
 const UserRoute = ({ user, component: Component, ...rest }) => (
-    <Route
-	    { ...rest }
-	    render={ props => !user.username ? <Component {...props} /> : <Redirect to="/404" /> }
-    />
+  <Route
+    { ...rest }
+    render={ props => !user.email ? <Component {...props} /> : <Redirect to="/404" /> }
+  />
 );
 
 function mapStateToProps(state) {
