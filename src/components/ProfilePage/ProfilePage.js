@@ -25,13 +25,13 @@ class ProfilePage extends Component {
 	}
 
 	render() {
-		const { articles, profile } = this.props;
+		const { articles, profile, lang } = this.props;
 
 		if (Object.keys(articles).length === 0 && Object.keys(profile).length === 0) return <div></div>
 
 		return (
 			<Wrapper>
-				<ProvateProfile articles={articles} profile={profile} />
+				<ProvateProfile articles={articles} profile={profile} lang={lang} />
 			</Wrapper>
 		);
 	}
@@ -41,7 +41,8 @@ function mapStateToProps(state) {
 	return {
 		articles: articlesSelector(state),
 		profile: profileSelector(state),
-		user: state.user
+		user: state.user,
+		lang: state.locale.lang
 	}
 }
 

@@ -20,7 +20,7 @@ class Social extends Component {
 		const data = res;
 		this.props.facebookLogin(data)
 			.then(() => {
-				window.location.reload(true)
+				window.location.href = "/";
 			});
 	};
 
@@ -33,7 +33,7 @@ class Social extends Component {
 		const data = Object.assign({}, profileObj, tokenObj);
 		this.props.googleLogin(data)
 			.then(() => {
-				window.location.reload(true)
+				window.location.href = "/";
 			});
 	};
 

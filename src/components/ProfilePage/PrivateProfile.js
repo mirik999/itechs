@@ -42,6 +42,10 @@ class PrivateProfile extends Component {
 			contactError: <FormattedMessage id="error.contact" />,
 			ptfError: <FormattedMessage id="error.ptf" />,
 			githubError: <FormattedMessage id="error.github" />,
+			articles: <FormattedMessage id="profile.articles" />,
+			comments: <FormattedMessage id="button.comments" />,
+			following: <FormattedMessage id="profile.following" />,
+			followers: <FormattedMessage id="profile.followers" />,
 		}
 
 		this.handleLogout = this.handleLogout.bind(this);
@@ -240,19 +244,19 @@ class PrivateProfile extends Component {
 							</section>
 							<section className="row no-gutters w-100" style={styles.counts}>
 								<div className="col-6 col-lg-3 text-center text-secondary px-3 pb-4">
-									<small className="font-weight-bold"><Fa icon="newspaper-o"/> Articles</small>
+									<small className="font-weight-bold"><Fa icon="newspaper-o"/> {this.txt.articles}</small>
 									<p>{this.renderNumbers("articleNums")}</p>
 								</div>
 								<div className="col-6 col-lg-3 text-center text-secondary px-3 pb-4">
-									<small className="font-weight-bold"><Fa icon="comment"/> Comments</small>
+									<small className="font-weight-bold"><Fa icon="comment"/> {this.txt.comments}</small>
 									<p>{this.renderNumbers("commentNums")}</p>
 								</div>
 								<div className="col-6 col-lg-3 text-center text-secondary px-3 pb-4">
-									<small className="font-weight-bold"><Fa icon="user-plus"/> Following</small>
+									<small className="font-weight-bold"><Fa icon="user-plus"/> {this.txt.following}</small>
 									<p>{this.renderNumbers("following")}</p>
 								</div>
 								<div className="col-6 col-lg-3 text-center text-secondary px-3 pb-4">
-									<small className="font-weight-bold"><Fa icon="users"/> Followers</small>
+									<small className="font-weight-bold"><Fa icon="users"/> {this.txt.followers}</small>
 									<p>{this.renderNumbers("followers")}</p>
 								</div>
 							</section>
