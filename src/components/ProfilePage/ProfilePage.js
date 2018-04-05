@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import NProgress from 'nprogress';
 //user components
-import ProvateProfile from './PrivateProfile';
+import PrivateProfile from './PrivateProfile';
 import Wrapper from '../Utils/Wrapper';
 //actions
 import { getAllArticles } from "../../actions/article";
@@ -14,14 +14,11 @@ import { profileSelector } from '../../reducer/profile';
 
 class ProfilePage extends Component {
 
-	UNSAFE_componentWillMount() {
-		NProgress.start();
-	}
-
 	componentDidMount() {
+		NProgress.start();
 		this.props.getAllArticles()
-			.then(this.props.getProfile(this.props.user.email))
-			.then(() => NProgress.done())
+			.then(this.props.getProfile(this.props.user.email)
+				.then(() => NProgress.done()))
 	}
 
 	render() {
@@ -31,7 +28,7 @@ class ProfilePage extends Component {
 
 		return (
 			<Wrapper>
-				<ProvateProfile articles={articles} profile={profile} lang={lang} />
+				<PrivateProfile articles={articles} profile={profile} lang={lang} />
 			</Wrapper>
 		);
 	}

@@ -29,11 +29,11 @@ class ArticleCard extends Component {
 					<section style={styles.cardHeader}>
 						<table className="d-inline-flex"><tbody><tr>
 							<td>
-								<img src={article.avatar} alt="User-logo" style={styles.userAvatar} />
+								<img src={article.author.useravatar} alt="User-logo" style={styles.userAvatar} />
 							</td>
 							<td className="pl-2" style={styles.verticalAlign}>
-								<span className="text-secondary font-weight-bold">{article.author}</span><br/>
-								<small className="text-secondary font-weight-bold" style={styles.authorAbout}>{article.tags}</small>
+								<span className="text-secondary font-weight-bold">{article.author.username}</span><br/>
+								<small className="text-secondary font-weight-bold" style={styles.authorAbout}>{article.author.about}</small>
 							</td>
 						</tr></tbody></table>
 						<table className="d-inline-flex float-right"><tbody><tr>
@@ -47,7 +47,7 @@ class ArticleCard extends Component {
 					</section>
 
 					<section style={styles.cardBody}>
-						<Link to={`/article/${id}`}>
+						<Link to={`/article/read/${id}`}>
 							<h3 className="text-secondary">{article.title}</h3>
 						</Link>
 						<small className="text-secondary">

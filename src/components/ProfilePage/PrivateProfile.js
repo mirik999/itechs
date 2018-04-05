@@ -6,7 +6,6 @@ import Tooltip from 'material-ui/Tooltip';
 import { FormattedMessage } from 'react-intl';
 import Dropzone from 'react-dropzone';
 import sha1 from 'sha1';
-import _ from 'lodash';
 import superagent from 'superagent';
 import NProgress from 'nprogress';
 import validator from 'validator';
@@ -174,7 +173,7 @@ class PrivateProfile extends Component {
 	renderNumbers = (category) => {
 		const { articles, profile } = this.state;
 		if (articles && Object.keys(articles).length !== 0) {
-			if (category === "articleNums") return articles.filter(article => article.author === profile.username).length
+			if (category === "articleNums") return articles.filter(article => article.author.username === profile.username).length
 			if (category === "commentNums") return articles.filter(art => art.comments).reduce((acc, art) => acc.concat(art.comments), [])
 				.filter(cmt => cmt.author.name === profile.username).length
 			if (category === "followers") return profile.followedUsers.length

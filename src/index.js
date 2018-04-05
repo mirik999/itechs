@@ -42,6 +42,7 @@ if (localStorage.Login) {
 	const payload = decode(localStorage.Login);
 
 	const user = {
+		id: payload.id,
 		email: payload.email,
 		token: localStorage.Login
 	};

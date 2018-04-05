@@ -16,7 +16,7 @@ class UserInput extends Component {
 	}
 
 	render() {
-		const { label, icon, type, name, value, errorLabel, className, disabled, defaultValue } = this.props;
+		const { label, icon, type, name, value, errorLabel, className, disabled, defaultValue, style } = this.props;
 
 		return (
 			<FormattedMessage id={ label }>
@@ -26,9 +26,9 @@ class UserInput extends Component {
 							<Input
 								label={txt} icon={icon} type={type} name={name} value={value} onChange={this.onChange}
 								autoComplete="off" className={className} disabled={disabled} defaultValue={defaultValue}
-								errorlabel={errorLabel}
+								style={style}
 							/>
-							<span className="text-danger small float-right" style={styles.error}>{ errorLabel ? errorLabel : " " }</span><br />
+							<span className="deep-orange-text small float-right" style={styles.error}>{ errorLabel ? errorLabel : " " }</span><br />
 						</Fragment>
 					)
 				}
@@ -52,6 +52,7 @@ UserInput.propTypes = {
 	className: PropTypes.string,
 	errorLabel: PropTypes.oneOfType([ PropTypes.string, PropTypes.object ]),
 	value: PropTypes.oneOfType([ PropTypes.string, PropTypes.object ]),
+	style: PropTypes.oneOfType([ PropTypes.string, PropTypes.object ]),
 	onChange: PropTypes.func,
 	disabled: PropTypes.bool,
 	defaultValue: PropTypes.string,

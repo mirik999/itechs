@@ -10,8 +10,10 @@ import UserNotAuth from './components/UserRoute/UserNotAuth';
 import LeftNavBar from './components/LeftNavBar/LeftNavBar';
 import ArticlesPage from './components/ArticlesPage/ArticlesPage';
 import ArticleContent from './components/ArticlesPage/ArticleContent';
+import ArticleCreate from './components/ArticlesPage/ArticleCreate';
 import AuthPage from './components/AuthPage/AuthPage';
 import ProfilePage from './components/ProfilePage/ProfilePage';
+import NotFound from './components/404-Constructor/NotFound';
 
 
 class App extends Component {
@@ -28,9 +30,11 @@ class App extends Component {
 					<LeftNavBar />
 					<Switch>
 						<Route exact location={location} path="/" component={ArticlesPage} />
-						<Route location={location} path="/article/:id" component={ArticleContent} />
+						<Route location={location} path="/article/read/:id" component={ArticleContent} />
+						<UserNotAuth location={location} path="/article/create" component={ArticleCreate} />
 						<UserIsAuth exact location={location} path="/authorization" component={AuthPage} />
 						<UserNotAuth exact location={location} path="/profile" component={ProfilePage} />
+						<Route exact location={location} path="*" component={NotFound} />
 					</Switch>
 				</div>
 			</IntlProvider>

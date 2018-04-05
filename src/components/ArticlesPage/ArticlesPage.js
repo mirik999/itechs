@@ -22,8 +22,8 @@ function searching(word) {
 		// else if(article.content.toLowerCase().includes(word.toLowerCase())) {
 		// 	return article.content.toLowerCase().includes(word.toLowerCase()) || !word;
 		// }
-		else if(article.author.toLowerCase().includes(word.toLowerCase())) {
-			return article.author.toLowerCase().includes(word.toLowerCase()) || !word;
+		else if(article.author.username.toLowerCase().includes(word.toLowerCase())) {
+			return article.author.username.toLowerCase().includes(word.toLowerCase()) || !word;
 		}
 		else if(article.tags.toLowerCase().includes(word.toLowerCase())) {
 			return article.tags.toLowerCase().includes(word.toLowerCase()) || !word;
@@ -45,11 +45,8 @@ class ArticlesPage extends Component {
 		this.update = this.update.bind(this);
 	}
 
-	UNSAFE_componentWillMount() {
-		NProgress.start();
-	}
-
 	componentDidMount() {
+		NProgress.start();
 		this.props.getAllArticles()
 			.then(() => this.props.getProfile(this.props.user.email)
 				.then(() => this.setState({

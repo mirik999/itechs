@@ -18,6 +18,7 @@ class MenuList extends Component {
 			feedback: <FormattedMessage id="profile.feedback" />,
 			profile: <FormattedMessage id="profile.profile" />,
 			auth: <FormattedMessage id="button.auth" />,
+			create: <FormattedMessage id="profile.article" />,
 		}
 	}
 

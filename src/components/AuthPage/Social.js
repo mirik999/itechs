@@ -49,6 +49,7 @@ class Social extends Component {
 						cssClass="btn-floating peach-gradient btn-sm waves-effect waves-light loginbtn"
 						textButton=" "
 						icon="fa fa-facebook left"
+						redirectUri="https://itechs.info/"
 					/>
 				</div>
 				<div className="d-inline-flex">

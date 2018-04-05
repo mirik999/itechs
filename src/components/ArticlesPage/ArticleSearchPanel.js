@@ -31,8 +31,8 @@ class ArticleSearchPanel extends Component {
 				</div>
 				<div className="col-1 d-none d-md-block">
 					<Tooltip id="tooltip-icon" title={this.txt.shareYourStory}>
-						<Link to="/article/share-your-article" className="py-2">
-							<Button type="button" outline color="elegant"><Fa icon="pencil" /></Button>
+						<Link to="/article/create">
+							<Button type="button" outline color="elegant" className="py-2"><Fa icon="pencil" /></Button>
 						</Link>
 					</Tooltip>
 				</div>
