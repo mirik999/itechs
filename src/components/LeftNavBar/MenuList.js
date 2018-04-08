@@ -19,13 +19,14 @@ class MenuList extends Component {
 			profile: <FormattedMessage id="profile.profile" />,
 			auth: <FormattedMessage id="button.auth" />,
 			create: <FormattedMessage id="profile.article" />,
+			shareYourStory: <FormattedMessage id="profile.article" />,
 		}
 	}
 
 
 	render() {
-		const { user } = this.props;
-		const notAuth = Object.keys(user).length !== 0;
+		const { profile } = this.props;
+		const isAuth = Object.keys(profile).length !== 0;
 		return (
 			<div className="menu-list mt-4">
 				<ul style={styles.ul}>
@@ -33,6 +34,13 @@ class MenuList extends Component {
 						<Fa icon="code" className="ml-2 mr-3"/>
 						<NavLink to="/" exact><span className="text-light" style={styles.link}>{ this.txt.articles }</span></NavLink>
 					</li>
+					{
+						isAuth &&
+						<li style={styles.submenu}>
+							<Fa icon="pencil" className="ml-2 mr-3"/>
+							<NavLink to="/article/create" exact><span className="text-light" style={styles.link}>{ this.txt.shareYourStory }</span></NavLink>
+						</li>
+					}
 					<li style={styles.li}>
 						<Fa icon="book" className="ml-2 mr-3"/>
 						<NavLink to="/documentation"><span className="text-light" style={styles.link}>{ this.txt.documentation }</span></NavLink>
@@ -47,9 +55,9 @@ class MenuList extends Component {
 					</li>
 
 					{
-						notAuth ? (<li style={styles.li}>
+						isAuth ? (<li style={styles.li}>
 						<Fa icon="user-circle" className="ml-2 mr-3"/>
-						<NavLink to="/profile"><span className="text-light" style={styles.link}>{ this.txt.profile }</span></NavLink>
+						<NavLink to={`/profile/@${profile.username}`}><span className="text-light" style={styles.link}>{ this.txt.profile }</span></NavLink>
 						</li>) :
 							(<li style={styles.li}>
 							<Fa icon="sign-in" className="ml-2 mr-3"/>
@@ -71,11 +79,17 @@ const styles = {
 	},
 	link: {
 		width: "150px"
+	},
+	submenu: {
+		color: "#bdc3c7",
+		position: "relative",
+		left: "30px",
+		marginTop: "0px"
 	}
 }
 
 MenuList.propTypes = {
-	user: PropTypes.object,
+	profile: PropTypes.object,
 };
 
 export default MenuList;

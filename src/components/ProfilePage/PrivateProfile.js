@@ -28,6 +28,7 @@ class PrivateProfile extends Component {
 				contact: '',
 				portfolio: '',
 				github: '',
+				bgImg: null,
 			},
 			edit: true,
 			errors: {}
@@ -111,7 +112,8 @@ class PrivateProfile extends Component {
 				this.props.changeCover(data)
 					.then(() => {
 						NProgress.done();
-						this.props.getProfile(data.email);
+						this.props.getProfile(data.email)
+							.then(() => this.setState({ profile: { ...this.props.profile, bgImg: bgImg } }))
 					})
 			}
 		})

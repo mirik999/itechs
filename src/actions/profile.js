@@ -1,5 +1,5 @@
 import api from '../api';
-import { GET_PROFILE } from '../types';
+import { GET_PROFILE, GET_PROFILE_BY_NAME } from '../types';
 
 // EditProfile
 export const editProfile = (data) => (dispatch) => {
@@ -13,8 +13,20 @@ export const getProfile = (data) => (dispatch) => {
 	})
 }
 
+//GET PROFILE BY NAME
+export const getProfileByName = (data) => (dispatch) => {
+	return api.user.getProfileByName(data).then(profile => {
+		dispatch(getProfileByNameDispatch(profile))
+	})
+}
+
 export const getProfileDispatch = (profile) => ({
 	type: GET_PROFILE,
+	profile
+});
+
+export const getProfileByNameDispatch = (profile) => ({
+	type: GET_PROFILE_BY_NAME,
 	profile
 });
 

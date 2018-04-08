@@ -30,7 +30,7 @@ class HandleDate extends Component {
 		}
 		else if (month === '04') {
 			if (lang === "en") return month = "April"
-			if (lang === "ru") return month = "Апрел"
+			if (lang === "ru") return month = "Апрель"
 			if (lang === "az") return month = "Aprel"
 		}
 		else if (month === '05') {

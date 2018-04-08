@@ -9,3 +9,4 @@ export const SWITCH_LANG = 'SWITCH_LANG';
 export const GET_NOTIFY = 'GET_NOTIFY';
 export const ADD_NOTIFY = 'ADD_NOTIFY';
 export const GET_PROFILE = 'GET_PROFILE';
+export const GET_PROFILE_BY_NAME = 'GET_PROFILE_BY_NAME';

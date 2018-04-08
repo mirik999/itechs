@@ -33,7 +33,7 @@ class App extends Component {
 						<Route location={location} path="/article/read/:id" component={ArticleContent} />
 						<UserNotAuth location={location} path="/article/create" component={ArticleCreate} />
 						<UserIsAuth exact location={location} path="/authorization" component={AuthPage} />
-						<UserNotAuth exact location={location} path="/profile" component={ProfilePage} />
+						<UserNotAuth exact location={location} path="/profile/:name" component={ProfilePage} />
 						<Route exact location={location} path="*" component={NotFound} />
 					</Switch>
 				</div>

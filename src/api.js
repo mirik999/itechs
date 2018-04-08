@@ -20,6 +20,9 @@ export default {
 		getProfile: (email) => {
 			return axios.get(`/api/profile/get-profile/${email}`).then(res => res.data.userprofile)
 		},
+		getProfileByName: (email) => {
+			return axios.get(`/api/profile/get-profile-by-name/${email}`).then(res => res.data.userprofile)
+		},
 		changeCover: (data) => {
 			return axios.put('/api/profile/change-cover/:email', { data }).then(res => res.data.userprofile)
 		},

@@ -4,8 +4,13 @@ import { push as Menu } from 'react-burger-menu';
 //user components
 import MenuList from './MenuList';
 import Language from './Language';
+//actions
+import { getProfile } from '../../actions/profile';
+//selectors
+import profile, {profileSelector} from "../../reducer/profile";
 //css
 import './LeftNavBar.css';
+
 
 
 class LeftNavBar extends Component {
@@ -16,11 +21,16 @@ class LeftNavBar extends Component {
 		this.handleChangeLanguage = this.handleChangeLanguage.bind(this);
 	}
 
+	componentDidMount() {
+		this.props.getProfile(this.props.user.email)
+	}
+
 	handleChangeLanguage = () => {
 		this.setState({ menuOpen: true })
 	}
 
 	render() {
+		const { profile } = this.props;
 		const { menuOpen } = this.state;
 
 		return (
@@ -31,7 +41,7 @@ class LeftNavBar extends Component {
 						<div className="logo-name text-center" style={styles.logobm}>
 							<img src={require('../../lib/images/logo-text.png')} alt="logo-text"/>
 						</div>
-						<MenuList user={this.props.user} />
+						<MenuList profile={profile} />
 						<Language menuOpen={this.handleChangeLanguage} />
 					</div>
 				</Menu>
@@ -85,8 +95,9 @@ const styles = {
 function mapStateToProps(state) {
 	return {
 		lang: state.locale.lang,
-		user: state.user
+		user: state.user,
+		profile: profileSelector(state)
 	};
 }
 
-export default connect(mapStateToProps)(LeftNavBar);
+export default connect(mapStateToProps, { getProfile })(LeftNavBar);
