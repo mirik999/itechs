@@ -177,7 +177,7 @@ class PrivateProfile extends Component {
 		if (articles && Object.keys(articles).length !== 0) {
 			if (category === "articleNums") return articles.filter(article => article.author.username === profile.username).length
 			if (category === "commentNums") return articles.filter(art => art.comments).reduce((acc, art) => acc.concat(art.comments), [])
-				.filter(cmt => cmt.author.name === profile.username).length
+				.filter(cmt => cmt.author.username === profile.username).length
 			if (category === "followers") return profile.followedUsers.length
 			if (category === "following") return profile.myFollows.length
 		}
@@ -218,8 +218,8 @@ class PrivateProfile extends Component {
 								/>
 							</section>
 							<section className="float-left" style={styles.contact}>
-								<span className="text-secondary"><Fa icon="user-secret"/> {profile.username}</span><br/>
-								<small className="text-secondary font-weight-bold"><Fa icon="at"/> {profile.email}</small>
+								<span className="text-secondary"><Fa icon="at"/>{profile.username}</span><br/>
+								<small className="text-secondary font-weight-bold">{profile.email}</small>
 							</section>
 							<section className="float-right d-none d-sm-block" style={styles.edit}>
 								{
@@ -265,13 +265,13 @@ class PrivateProfile extends Component {
 								<section className="mt-2" style={styles.counts}>
 									<div className="row justify-content-center">
 										<div className="col-12 col-md-6">
-											<UserInput label="profile.about" icon="user-secret" name="about" onChange={this.onChange}
+											<UserInput label="profile.about" icon="address-card-o" name="about" onChange={this.onChange}
 											           value={profile.about} defaultValue={profile.about} disabled={editable}
 											           errorLabel={errors.about}
 											/>
 										</div>
 										<div className="col-12 col-md-6">
-											<UserInput label="profile.contact" icon="address-card-o" name="contact" onChange={this.onChange}
+											<UserInput label="profile.contact" icon="envelope-o" name="contact" onChange={this.onChange}
 											           value={profile.contact} defaultValue={profile.contact} disabled={editable}
 											           errorLabel={errors.contact}
 											/>

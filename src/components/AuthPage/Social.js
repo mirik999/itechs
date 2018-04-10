@@ -12,7 +12,6 @@ class Social extends Component {
 		super(props);
 
 		this.responseFacebook = this.responseFacebook.bind(this);
-		this.rejectFacebook = this.rejectFacebook.bind(this);
 		this.responseGoogle = this.responseGoogle.bind(this);
 	}
 
@@ -23,10 +22,6 @@ class Social extends Component {
 				window.location.href = "/";
 			});
 	};
-
-	rejectFacebook = (rej) => {
-		console.log(rej)
-	}
 
 	responseGoogle = (res) => {
 		const { profileObj, tokenObj } = res;
@@ -45,11 +40,9 @@ class Social extends Component {
 						appId="128678167815456"
 						fields="name,email,picture.width(100).height(100)"
 						callback={this.responseFacebook}
-						onFailure={this.rejectFacebook}
 						cssClass="btn-floating peach-gradient btn-sm waves-effect waves-light loginbtn"
 						textButton=" "
 						icon="fa fa-facebook left"
-						redirectUri="https://itechs.info/"
 					/>
 				</div>
 				<div className="d-inline-flex">
