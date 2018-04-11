@@ -28,13 +28,16 @@ class ProfilePage extends Component {
 		NProgress.start();
 		const name = this.props.match.params.name.slice(1).trim();
 		this.props.getAllArticles()
-		this.props.getProfileByName(name)
-		this.props.getProfile(this.props.user.email)
-			.then(() => this.setState({
-				articles: this.props.articles,
-				profile: this.props.profile,
-				profileByName: this.props.profileByName
-			}, () => NProgress.done() ))
+			.then(() => this.props.getProfileByName(name)
+				.then(() => this.props.getProfile(this.props.user.email)
+					.then(() => this.setState({
+						articles: this.props.articles,
+						profile: this.props.profile,
+						profileByName: this.props.profileByName
+					}, () => NProgress.done() )
+				)
+			)
+		)
 	}
 
 	componentDidUpdate(prevProps, prevState) {
@@ -52,12 +55,12 @@ class ProfilePage extends Component {
 		const { lang } = this.props;
 		const { articles, profile, profileByName } = this.state;
 
-		if (Object.keys(articles).length === 0 && Object.keys(profile).length === 0) return <div></div>
+		if (!articles && Object.keys(profile).length === 0) return <div></div>
 
 		if (profile.username === profileByName.username) {
 			return (
 				<Wrapper>
-					<PrivateProfile articles={articles} profile={profile} lang={lang} update={this.update} />
+					<PrivateProfile articles={articles} profile={profile} lang={lang} />
 				</Wrapper>
 			);
 		}

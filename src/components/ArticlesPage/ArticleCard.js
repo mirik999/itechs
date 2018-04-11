@@ -56,7 +56,7 @@ class ArticleCard extends Component {
 					</section>
 
 					<section style={styles.cardFooter}>
-						<LikeShareButtons article={article} lang={lang} profile={profile} />
+						<LikeShareButtons article={article} lang={lang} profile={profile} card={true} />
 					</section>
 
 				</section>
@@ -68,13 +68,14 @@ class ArticleCard extends Component {
 const styles = {
 	card: {
 		backgroundColor: "#fff",
-		padding: "10px",
+		padding: "10px"
 	},
 	cardHeader: {
 		padding: "5px",
 	},
 	cardBody: {
 		padding: "5px",
+		minHeight: "123px"
 	},
 	cardFooter: {
 		padding: "5px",

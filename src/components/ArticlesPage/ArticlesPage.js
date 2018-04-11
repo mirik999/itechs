@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import NProgress from 'nprogress';
+import { Helmet } from "react-helmet";
 //user components
 import Wrapper from '../Utils/Wrapper';
 import ArticleCard from './ArticleCard';

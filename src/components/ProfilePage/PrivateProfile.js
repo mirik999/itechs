@@ -174,6 +174,7 @@ class PrivateProfile extends Component {
 
 	renderNumbers = (category) => {
 		const { articles, profile } = this.state;
+
 		if (articles && Object.keys(articles).length !== 0) {
 			if (category === "articleNums") return articles.filter(article => article.author.username === profile.username).length
 			if (category === "commentNums") return articles.filter(art => art.comments).reduce((acc, art) => acc.concat(art.comments), [])
