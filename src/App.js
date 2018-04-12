@@ -12,6 +12,7 @@ import ArticlesPage from './components/ArticlesPage/ArticlesPage';
 import ArticleContent from './components/ArticlesPage/ArticleContent';
 import ArticleCreate from './components/ArticlesPage/ArticleCreate';
 import AuthPage from './components/AuthPage/AuthPage';
+import DocumentationPage from './components/DocumentationPage/DocumentationPage';
 import ProfilePage from './components/ProfilePage/ProfilePage';
 import NotFound from './components/404-Constructor/NotFound';
 
@@ -34,6 +35,7 @@ class App extends Component {
 						<UserNotAuth location={location} path="/article/create" component={ArticleCreate} />
 						<UserIsAuth exact location={location} path="/authorization" component={AuthPage} />
 						<UserNotAuth exact location={location} path="/profile/:name" component={ProfilePage} />
+						<UserNotAuth exact location={location} path="/documentation" component={DocumentationPage} />
 						<Route exact location={location} path="*" component={NotFound} />
 					</Switch>
 				</div>

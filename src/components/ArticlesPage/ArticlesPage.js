@@ -100,6 +100,10 @@ class ArticlesPage extends Component {
 
 ArticlesPage.propTypes = {
 	articles: PropTypes.array.isRequired,
+	profile: PropTypes.object.isRequired,
+	getAllArticles: PropTypes.func.isRequired,
+	getProfile: PropTypes.func.isRequired,
+	user: PropTypes.object.isRequired,
 };
 
 function mapStateToProps(state) {

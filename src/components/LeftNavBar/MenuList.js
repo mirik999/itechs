@@ -20,6 +20,7 @@ class MenuList extends Component {
 			auth: <FormattedMessage id="button.auth" />,
 			create: <FormattedMessage id="profile.article" />,
 			shareYourStory: <FormattedMessage id="profile.article" />,
+			documentCreate: <FormattedMessage id="profile.documentCreate" />,
 		}
 	}
 
@@ -37,14 +38,25 @@ class MenuList extends Component {
 					{
 						isAuth &&
 						<li style={styles.submenu}>
-							<Fa icon="pencil" className="ml-2 mr-3"/>
-							<NavLink to="/article/create" exact><span className="text-light" style={styles.link}>{ this.txt.shareYourStory }</span></NavLink>
+							<Fa icon="pencil" className="ml-1 mr-2"/>
+							<NavLink to="/article/create" exact>
+								<span className="text-light" style={styles.link}>{ this.txt.shareYourStory }</span>
+							</NavLink>
 						</li>
 					}
-					<li style={styles.li}>
-						<Fa icon="book" className="ml-2 mr-3"/>
-						<NavLink to="/documentation"><span className="text-light" style={styles.link}>{ this.txt.documentation }</span></NavLink>
-					</li>
+					{/*<li style={styles.li}>*/}
+						{/*<Fa icon="book" className="ml-2 mr-3"/>*/}
+						{/*<NavLink to="/documentation"><span className="text-light" style={styles.link}>{ this.txt.documentation }</span></NavLink>*/}
+					{/*</li>*/}
+					{/*{*/}
+						{/*isAuth &&*/}
+						{/*<li style={styles.submenu}>*/}
+							{/*<Fa icon="pencil" className="ml-1 mr-1"/>*/}
+							{/*<NavLink to="/documentation/create" exact>*/}
+								{/*<small className="text-light" style={styles.link}>{ this.txt.documentCreate }</small>*/}
+							{/*</NavLink>*/}
+						{/*</li>*/}
+					{/*}*/}
 					<li style={styles.li}>
 						<Fa icon="question-circle" className="ml-2 mr-3"/>
 						<NavLink to="/ask-question"><span className="text-light" style={styles.link}>{ this.txt.question }</span></NavLink>
