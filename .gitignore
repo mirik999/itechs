@@ -18,10 +18,7 @@ yarn-debug.log*
 yarn-error.log*
 
 # for this project development
-/public
-/src
 .idea
 package-lock.json
-package.json
 README.me
 yarn.lock
