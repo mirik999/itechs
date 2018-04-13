@@ -23,8 +23,8 @@ class Enter extends Component {
 		this.txt = {
 			emailError: <FormattedMessage id="error.email" />,
 			passError: <FormattedMessage id="error.password" />,
-			globalEmailErr: <FormattedMessage id="global.email" />,
-			globalEnterErr: <FormattedMessage id="global.enter" />,
+			globalEmailErr: <FormattedMessage id="errorglobal.email" />,
+			globalEnterErr: <FormattedMessage id="errorglobal.enter" />,
 			enter: <FormattedMessage id="button.enter" />,
 			createAnAccaunt: <FormattedMessage id="button.createAcc" />,
 		}

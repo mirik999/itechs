@@ -7,7 +7,7 @@ import Language from './Language';
 //actions
 import { getProfile } from '../../actions/profile';
 //selectors
-import profile, {profileSelector} from "../../reducer/profile";
+import {profileSelector} from "../../reducer/profile";
 //css
 import './LeftNavBar.css';
 
@@ -17,16 +17,10 @@ class LeftNavBar extends Component {
 	constructor(props) {
 		super(props);
 		this.state = { menuOpen: false }
-
-		this.handleChangeLanguage = this.handleChangeLanguage.bind(this);
 	}
 
 	componentDidMount() {
 		this.props.getProfile(this.props.user.email)
-	}
-
-	handleChangeLanguage = () => {
-		this.setState({ menuOpen: true })
 	}
 
 	render() {

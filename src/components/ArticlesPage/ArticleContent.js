@@ -72,12 +72,14 @@ class ArticleContent extends Component {
 
 		const thumbnail = article.thumbnail[0];
 		const url = window.location.href.replace("http://localhost:3000", "https://itechs.info");
+		const hash = window.location.hash
 
 		return (
 			<Wrapper>
 				<Helmet>
-					<meta property="og:image" content="../../lib/images/share.jpg" />  2@
+					<meta property="og:image" content={thumbnail} />
 					<meta property="og:title" content={article.title} />
+					<meta property="og:type" content="website" />
 				</Helmet>
 				<div className="row justify-content-center" id='page-wrap'>
 					<div className="col-12 col-md-10 col-xl-8 mt-3">
@@ -108,7 +110,7 @@ class ArticleContent extends Component {
 						</section>
 						<hr />
 						<section className="footer px-3 pb-3 mb-3" style={styles.bg}>
-							<CommentsWrapper article={article} user={user} profile={profile} id={article._id} />
+							<CommentsWrapper article={article} user={user} profile={profile} id={article._id} hash={hash} />
 						</section>
 					</div>
 				</div>
@@ -119,7 +121,8 @@ class ArticleContent extends Component {
 
 const styles = {
 	bg: {
-		backgroundColor: "#fff"
+		backgroundColor: "#fff",
+		wordWrap: "break-word"
 	},
 	userAvatar: {
 		width: "50px",

@@ -817,6 +817,10 @@
 
 .public-DraftStyleDefault-block {
 	margin-bottom: 1em;
+	display: inline-block;
+	word-wrap: break-word;
+	word-break: break-all;
+	width: 100%;
 }
 .rdw-editor-wrapper:focus {
 	outline: none;

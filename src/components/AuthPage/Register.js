@@ -25,8 +25,8 @@ class Register extends Component {
 			emailError: <FormattedMessage id="error.email" />,
 			unameError: <FormattedMessage id="error.username" />,
 			passError: <FormattedMessage id="error.password" />,
-			globalEmailErr: <FormattedMessage id="global.email" />,
-			globalUnameErr: <FormattedMessage id="global.username" />,
+			globalEmailErr: <FormattedMessage id="errorglobal.email" />,
+			globalUnameErr: <FormattedMessage id="errorglobal.username" />,
 			register: <FormattedMessage id="button.register" />,
 			haveAnAccaunt: <FormattedMessage id="button.haveAcc" />,
 		}

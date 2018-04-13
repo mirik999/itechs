@@ -20,21 +20,21 @@ class Language extends Component {
 
 					<span className={ `mx-3 ${lang === "az" && "border-bottom"}` }
 					      style={styles.lang}
-					      onClick={ () => { this.props.setlocale("az"); this.props.menuOpen(); } }
+					      onClick={ () => { this.props.setlocale("az") } }
 					>
 						AZE
 					</span>
 
 					<span className={ `mx-3 ${lang === "en" && "border-bottom"}` }
 					      style={styles.lang}
-					      onClick={ () => { this.props.setlocale("en"); this.props.menuOpen(); } }
+					      onClick={ () => { this.props.setlocale("en") } }
 					>
 						ENG
 					</span>
 
 					<span className={ `mx-3 ${lang === "ru" && "border-bottom"}` }
 					      style={styles.lang}
-					      onClick={ () => { this.props.setlocale("ru"); this.props.menuOpen(); } }
+					      onClick={ () => { this.props.setlocale("ru") } }
 					>
 						RUS
 					</span>

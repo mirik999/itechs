@@ -37,6 +37,7 @@ p.comment-p {
 	display: table;
 	width: 100%;
 	min-height: 5.3125rem;
+	width: 100%;
 }
 
 .photo {
@@ -51,6 +52,12 @@ p.comment-p {
 	background-size: contain;
 }
 
+@media screen and (max-width: 420px) {
+	.photo {
+		display: none;
+	}
+}
+
 .comment-block {
 	padding: 1rem;
 	background-color: #fff;
@@ -59,6 +66,14 @@ p.comment-p {
 	border-radius: 0.1875rem;
 	box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.08);
 }
+
+.comment-block p {
+	display: inline-block;
+	word-wrap: break-word;
+	word-break: break-all;
+	width: 100%;
+}
+
 .comment-block textarea {
 	width: 100%;
 	resize: none;

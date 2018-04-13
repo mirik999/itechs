@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, Fragment} from 'react';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 //user components
@@ -17,7 +17,7 @@ class CommentsWrapper extends Component {
 	}
 
 	render() {
-		const { id, article, profile, lang } = this.props;
+		const { id, article, profile, lang, hash } = this.props;
 
 		if (article.disableComment) {
 			return <div className="col-12 text-center pt-3">
@@ -28,7 +28,7 @@ class CommentsWrapper extends Component {
 		return (
 			<div className="row justify-content-center">
 				<div className="col-12">
-					<div>
+					<Fragment>
 						<EachComment comments={article.comments}
 						             profile={profile}
 						             id={id}
@@ -38,8 +38,9 @@ class CommentsWrapper extends Component {
 						             comments={article.comments}
 						             id={id}
 						             lang={lang}
+						             hash={hash}
 						/>
-					</div>
+					</Fragment>
 				</div>
 			</div>
 		);

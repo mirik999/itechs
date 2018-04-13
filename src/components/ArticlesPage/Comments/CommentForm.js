@@ -51,7 +51,6 @@ class CommentForm extends Component {
 		this.setState({ editorState })
 	}
 
-
 	onComment = (e) => {
 		e.preventDefault();
 		const { id, profile } = this.props;

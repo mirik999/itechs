@@ -349,6 +349,8 @@ PrivateProfile.propTypes = {
 	logout: PropTypes.func,
 	changeCover: PropTypes.func,
 	getProfile: PropTypes.func,
+	profile: PropTypes.object.isRequired,
+	articles: PropTypes.array.isRequired,
 };
 
 export default connect(null, { logout, changeCover, getProfile, editProfile })(PrivateProfile);

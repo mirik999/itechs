@@ -20,7 +20,7 @@ class Settings extends Component {
 
 		this.txt = {
 			share: <FormattedMessage id="profile.article" />,
-			disableComment: <FormattedMessage id="toggle.comment" />
+			disableComment: <FormattedMessage id="comment.toggle" />
 		}
 
 		this.onSave = this.onSave.bind(this)

@@ -50,7 +50,7 @@ class ArticleCard extends Component {
 						<Link to={`/article/read/${id}`}>
 							<h3 className="text-secondary">{article.title}</h3>
 						</Link>
-						<small className="text-secondary">
+						<small className="text-secondary" style={styles.wordWrap}>
 							<i>{_.truncate(article.content, { 'length': 250 }).replace(/<\/?[^>]+>/g,'').replace('&nbsp;', ' ')}</i>
 						</small>
 					</section>
@@ -91,6 +91,9 @@ const styles = {
 	authorAbout: {
 		position: "relative",
 		bottom: "5px"
+	},
+	wordWrap: {
+		wordWrap: "break-word"
 	}
 }
 

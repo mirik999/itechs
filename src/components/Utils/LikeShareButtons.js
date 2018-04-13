@@ -1,4 +1,5 @@
 import React, {Component, Fragment} from 'react';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Tooltip from 'material-ui/Tooltip';
@@ -23,6 +24,8 @@ class LikeShareButtons extends Component {
 		this.txt = {
 			shareOnFb: <FormattedMessage id="button.share" />,
 			like: <FormattedMessage id="button.like" />,
+			comment: <FormattedMessage id="comment" />,
+			read: <FormattedMessage id="read" />,
 			dislike: <FormattedMessage id="button.dislike" />,
 			follow: <FormattedMessage id="button.follow" />,
 			unfollow: <FormattedMessage id="button.unfollow" />,
@@ -95,9 +98,9 @@ class LikeShareButtons extends Component {
 			const commentCount = article.comments.length
 			return (
 				<span className="text-secondary">
-					<small className="pr-2" style={styles.view}>{Math.floor(article.pageview)} read</small>
-					<small className="px-2" style={styles.view}>{commentCount} comment</small>
-					<small className="pl-2">{likeCount} liked</small>
+					<small className="pr-2" style={styles.view}>{Math.floor(article.pageview)} &nbsp;{this.txt.read}</small>
+					<small className="px-2" style={styles.view}>{commentCount} &nbsp;{this.txt.comment}</small>
+					<small className="pl-2">{likeCount}&nbsp;{this.txt.like}</small>
 				</span>
 			)
 		}
