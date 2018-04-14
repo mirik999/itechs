@@ -1,4 +1,6 @@
 import React, {Component} from 'react';
+//async render
+const AsyncMode = React.unstable_AsyncMode;
 
 class Wrapper extends Component {
 	render() {

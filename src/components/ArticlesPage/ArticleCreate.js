@@ -21,7 +21,7 @@ class ArticleCreate extends Component {
 		super(props);
 		
 		this.state = {
-			thumbnail: [],
+			articleImages: [],
 			content: '',
 			settings: '',
 			me: '',
@@ -44,7 +44,7 @@ class ArticleCreate extends Component {
 	}
 
 	getContent = (content) => {
-		this.setState({ thumbnail: content.thumbnail, content: content.editorState })
+		this.setState({ articleImages: content.articleImages, content: content.editorState })
 	}
 
 	getSettingsAndPush = (settings) => {
@@ -64,7 +64,6 @@ class ArticleCreate extends Component {
 	}
 
 	validate = (data) => {
-		console.log(data)
 		const errors = {};
 		if (!data.settings.title || !validator.isLength(data.settings.title, { min: 10, max: 50 }) ) {
 			toast.warn(this.txt.titleErr)

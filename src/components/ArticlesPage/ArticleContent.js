@@ -70,15 +70,18 @@ class ArticleContent extends Component {
 
 		if (Object.keys(article).length === 0 && Object.keys(profile).length === 0) return <div></div>;
 
-		const thumbnail = article.thumbnail[0];
 		const url = window.location.href.replace("http://localhost:3000", "https://itechs.info");
 		const hash = window.location.hash
 
 		return (
 			<Wrapper>
 				<Helmet>
-					<meta property="og:image" content={thumbnail} />
-					<meta property="og:title" content={article.title} />
+					<title>{`iTechs Article - ${article.title}`}</title>
+					<meta property="og:url" content={url} />
+					<meta property="og:site_name" content="iTechs Information" />
+					<meta property="og:image:url" content={article.thumbnail} />
+					<meta property="og:image:secure_url" content={article.thumbnail} />
+					<meta property="og:title" content={`iTechs Article - ${article.title}`} />
 					<meta property="og:type" content="website" />
 				</Helmet>
 				<div className="row justify-content-center" id='page-wrap'>

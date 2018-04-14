@@ -17,7 +17,7 @@ class MyEditor extends Component {
 			const editorState = EditorState.createWithContent(contentState);
 			this.state = {
 				editorState,
-				thumbnail: []
+				articleImages: []
 			};
 		}
 
@@ -40,7 +40,7 @@ class MyEditor extends Component {
 				xhr.send(data);
 				xhr.addEventListener('load', () => {
 					const response = JSON.parse(xhr.responseText);
-					this.setState({ thumbnail: this.state.thumbnail.concat(response.data.link) })
+					this.setState({ articleImages: this.state.articleImages.concat(response.data.link) })
 					resolve(response);
 				});
 				xhr.addEventListener('error', () => {
@@ -56,7 +56,7 @@ class MyEditor extends Component {
 		this.setState({ editorState }, () => {
 			const content = {
 				editorState: draftToHtml(convertToRaw(this.state.editorState.getCurrentContent())),
-				thumbnail: this.state.thumbnail
+				articleImages: this.state.articleImages
 			}
 			this.props.getContent(content)
 		})
