@@ -1,8 +1,8 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 //async render
 const AsyncMode = React.unstable_AsyncMode;
 
-class Wrapper extends Component {
+class Wrapper extends PureComponent {
 	render() {
 		return (
 			<div className="row justify-content-center pb-5" id="page-wrap">

@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import validator from 'validator';
 import { FormattedMessage } from 'react-intl';
 import { Card, CardImage, CardBody, Button, Fa } from 'mdbreact';
@@ -8,7 +8,7 @@ import UserInput from '../Utils/UserInput';
 import Social from './Social';
 
 
-class Enter extends Component {
+class Enter extends PureComponent {
 	constructor(props) {
 		super(props)
 

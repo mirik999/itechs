@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import {connect} from 'react-redux';
 import { push as Menu } from 'react-burger-menu';
 //user components
@@ -13,7 +13,7 @@ import './LeftNavBar.css';
 
 
 
-class LeftNavBar extends Component {
+class LeftNavBar extends PureComponent {
 	constructor(props) {
 		super(props);
 		this.state = { menuOpen: false }

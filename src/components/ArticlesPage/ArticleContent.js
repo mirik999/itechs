@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import renderHTML from 'react-render-html';
@@ -20,7 +20,7 @@ import {profileSelector} from "../../reducer/profile";
 import './style.css';
 
 
-class ArticleContent extends Component {
+class ArticleContent extends PureComponent {
 	constructor(props) {
 		super(props);
 

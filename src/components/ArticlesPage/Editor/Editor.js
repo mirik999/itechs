@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Editor } from 'react-draft-wysiwyg';
 import { EditorState, convertToRaw, ContentState } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
@@ -7,7 +7,7 @@ import { FormattedMessage } from 'react-intl';
 //css
 import './react-draft-wysiwyg.css';
 
-class MyEditor extends Component {
+class MyEditor extends PureComponent {
 	constructor(props){
 		super(props)
 		const html = '';

@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import { NavLink } from 'react-router-dom';
 import { Fa } from 'mdbreact';
 import PropTypes from 'prop-types';
@@ -7,7 +7,7 @@ import { FormattedMessage } from 'react-intl';
 import './LeftNavBar.css';
 
 
-class MenuList extends Component {
+class MenuList extends PureComponent {
 	constructor(props) {
 		super(props);
 

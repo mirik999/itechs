@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Button, Card, CardImage, CardBody, CardTitle, CardText, Fa } from 'mdbreact';
@@ -17,7 +17,7 @@ import { logout } from '../../actions/user';
 import { changeCover, getProfile, editProfile } from '../../actions/profile';
 
 
-class PrivateProfile extends Component {
+class PrivateProfile extends PureComponent {
 	constructor(props) {
 		super(props);
 

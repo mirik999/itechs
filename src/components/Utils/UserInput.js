@@ -1,11 +1,11 @@
-import React, {Component, Fragment} from 'react';
+import React, {PureComponent, Fragment} from 'react';
 import {connect} from 'react-redux';
 import { Input } from 'mdbreact';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 
 
-class UserInput extends Component {
+class UserInput extends PureComponent {
 	constructor(props) {
 		super(props);
 		this.onChange = this.onChange.bind(this);

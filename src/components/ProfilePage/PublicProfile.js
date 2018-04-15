@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Button, Card, CardImage, CardBody, CardTitle, CardText, Fa } from 'mdbreact';
@@ -8,7 +8,7 @@ import UserImage from '../Utils/UserImage';
 import UserInput from '../Utils/UserInput';
 
 
-class PublicProfile extends Component {
+class PublicProfile extends PureComponent {
 	constructor(props) {
 		super(props);
 

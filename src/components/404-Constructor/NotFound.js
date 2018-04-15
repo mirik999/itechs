@@ -1,10 +1,10 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import { Link } from 'react-router-dom';
 import Wrapper from '../Utils/Wrapper';
 //css
 import './style.css';
 
-class NotFound extends Component {
+class NotFound extends PureComponent {
 	render() {
 		return (
 			<Wrapper>

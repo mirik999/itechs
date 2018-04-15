@@ -1,10 +1,10 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import ImageZoom from 'react-medium-image-zoom';
 import ProgressiveImage from 'react-progressive-image';
 
 
-class UserImage extends Component {
+class UserImage extends PureComponent {
 	render() {
 		const { image, alt, className, style, zoom, load2image  } = this.props;
 		// const beforeLoad2Image = require("../../lib/images/blur.png");

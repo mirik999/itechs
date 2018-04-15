@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import { conntect } from 'react-redux';
 import api from '../../api';
 //actions
@@ -6,7 +6,7 @@ import { getProfile } from '../actions/profile';
 
 export const Context = React.createContext();
 
-class MyContext extends Component {
+class MyContext extends PureComponent {
 	constructor(props) {
 		super(props);
 		this.state = {

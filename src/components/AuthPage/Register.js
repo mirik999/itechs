@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import validator from 'validator';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
@@ -8,7 +8,7 @@ import Tooltip from 'material-ui/Tooltip';
 import UserInput from '../Utils/UserInput';
 
 
-class Register extends Component {
+class Register extends PureComponent {
 	constructor(props) {
 		super(props);
 

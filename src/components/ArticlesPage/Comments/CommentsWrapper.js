@@ -1,4 +1,4 @@
-import React, {Component, Fragment} from 'react';
+import React, {PureComponent, Fragment} from 'react';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 //user components
@@ -7,7 +7,7 @@ import EachComment from './EachComment';
 //css
 import './style.css';
 
-class CommentsWrapper extends Component {
+class CommentsWrapper extends PureComponent {
 	constructor(props) {
 		super(props)
 

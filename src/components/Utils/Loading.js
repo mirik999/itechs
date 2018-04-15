@@ -1,8 +1,8 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 //css
 import './style.css';
 
-class Loading extends Component {
+class Loading extends PureComponent {
 	render() {
 		return (
 			<main>

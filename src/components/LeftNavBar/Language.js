@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Divider from 'material-ui/Divider';
@@ -7,7 +7,7 @@ import { Fa } from 'mdbreact';
 import { setlocale } from '../../actions/locale';
 
 
-class Language extends Component {
+class Language extends PureComponent {
 	render() {
 		const { lang } = this.props;
 

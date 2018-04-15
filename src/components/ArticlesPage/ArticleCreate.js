@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import validator from 'validator';
@@ -16,7 +16,7 @@ import { getProfile } from '../../actions/profile';
 import {profileSelector} from "../../reducer/profile";
 
 
-class ArticleCreate extends Component {
+class ArticleCreate extends PureComponent {
 	constructor(props) {
 		super(props);
 		

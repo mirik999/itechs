@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import { Editor } from 'react-draft-wysiwyg';
@@ -18,7 +18,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 
-class CommentForm extends Component {
+class CommentForm extends PureComponent {
 	constructor(props){
 		super(props)
 

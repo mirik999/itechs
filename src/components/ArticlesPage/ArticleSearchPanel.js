@@ -1,20 +1,20 @@
-import React, {Component} from 'react';
-import { Link } from 'react-router-dom';
+import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Button, Fa } from 'mdbreact';
-import Tooltip from 'material-ui/Tooltip';
 //user components
 import UserInput from '../Utils/UserInput';
 
 
-class ArticleSearchPanel extends Component {
+class ArticleSearchPanel extends PureComponent {
 	constructor(props) {
 		super(props);
 
 		this.txt = {
 			shareYourStory: <FormattedMessage id="profile.article" />,
 		}
+
+		this.handleSearchFilter = this.handleSearchFilter.bind(this);
 	}
 
 	handleSearchFilter = (e) => {

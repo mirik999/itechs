@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import NProgress from 'nprogress';
@@ -15,8 +15,33 @@ import { articlesSelector } from "../../reducer/article";
 import { profileSelector } from "../../reducer/profile";
 
 
-function searching(word) {
-	return function(article) {
+class ArticlesPage extends PureComponent {
+	constructor(props) {
+		super(props);
+
+		this.state = {
+			articles: [],
+			profile: {},
+			searchTerm: ''
+		}
+
+		this.handleSearchFilter = this.handleSearchFilter.bind(this);
+		this.update = this.update.bind(this);
+		this.onFilter = this.onFilter.bind(this);
+	}
+
+	componentDidMount() {
+		NProgress.start();
+		this.props.getAllArticles()
+			.then(() => this.props.getProfile(this.props.user.email)
+				.then(() => this.setState({
+					articles: this.props.articles,
+					profile: this.props.profile
+				}, () => NProgress.done()))
+			)
+	}
+
+	onFilter = (word) => (article) => {
 		if (article.title.toLowerCase().includes(word.toLowerCase())) {
 			return article.title.toLowerCase().includes(word.toLowerCase()) || !word;
 		}
@@ -29,32 +54,6 @@ function searching(word) {
 		else if(article.tags.toLowerCase().includes(word.toLowerCase())) {
 			return article.tags.toLowerCase().includes(word.toLowerCase()) || !word;
 		}
-	}
-}
-
-class ArticlesPage extends Component {
-	constructor(props) {
-		super(props);
-
-		this.state = {
-			articles: [],
-			profile: {},
-			searchTerm: ''
-		}
-
-		this.handleSearchFilter = this.handleSearchFilter.bind(this);
-		this.update = this.update.bind(this);
-	}
-
-	componentDidMount() {
-		NProgress.start();
-		this.props.getAllArticles()
-			.then(() => this.props.getProfile(this.props.user.email)
-				.then(() => this.setState({
-					articles: this.props.articles,
-					profile: this.props.profile
-				}, () => NProgress.done()))
-			)
 	}
 
 	handleSearchFilter = (word) => {
@@ -78,7 +77,7 @@ class ArticlesPage extends Component {
 				<ArticleSearchPanel searchTerm={searchTerm} search={this.handleSearchFilter} />
 					<div className="row justify-content-center">
 						{
-							articles.filter(searching(searchTerm)).map((article, idx) => {
+							articles.filter(this.onFilter(searchTerm)).map((article, idx) => {
 								return (
 									<ArticleCard
 										key={idx}

@@ -1,7 +1,7 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import { connect } from 'react-redux';
 
-class HandleDate extends Component {
+class HandleDate extends PureComponent {
 	constructor(props) {
 		super(props)
 

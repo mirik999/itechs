@@ -1,4 +1,4 @@
-import React, {Component, Fragment} from 'react';
+import React, {PureComponent, Fragment} from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -12,7 +12,7 @@ import { FacebookShareButton } from 'react-share';
 import { like, getArticle } from '../../actions/article';
 import { follow } from '../../actions/profile';
 
-class LikeShareButtons extends Component {
+class LikeShareButtons extends PureComponent {
 	constructor(props) {
 		super(props);
 

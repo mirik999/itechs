@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Button, Fa } from 'mdbreact';
@@ -10,7 +10,7 @@ import LikeShareButtons from '../Utils/LikeShareButtons';
 //actions
 import { like } from '../../actions/article';
 
-class ArticleCard extends Component {
+class ArticleCard extends PureComponent {
 	constructor(props) {
 		super(props);
 

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { IntlProvider } from 'react-intl';
@@ -17,7 +17,7 @@ import ProfilePage from './components/ProfilePage/ProfilePage';
 import NotFound from './components/404-Constructor/NotFound';
 
 
-class App extends Component {
+class App extends PureComponent {
 	constructor(props) {
 		super(props);
 	}

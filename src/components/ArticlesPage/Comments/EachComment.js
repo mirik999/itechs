@@ -1,4 +1,4 @@
-import React, {Component, Fragment} from 'react';
+import React, {PureComponent, Fragment} from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import renderHTML from 'react-render-html';
@@ -24,7 +24,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 
-class EachComment extends Component {
+class EachComment extends PureComponent {
 	constructor(props) {
 		super(props)
 
@@ -162,7 +162,7 @@ class EachComment extends Component {
 										<li className="reply">
 											{
 												comment.author.username === profile.username ?
-													<span onClick={() => this.onEdit(comment)}>
+													<span onClick={() => this.onEdit(comment).bind(this)}>
 														{ comment.handleID === target && toggle  ? this.txt.cancel : this.txt.edit }
 													</span> : <span>reply</span>
 											}
@@ -198,7 +198,7 @@ class EachComment extends Component {
 		socket.on('onComment', async (res) => {
 			try {
 				const currentComments = await _.clone(this.state.comments).concat(res);
-				this.setState({ comments: currentComments })
+				this.setState({ ...this.state, comments: currentComments })
 			}
 			catch(err) {
 				console.log('error', err.message)
@@ -206,11 +206,11 @@ class EachComment extends Component {
 		})
 
 		socket.on('editComment', (res) => {
-			this.setState({ comments: res })
+			this.setState({ ...this.state, comments: res })
 		})
 
 		socket.on('delComment', res => {
-			this.setState({ comments: res })
+			this.setState({ ...this.state, comments: res })
 		})
 	}
 

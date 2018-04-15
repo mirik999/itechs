@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import {connect} from 'react-redux';
 import FacebookLogin from 'react-facebook-login';
 import GoogleLogin from 'react-google-login';
@@ -7,7 +7,7 @@ import { facebookLogin, googleLogin } from '../../actions/user';
 //css
 import './Social.css';
 
-class Social extends Component {
+class Social extends PureComponent {
 	constructor(props) {
 		super(props);
 

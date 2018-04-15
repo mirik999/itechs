@@ -1,4 +1,4 @@
-import React, {Component, Fragment} from 'react';
+import React, {PureComponent, Fragment} from 'react';
 import { Button, Fa } from 'mdbreact';
 import Tooltip from 'material-ui/Tooltip';
 import { FormattedMessage } from 'react-intl';
@@ -12,7 +12,7 @@ import UserInput from '../../Utils/UserInput';
 import UserImage from '../../Utils/UserImage';
 
 
-class Settings extends Component {
+class Settings extends PureComponent {
 	constructor(props) {
 		super(props);
 

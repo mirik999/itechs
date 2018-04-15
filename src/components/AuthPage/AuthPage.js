@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 //user components
@@ -10,7 +10,7 @@ import { register } from '../../actions/user';
 import { enter } from '../../actions/user';
 
 
-class AuthPage extends Component {
+class AuthPage extends PureComponent {
 	constructor(props) {
 		super(props);
 
