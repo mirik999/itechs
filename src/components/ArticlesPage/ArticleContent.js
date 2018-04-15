@@ -70,8 +70,8 @@ class ArticleContent extends PureComponent {
 
 		if (Object.keys(article).length === 0 && Object.keys(profile).length === 0) return <div></div>;
 
-		const url = window.location.href.replace("http://localhost:3000", "https://itechs.info");
-		const hash = window.location.hash
+		const url = window.location.href;
+		const hash = window.location.hash;
 
 		return (
 			<Wrapper>
@@ -79,10 +79,12 @@ class ArticleContent extends PureComponent {
 					<title>{`iTechs Article - ${article.title}`}</title>
 					<meta property="og:url" content={url} />
 					<meta property="og:site_name" content="iTechs Information" />
+					<meta property="og:image" content={article.thumbnail} />
 					<meta property="og:image:url" content={article.thumbnail} />
 					<meta property="og:image:secure_url" content={article.thumbnail} />
 					<meta property="og:title" content={`iTechs Article - ${article.title}`} />
 					<meta property="og:type" content="website" />
+					<meta property="fb:app_id" content="128678167815456" />
 				</Helmet>
 				<div className="row justify-content-center" id='page-wrap'>
 					<div className="col-12 col-md-10 col-xl-8 mt-3">
