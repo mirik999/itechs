@@ -28,6 +28,7 @@ class MenuList extends PureComponent {
 	render() {
 		const { profile } = this.props;
 		const isAuth = Object.keys(profile).length !== 0;
+
 		return (
 			<div className="menu-list mt-4">
 				<ul style={styles.ul}>
@@ -101,7 +102,7 @@ const styles = {
 }
 
 MenuList.propTypes = {
-	profile: PropTypes.object,
+	profile: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]),
 };
 
 export default MenuList;

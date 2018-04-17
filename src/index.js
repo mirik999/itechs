@@ -7,7 +7,6 @@ import { Provider } from 'react-redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
 import decode from 'jwt-decode';
-import axios from 'axios';
 import { addLocaleData } from 'react-intl';
 import en from 'react-intl/locale-data/en';
 import ru from 'react-intl/locale-data/ru';
@@ -34,20 +33,17 @@ export const store = createStore(
 	composeWithDevTools(applyMiddleware(thunk))
 );
 
-if (localStorage.devsLang) {
-	store.dispatch(setlocale(localStorage.devsLang))
-}
-// user auth token
 if (localStorage.Login) {
 	const payload = decode(localStorage.Login);
-
 	const user = {
-		id: payload.id,
 		email: payload.email,
 		token: localStorage.Login
 	};
-
 	store.dispatch(LoginDispatch(user))
+}
+
+if (localStorage.devsLang) {
+	store.dispatch(setlocale(localStorage.devsLang))
 }
 
 

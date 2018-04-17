@@ -1,5 +1,4 @@
 import React, { PureComponent } from "react";
-import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Button, Fa } from 'mdbreact';
 import _ from 'lodash';
@@ -7,8 +6,6 @@ import { FormattedMessage } from 'react-intl';
 //user components
 import HandleDate from '../Utils/HandleDate';
 import LikeShareButtons from '../Utils/LikeShareButtons';
-//actions
-import { like } from '../../actions/article';
 
 class ArticleCard extends PureComponent {
 	constructor(props) {
@@ -97,4 +94,4 @@ const styles = {
 	}
 }
 
-export default connect(null, { like })(ArticleCard);
+export default ArticleCard;

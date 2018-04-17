@@ -26,14 +26,14 @@ class AuthPage extends PureComponent {
 		this.setState({ toggle: !this.state.toggle })
 	}
 
-	onSubmit = (data) => {
+	onSubmit = async (data) => {
 		if (Object.keys(data).length === 3) {
-			return this.props.register(data)
-				.then(() => this.props.history.push("/"))
+			await this.props.register(data)
+			window.location.href = '/';
 		}
 		else if (Object.keys(data).length === 2) {
-			return this.props.enter(data)
-				.then(() => this.props.history.push("/"))
+			await this.props.enter(data)
+			window.location.href = '/';
 		}
 	}
 

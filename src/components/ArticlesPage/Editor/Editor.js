@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import { Editor } from 'react-draft-wysiwyg';
 import { EditorState, convertToRaw, ContentState } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
@@ -52,14 +52,13 @@ class MyEditor extends PureComponent {
 	}
 
 
-	onEditorStateChange = (editorState) => {
-		this.setState({ editorState }, () => {
-			const content = {
-				editorState: draftToHtml(convertToRaw(this.state.editorState.getCurrentContent())),
-				articleImages: this.state.articleImages
-			}
-			this.props.getContent(content)
-		})
+	onEditorStateChange = async (editorState) => {
+		this.setState({ editorState })
+		const content = await {
+			editorState: draftToHtml(convertToRaw(this.state.editorState.getCurrentContent())),
+			articleImages: this.state.articleImages
+		}
+		await this.props.getContent(content)
 	}
 
 	render() {

@@ -1,0 +1,27 @@
+.hoverStatic {
+	cursor: pointer;
+	height: 50px;
+}
+
+.hoverStatic:hover {
+	background-color: #f8f8f8;
+}
+
+.border-list-article:nth-child(odd) {
+	background-color: #f8f8f8;
+}
+
+.border-list-article {
+	border-bottom: 1px solid #edebe3;
+	padding: 13px 0;
+}
+
+.border-list-article:last-child {
+	border: none;
+	margin-bottom: 0px;
+}
+
+.profile-article-btns:hover {
+	background-color: #f0f0f0;
+	cursor: pointer;
+}

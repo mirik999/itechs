@@ -3,6 +3,7 @@ import validator from 'validator';
 import { FormattedMessage } from 'react-intl';
 import { Card, CardImage, CardBody, Button, Fa } from 'mdbreact';
 import Tooltip from 'material-ui/Tooltip';
+import { ToastContainer, toast } from 'react-toastify';
 //user components
 import UserInput from '../Utils/UserInput';
 import Social from './Social';
@@ -34,13 +35,16 @@ class Enter extends PureComponent {
 		this.onSubmit = this.onSubmit.bind(this);
 	}
 
-	onSubmit = (e) => {
+	onSubmit = async (e) => {
 		e.preventDefault();
 		const errors = this.validate(this.state.data);
 		this.setState({ errors });
 		if (Object.keys(errors).length === 0) {
-			this.props.submit(this.state.data)
-				.catch(err => this.setState({ errors: err.response.data.errors }))
+			try {
+				await this.props.submit(this.state.data)
+			} catch(err) {
+				this.setState({ errors: err.response.data.errors })
+			}
 		}
 	}
 
@@ -54,14 +58,20 @@ class Enter extends PureComponent {
 
 	validate = (data) => {
 		const errors = {};
-		if (!validator.isEmail(data.email)) errors.email = this.txt.emailError;
-		if (!data.pass) errors.password = this.txt.passError;
+		if (!validator.isEmail(data.email)) {
+			toast.warn(this.txt.emailError)
+			errors.email = this.txt.emailError;
+		}
+		if (!data.pass) {
+			toast.warn(this.txt.passError)
+			errors.password = this.txt.passError;
+		}
 		return errors;
 	}
 
 	render() {
 		const { data, errors } = this.state;
-		const handleEnterErr = errors.global && (errors.global && this.txt.globalEnterErr)
+		errors.global && (errors.global && toast.warn(this.txt.globalEnterErr))
 		
 		return (
 			<div className={this.props.toggle ? "row justify-content-center" : "d-none"}>
@@ -76,10 +86,10 @@ class Enter extends PureComponent {
 							<CardBody>
 
 								<UserInput label="input.email" icon="envelope" type="text" name="email"
-								           onChange={this.onChange} value={data.email} errorLabel={errors.email || handleEnterErr} />
+								           onChange={this.onChange} value={data.email} />
 
 								<UserInput label="input.pass" icon="lock" type="password" name="pass"
-								           onChange={this.onChange} value={data.pass} errorLabel={errors.password || handleEnterErr} />
+								           onChange={this.onChange} value={data.pass} />
 
 								<div className="">
 									<Button type="submit"><Fa icon="sign-in" /> &nbsp; { this.txt.enter }</Button>
@@ -94,6 +104,7 @@ class Enter extends PureComponent {
 						</Card>
 					</form>
 				</div>
+				<ToastContainer />
 			</div>
 		);
 	}

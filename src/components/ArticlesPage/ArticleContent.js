@@ -1,21 +1,19 @@
 import React, {PureComponent} from 'react';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import renderHTML from 'react-render-html';
 import { FormattedMessage } from 'react-intl';
 import NProgress from 'nprogress';
 import { Helmet } from "react-helmet";
+import mediumZoom from 'medium-zoom';
 //user components
 import CommentsWrapper from './Comments/CommentsWrapper';
 import Wrapper from '../Utils/Wrapper';
 import HandleDate from '../Utils/HandleDate';
 import LikeShareButtons from '../Utils/LikeShareButtons';
-//actions
-import { getArticle } from '../../actions/article';
-import { getProfile } from '../../actions/profile';
-//selectors
-import { eachArticleSelector } from "../../reducer/article";
-import {profileSelector} from "../../reducer/profile";
+//direct api requests
+import api from '../../api';
 //css
 import './style.css';
 
@@ -28,47 +26,41 @@ class ArticleContent extends PureComponent {
 			article: {},
 			profile: {},
 			html: '',
-			liked: false
+			liked: false,
+			deleted: false
 		}
 
 		this.txt = {
 			publishedOn: <FormattedMessage id="date.publish" />,
 		}
-
-		this.update = this.update.bind(this)
 	}
 
-	update = () => {
-		NProgress.start();
-		this.props.getArticle(this.props.match.params.id)
-			.then(() => this.props.getProfile(this.props.user.email)
-				.then(() => {
-					let html = `${this.props.article.content}`;
-					const stringOpt = { "<img": "<img className='img-fluid mx-auto d-block' alt='content_image'" }
-					html = html.replace(/<img/gi, (matched) => stringOpt[matched])
-					this.setState({ article: this.props.article, profile: this.props.profile, html }, () => NProgress.done())
-				})
-			)
-	}
-
-	componentDidMount() {
+	async componentDidMount() {
 		NProgress.start()
-		this.props.getArticle(this.props.match.params.id)
-			.then(() => this.props.getProfile(this.props.user.email)
-				.then(() => {
-					let html = `${this.props.article.content}`;
-					const stringOpt = { "<img": "<img className='img-fluid mx-auto d-block img-thumbnail' alt='content_image'" }
-					html = html.replace(/<img/gi, (matched) => stringOpt[matched])
-					this.setState({ article: this.props.article, profile: this.props.profile, html }, () => NProgress.done())
-				})
-			)
+		const article = await api.article.getArticle(this.props.match.params.id);
+		if (article === null || Object.keys(article).length === 0) window.location.href = '/404';
+		const profile = Object.keys(this.props.user).length !== 0 && await api.user.getProfile(this.props.user.email)
+		let html = article.content;
+		const stringOpt = {
+			"<img": "<img id='articleImages' style='cursor: pointer;' " +
+			"className='img-fluid my-3 mx-auto d-block img-thumbnail' alt='content_image'"
+		}
+		html = await html.replace(/<img/gi, (matched) => stringOpt[matched])
+		this.setState({ article, profile, html })
+		await mediumZoom('#articleImages', {
+			margin: 24,
+			background: 'rgba(0, 0, 0, 0.7)',
+			scrollOffset: 0,
+			metaClick: false,
+		});
+		NProgress.done();
 	}
 
 	render() {
 		const { lang, user } = this.props;
 		const { html, article, profile } = this.state;
 
-		if (Object.keys(article).length === 0 && Object.keys(profile).length === 0) return <div></div>;
+		if (Object.keys(article).length === 0) return <div></div>;
 
 		const url = window.location.href;
 		const hash = window.location.hash;
@@ -149,21 +141,15 @@ const styles = {
 }
 
 ArticleContent.propTypes = {
-	article: PropTypes.oneOfType([ PropTypes.array, PropTypes.object ]).isRequired,
-	profile: PropTypes.object.isRequired,
 	user: PropTypes.object.isRequired,
-	getArticle: PropTypes.func.isRequired,
-	getProfile: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
 	return {
-		article: eachArticleSelector(state),
-		profile: profileSelector(state),
 		user: state.user,
 		lang: state.locale.lang
 	}
 }
 
-export default connect(mapStateToProps, { getArticle, getProfile })(ArticleContent);
+export default connect(mapStateToProps)(ArticleContent);
 

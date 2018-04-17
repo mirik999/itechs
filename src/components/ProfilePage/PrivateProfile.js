@@ -9,12 +9,18 @@ import sha1 from 'sha1';
 import superagent from 'superagent';
 import NProgress from 'nprogress';
 import validator from 'validator';
+import { ToastContainer, toast } from 'react-toastify';
 //user components
 import UserImage from '../Utils/UserImage';
-import UserInput from '../Utils/UserInput';
+import StatisticPanel from './Sections/StatisticPanel';
+import Inputs from './Sections/Inputs';
+import MyArticles from './Sections/MyArticles';
 //actions
-import { logout } from '../../actions/user';
-import { changeCover, getProfile, editProfile } from '../../actions/profile';
+import { logout } from '../../actions/user'
+//direct api requests
+import api from '../../api';
+//cdd
+import './Sections/style.css';
 
 
 class PrivateProfile extends PureComponent {
@@ -31,11 +37,13 @@ class PrivateProfile extends PureComponent {
 				bgImg: null,
 			},
 			edit: true,
+			tableNumber: 1,
 			errors: {}
 		}
 		
 		this.txt = {
 			edit: <FormattedMessage id="edit" />,
+			delete: <FormattedMessage id="delete" />,
 			exit: <FormattedMessage id="profile.logout" />,
 			resolve: <FormattedMessage id="resolve" />,
 			aboutError: <FormattedMessage id="error.about" />,
@@ -52,7 +60,8 @@ class PrivateProfile extends PureComponent {
 		this.uploadFile = this.uploadFile.bind(this);
 		this.onSave = this.onSave.bind(this);
 		this.onChange = this.onChange.bind(this);
-		this.renderNumbers = this.renderNumbers.bind(this);
+		this.onChangeTable = this.onChangeTable.bind(this);
+		this.onRemoveFromArticles = this.onRemoveFromArticles.bind(this);
 	}
 
 	static getDerivedStateFromProps(nextProps, prevState) {
@@ -67,7 +76,7 @@ class PrivateProfile extends PureComponent {
 	}
 
 	componentDidMount() {
-		const {profile, articles} = this.props;
+		const { profile, articles } = this.props;
 		this.setState({ profile, articles })
 	}
 
@@ -95,7 +104,7 @@ class PrivateProfile extends PureComponent {
 			uploadRequest.field(key, params[key])
 		})
 
-		uploadRequest.end((err, res) => {
+		uploadRequest.end(async (err, res) => {
 			if (err) {
 				NProgress.done();
 				return this.setState({ errors: { image: "error" } })
@@ -109,37 +118,33 @@ class PrivateProfile extends PureComponent {
 			}
 			
 			if (Object.keys(this.state.errors).length === 0) {
-				this.props.changeCover(data)
-					.then(() => {
-						NProgress.done();
-						this.props.getProfile(data.email)
-							.then(() => this.setState({ profile: { ...this.props.profile, bgImg: bgImg } }))
-					})
+				const profile = await api.user.changeCover(data)
+				this.setState({ profile }, () => NProgress.done())
 			}
 		})
 	}
 
 	handleLogout = () => {
-		Promise.resolve()
-			.then(() => this.props.logout())
-			.then(() => {
-				window.location.href = '/';
-			})
+		this.props.logout()
+		window.location.href = '/';
 	}
 
-	onSave = (e) => {
+	onSave = async (e) => {
 		const { email, about, contact, portfolio, github } = this.state.profile;
 		this.setState((prevState) => {
 			return { edit: !prevState.edit }
 		})
 		if (e.target.name === "save") {
-			const errors = this.validate(this.state.profile);
+			const errors = await this.validate(this.state.profile);
 			this.setState({ errors });
 			if (Object.keys(errors).length === 0) {
 				const data = { email, about, contact, portfolio, github}
-				this.props.editProfile(data)
-					.then(() => this.props.getProfile(data.email))
-					.catch(err => this.setState({errors: {global: err.message}}))
+				try {
+					await api.user.editProfile(data)
+					await api.user.getProfile(data.email)
+				} catch(err) {
+					this.setState({errors: {global: err.message}})
+				}
 			}
 		}
 	}
@@ -147,18 +152,23 @@ class PrivateProfile extends PureComponent {
 	validate = (profile) => {
 		const errors = {};
 		if (profile.about && !validator.isLength(JSON.stringify(profile.about), {min:0, max: 35})) {
+			toast.warn(this.txt.aboutError)
 			errors.about = this.txt.aboutError;
 		}
 		if (profile.contact && !validator.isLength(JSON.stringify(profile.contact), {min:0, max: 35})) {
+			toast.warn(this.txt.contactError)
 			errors.contact = this.txt.contactError;
 		}
 		if (profile.portfolio && (!validator.isURL(profile.portfolio))) {
+			toast.warn(this.txt.ptfError)
 			errors.portfolio = this.txt.ptfError;
 		}
 		if (profile.github && (!validator.isURL(profile.github))) {
+			toast.warn(this.txt.githubError)
 			errors.github = this.txt.githubError;
 		}
 		if (profile.github && (!validator.contains(profile.github, "github.com"))) {
+			toast.warn(this.txt.githubError)
 			errors.github = this.txt.githubError;
 		}
 		return errors;
@@ -172,23 +182,23 @@ class PrivateProfile extends PureComponent {
 		})
 	}
 
-	renderNumbers = (category) => {
-		const { articles, profile } = this.state;
+	onChangeTable = (num) => {
+		if ( this.state.tableNumber === num ) num = 1;
+		this.setState({ ...this.state, tableNumber: num })
+	}
 
-		if (articles && Object.keys(articles).length !== 0) {
-			if (category === "articleNums") return articles.filter(article => article.author.username === profile.username).length
-			if (category === "commentNums") return articles.filter(art => art.comments).reduce((acc, art) => acc.concat(art.comments), [])
-				.filter(cmt => cmt.author.username === profile.username).length
-			if (category === "followers") return profile.followedUsers.length
-			if (category === "following") return profile.myFollows.length
-		}
+	onRemoveFromArticles = async (deletedArticle) => {
+		const articles = await this.state.articles.filter(art => art._id !== deletedArticle._id)
+		this.setState({ articles })
 	}
 
 	render() {
-		const { edit, profile, errors } = this.state;
+		const { edit, articles, profile, tableNumber, errors } = this.state;
+		const { lang } = this.props;
+
+		if (Object.keys(profile).length === 0 && Object.keys(articles).length === 0) return <div></div>
+
 		const editable = edit && (Object.keys(errors).length === 0);
-		
-		if (Object.keys(profile).length === 0) return <div></div>
 
 		return (
 			<div className="row justify-content-center">
@@ -210,7 +220,7 @@ class PrivateProfile extends PureComponent {
 							<Fa className="position-absolute" icon="camera" style={styles.camera}/>
 						</Dropzone>
 						<CardBody>
-							<section className="float-left" style={styles.profileImageWrapper}>
+							<section className="float-left " style={styles.profileImageWrapper}>
 								<UserImage image={profile.useravatar}
 								           load2image=" "
 								           alt="user profile"
@@ -244,59 +254,30 @@ class PrivateProfile extends PureComponent {
 									</Button>
 								</Tooltip>
 							</section>
-							<section className="row no-gutters w-100" style={styles.counts}>
-								<div className="col-6 col-lg-3 text-center text-secondary px-3 pb-4">
-									<small className="font-weight-bold"><Fa icon="newspaper-o"/> {this.txt.articles}</small>
-									<p>{this.renderNumbers("articleNums")}</p>
-								</div>
-								<div className="col-6 col-lg-3 text-center text-secondary px-3 pb-4">
-									<small className="font-weight-bold"><Fa icon="comment"/> {this.txt.comments}</small>
-									<p>{this.renderNumbers("commentNums")}</p>
-								</div>
-								<div className="col-6 col-lg-3 text-center text-secondary px-3 pb-4">
-									<small className="font-weight-bold"><Fa icon="user-plus"/> {this.txt.following}</small>
-									<p>{this.renderNumbers("following")}</p>
-								</div>
-								<div className="col-6 col-lg-3 text-center text-secondary px-3 pb-4">
-									<small className="font-weight-bold"><Fa icon="users"/> {this.txt.followers}</small>
-									<p>{this.renderNumbers("followers")}</p>
-								</div>
-							</section>
+
+							<StatisticPanel articles={articles} profile={profile} style={styles.counts}
+							                txt={this.txt} getNumberOfTables={this.onChangeTable} lang={lang}
+							/>
+
 							{
-								<section className="mt-2" style={styles.counts}>
-									<div className="row justify-content-center">
-										<div className="col-12 col-md-6">
-											<UserInput label="profile.about" icon="address-card-o" name="about" onChange={this.onChange}
-											           value={profile.about} defaultValue={profile.about} disabled={editable}
-											           errorLabel={errors.about}
-											/>
-										</div>
-										<div className="col-12 col-md-6">
-											<UserInput label="profile.contact" icon="envelope-o" name="contact" onChange={this.onChange}
-											           value={profile.contact} defaultValue={profile.contact} disabled={editable}
-											           errorLabel={errors.contact}
-											/>
-										</div>
-									</div>
-									<div className="row justify-content-center">
-										<div className="col-12 col-md-6">
-											<UserInput label="profile.ptf" icon="file-code-o" name="portfolio" onChange={this.onChange}
-											           value={profile.portfolio} defaultValue={profile.portfolio} disabled={editable}
-											           errorLabel={errors.portfolio}
-											/>
-										</div>
-										<div className="col-12 col-md-6">
-											<UserInput label="profile.git" icon="code-fork" name="github" onChange={this.onChange}
-											           value={profile.github} defaultValue={profile.github} disabled={editable}
-											           errorLabel={errors.github}
-											/>
-										</div>
-									</div>
-								</section>
+								tableNumber === 1 &&
+								<Inputs profile={profile} editable={editable} getValue={this.onChange}
+								        style={styles.counts}
+								        lang={lang}
+								/>
 							}
+
+							{
+								tableNumber === 2 &&
+							<MyArticles articles={articles} profile={profile} txt={this.txt}
+							            lang={lang} deletedArticle={this.onRemoveFromArticles}
+							/>
+							}
+
 						</CardBody>
 					</Card>
 				</div>
+				<ToastContainer />
 			</div>
 		)
 	}
@@ -353,4 +334,4 @@ PrivateProfile.propTypes = {
 	articles: PropTypes.array.isRequired,
 };
 
-export default connect(null, { logout, changeCover, getProfile, editProfile })(PrivateProfile);
+export default connect(null, { logout })(PrivateProfile);

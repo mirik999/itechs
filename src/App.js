@@ -3,7 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { IntlProvider } from 'react-intl';
 import messages from './messages';
-// user routes
+//user routes
 import UserIsAuth from './components/UserRoute/UserIsAuth';
 import UserNotAuth from './components/UserRoute/UserNotAuth';
 //components
@@ -11,6 +11,7 @@ import LeftNavBar from './components/LeftNavBar/LeftNavBar';
 import ArticlesPage from './components/ArticlesPage/ArticlesPage';
 import ArticleContent from './components/ArticlesPage/ArticleContent';
 import ArticleCreate from './components/ArticlesPage/ArticleCreate';
+import ArticleEdit from './components/ArticlesPage/ArticleEdit';
 import AuthPage from './components/AuthPage/AuthPage';
 import DocumentationPage from './components/DocumentationPage/DocumentationPage';
 import ProfilePage from './components/ProfilePage/ProfilePage';
@@ -33,6 +34,7 @@ class App extends PureComponent {
 						<Route exact location={location} path="/" component={ArticlesPage} />
 						<Route location={location} path="/article/read/:id" component={ArticleContent} />
 						<UserNotAuth location={location} path="/article/create" component={ArticleCreate} />
+						<UserNotAuth location={location} path="/article/edit/:id" component={ArticleEdit} />
 						<UserIsAuth exact location={location} path="/authorization" component={AuthPage} />
 						<UserNotAuth exact location={location} path="/profile/:name" component={ProfilePage} />
 						<UserNotAuth exact location={location} path="/documentation" component={DocumentationPage} />

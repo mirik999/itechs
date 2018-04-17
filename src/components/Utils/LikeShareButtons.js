@@ -8,9 +8,8 @@ import { FormattedMessage } from 'react-intl';
 import { Button, Fa } from 'mdbreact';
 import NProgress from 'nprogress';
 import { FacebookShareButton } from 'react-share';
-//actions
-import { like, getArticle } from '../../actions/article';
-import { follow } from '../../actions/profile';
+//direct api requests
+import api from '../../api';
 
 class LikeShareButtons extends PureComponent {
 	constructor(props) {
@@ -35,61 +34,56 @@ class LikeShareButtons extends PureComponent {
 		this.onFollow = this.onFollow.bind(this);
 	}
 
-	componentDidMount() {
+	async componentDidMount() {
 		const { article, profile } = this.props;
 		const check = Object.keys(profile).length !== 0;
-		const follows = check && profile.myFollows.map(user => user.followedUserName === article.author.username)
-		const likes = article.like.map(like => like.likedBy === profile.username);
+		const follows = check && await profile.myFollows.map(user => user.followedUserName === article.author.username)
+		const likes = await article.like.map(like => like.likedBy === profile.username);
 		this.setState({
 			liked: likes.includes(true),
 			followed: check ? follows.includes(true) : false
 		})
 	}
 
-	onVote = () => {
+	onVote = async () => {
 		NProgress.start();
 		if (_.isEmpty(this.props.profile)) {
 			NProgress.done()
 			return null;
 		}
-
 		const data = {
 			id: this.props.article._id,
 			name: this.props.profile.username
 		}
-		this.setState({ liked: !this.state.liked }, () => {
-			this.props.like(data)
-				.then(() => NProgress.done())
-		})
+		await this.setState({ liked: !this.state.liked })
+		await	api.article.like(data)
+		NProgress.done();
 	}
 
-	onFollow = () => {
+	onFollow = async () => {
 		NProgress.start();
 		if (_.isEmpty(this.props.profile)) {
 			NProgress.done()
 			return null;
 		}
-
 		if (this.props.article.author.username === this.props.profile.username) {
 			NProgress.done()
 			return null;
 		}
-
 		const data = {
 			followUserName: this.props.article.author.username,
 			followUserEmail: this.props.article.author.email,
 			myUserName: this.props.profile.username,
 			myEmail: this.props.profile.email
 		}
-		this.setState({ followed: !this.state.followed }, () => {
-			this.props.follow(data)
-				.then(() => NProgress.done())
-		})
+		await this.setState({ followed: !this.state.followed })
+		await	api.user.follow(data)
+		NProgress.done();
 	}
 
 	render() {
 		const { liked, followed } = this.state;
-		const { url, card, article } =this.props;
+		const { url, card, article } = this.props;
 
 		if (Object.keys(article).length === 0) return <div></div>
 
@@ -98,9 +92,21 @@ class LikeShareButtons extends PureComponent {
 			const commentCount = article.comments.length
 			return (
 				<span className="text-secondary">
-					<small className="pr-2" style={styles.view}>{Math.floor(article.pageview)} &nbsp;{this.txt.read}</small>
-					<small className="px-2" style={styles.view}>{commentCount} &nbsp;{this.txt.comment}</small>
-					<small className="pl-2">{likeCount}&nbsp;{this.txt.like}</small>
+					<Tooltip id="newspaper-o" title={this.txt.read}>
+						<small className="pr-2">
+							<Fa icon="newspaper-o" /> {Math.floor(article.pageview)}
+						</small>
+					</Tooltip>
+					<Tooltip id="newspaper-o" title={this.txt.comment}>
+						<small className="px-2">
+							<Fa icon="commenting-o" /> {commentCount}
+						</small>
+					</Tooltip>
+					<Tooltip id="newspaper-o" title={this.txt.like}>
+						<small className="pl-2">
+							{ liked ? <Fa icon="heart" /> : <Fa icon="heart-o" /> } {likeCount}
+						</small>
+					</Tooltip>
 				</span>
 			)
 		}
@@ -136,10 +142,4 @@ LikeShareButtons.propTypes = {
 	getArticle: PropTypes.func.isRequired
 };
 
-const styles = {
-	view: {
-		borderRight: "1px solid silver"
-	}
-}
-
-export default connect(null, { like, getArticle, follow })(LikeShareButtons);
+export default LikeShareButtons;

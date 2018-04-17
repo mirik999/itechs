@@ -4,14 +4,22 @@
 }
 
 pre {
+	max-width: 100%;
 	font-family:"OMB";
-	font-size: 16px;
-	background-color: #262626;
-	color: #c1b58e;
+	font-size: 14px;
+	background-color: #eeeeee;
+	color: #242224;
 	padding: 10px;
 	margin: 10px 0;
-	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
-	border-radius: 5px;
 	word-wrap: break-word;
+}
+
+code {
+	background-color: #eeeeee;
+	color: #242224;
+}
+
+.edit-button:hover {
+	background-color: #f8f8f8;
+	cursor: pointer;
 }

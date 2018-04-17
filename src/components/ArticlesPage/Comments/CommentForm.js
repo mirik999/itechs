@@ -51,13 +51,13 @@ class CommentForm extends PureComponent {
 		this.setState({ editorState })
 	}
 
-	onComment = (e) => {
+	onComment = async (e) => {
 		e.preventDefault();
 		const { id, profile } = this.props;
 		const html = '';
-		const draftContent = htmlToDraft(html)
+		const draftContent = await htmlToDraft(html)
 
-		const htmlContent = draftToHtml(convertToRaw(this.state.editorState.getCurrentContent()));
+		const htmlContent = await draftToHtml(convertToRaw(this.state.editorState.getCurrentContent()));
 
 		const data = {
 			author: {
@@ -69,13 +69,13 @@ class CommentForm extends PureComponent {
 			userID: profile._id,
 			text: htmlContent
 		}
-		const errors = this.validate(data);
+		const errors = await this.validate(data);
 		this.setState({ errors })
 		if (Object.keys(errors).length === 0) {
-			socket.emit('onComment', data);
+			await socket.emit('onComment', data);
 			if (draftContent) {
-				const contentState = ContentState.createFromBlockArray(draftContent.contentBlocks);
-				const editorState = EditorState.createWithContent(contentState);
+				const contentState = await ContentState.createFromBlockArray(draftContent.contentBlocks);
+				const editorState = await EditorState.createWithContent(contentState);
 				this.setState({ editorState })
 			}
 		}

@@ -2,17 +2,12 @@ import React, { PureComponent } from "react";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import NProgress from 'nprogress';
-import { Helmet } from "react-helmet";
 //user components
 import Wrapper from '../Utils/Wrapper';
 import ArticleCard from './ArticleCard';
 import ArticleSearchPanel from "./ArticleSearchPanel";
-//actions
-import { getAllArticles } from '../../actions/article';
-import { getProfile } from '../../actions/profile';
-//selectors
-import { articlesSelector } from "../../reducer/article";
-import { profileSelector } from "../../reducer/profile";
+//direct api requests
+import api from '../../api';
 
 
 class ArticlesPage extends PureComponent {
@@ -26,19 +21,17 @@ class ArticlesPage extends PureComponent {
 		}
 
 		this.handleSearchFilter = this.handleSearchFilter.bind(this);
-		this.update = this.update.bind(this);
 		this.onFilter = this.onFilter.bind(this);
 	}
 
-	componentDidMount() {
+	async componentDidMount() {
 		NProgress.start();
-		this.props.getAllArticles()
-			.then(() => this.props.getProfile(this.props.user.email)
-				.then(() => this.setState({
-					articles: this.props.articles,
-					profile: this.props.profile
-				}, () => NProgress.done()))
-			)
+		const articles = await api.article.getAllArticles()
+		const profile = Object.keys(this.props.user).length !== 0 && await api.user.getProfile(this.props.user.email)
+		this.setState({
+			articles,
+			profile
+		}, () => NProgress.done())
 	}
 
 	onFilter = (word) => (article) => {
@@ -60,18 +53,12 @@ class ArticlesPage extends PureComponent {
 		this.setState({ searchTerm: word })
 	}
 
-	update = () => {
-		NProgress.start();
-		this.props.getAllArticles()
-			.then(() => NProgress.done())
-	}
-
 	render() {
 		const { lang } = this.props;
 		const { articles, profile, searchTerm } = this.state;
 
-		if (!articles && !profile) return <div></div>;
-
+		if (Object.keys(articles).length === 0 && Object.keys(profile).length === 0) return <div></div>;
+	
 		return (
 			<Wrapper>
 				<ArticleSearchPanel searchTerm={searchTerm} search={this.handleSearchFilter} />
@@ -84,7 +71,6 @@ class ArticlesPage extends PureComponent {
 										id={article._id}
 										article={article}
 										articles={articles}
-										update={this.update}
 										lang={lang}
 										profile={profile}
 									/>
@@ -98,10 +84,6 @@ class ArticlesPage extends PureComponent {
 }
 
 ArticlesPage.propTypes = {
-	articles: PropTypes.array.isRequired,
-	profile: PropTypes.object.isRequired,
-	getAllArticles: PropTypes.func.isRequired,
-	getProfile: PropTypes.func.isRequired,
 	user: PropTypes.object.isRequired,
 };
 
@@ -109,11 +91,9 @@ function mapStateToProps(state) {
 	//console.log('selector', articlesSelector(state) === articlesSelector(state))
 	return {
 		lang: state.locale.lang,
-		articles: articlesSelector(state),
-		profile: profileSelector(state),
 		user: state.user
 	}
 }
 
 
-export default connect(mapStateToProps, { getAllArticles, getProfile })(ArticlesPage);
+export default connect(mapStateToProps)(ArticlesPage);

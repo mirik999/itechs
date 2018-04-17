@@ -40,6 +40,12 @@ export default {
 		getArticle: (id) => {
 			return axios.get(`/api/article/get-one-article/${id}`).then(res => res.data.oneArticle)
 		},
+		editArticle: (data) => {
+			return axios.put(`/api/article/edit-article/${data.id}`, { data }).then(res => res.data.editedArticle)
+		},
+		deleteArticle: (id) => {
+			return axios.delete(`/api/article/delete-article/${id}`).then(res => res.data.articles)
+		},
 		like: (data) => {
 			return axios.post('/api/article/like', { data }).then(res => res.data.like)
 		}

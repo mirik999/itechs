@@ -4,10 +4,8 @@ import { push as Menu } from 'react-burger-menu';
 //user components
 import MenuList from './MenuList';
 import Language from './Language';
-//actions
-import { getProfile } from '../../actions/profile';
-//selectors
-import {profileSelector} from "../../reducer/profile";
+//direct api requests
+import api from '../../api';
 //css
 import './LeftNavBar.css';
 
@@ -16,16 +14,20 @@ import './LeftNavBar.css';
 class LeftNavBar extends PureComponent {
 	constructor(props) {
 		super(props);
-		this.state = { menuOpen: false }
+		this.state = {
+			profile: {},
+			menuOpen: false
+		}
 	}
 
-	componentDidMount() {
-		this.props.getProfile(this.props.user.email)
+	async componentDidMount() {
+		const profile = Object.keys(this.props.user).length !== 0 && await api.user.getProfile(this.props.user.email)
+		this.setState({ profile })
 	}
 
 	render() {
-		const { profile } = this.props;
-		const { menuOpen } = this.state;
+		const { lang } = this.props;
+		const { menuOpen, profile } = this.state;
 
 		return (
 			<div className="row" id="outer">
@@ -35,8 +37,8 @@ class LeftNavBar extends PureComponent {
 						<div className="logo-name text-center" style={styles.logobm}>
 							<img src={require('../../lib/images/logo-text.png')} alt="logo-text"/>
 						</div>
-						<MenuList profile={profile} />
-						<Language menuOpen={this.handleChangeLanguage} />
+						<MenuList profile={profile} lang={lang} />
+						<Language />
 					</div>
 				</Menu>
 			</div>
@@ -90,8 +92,7 @@ function mapStateToProps(state) {
 	return {
 		lang: state.locale.lang,
 		user: state.user,
-		profile: profileSelector(state)
 	};
 }
 
-export default connect(mapStateToProps, { getProfile })(LeftNavBar);
+export default connect(mapStateToProps)(LeftNavBar);

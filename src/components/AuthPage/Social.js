@@ -15,21 +15,17 @@ class Social extends PureComponent {
 		this.responseGoogle = this.responseGoogle.bind(this);
 	}
 
-	responseFacebook = (res) => {
+	responseFacebook = async (res) => {
 		const data = res;
-		this.props.facebookLogin(data)
-			.then(() => {
-				window.location.href = "/";
-			});
+		await this.props.facebookLogin(data)
+		window.location.href = "/";
 	};
 
-	responseGoogle = (res) => {
+	responseGoogle = async (res) => {
 		const { profileObj, tokenObj } = res;
 		const data = Object.assign({}, profileObj, tokenObj);
-		this.props.googleLogin(data)
-			.then(() => {
-				window.location.href = "/";
-			});
+		await this.props.googleLogin(data)
+		window.location.href = "/";
 	};
 
 	render() {

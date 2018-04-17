@@ -4,6 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import { Card, CardImage, CardBody, Button, Fa } from 'mdbreact';
 import Tooltip from 'material-ui/Tooltip';
+import { ToastContainer, toast } from 'react-toastify';
 //user components
 import UserInput from '../Utils/UserInput';
 
@@ -36,13 +37,16 @@ class Register extends PureComponent {
 		this.onSubmit = this.onSubmit.bind(this);
 	}
 
-	onSubmit = (e) => {
+	onSubmit = async (e) => {
 		e.preventDefault();
 		const errors = this.validate(this.state.data);
 		this.setState({ errors });
 		if (Object.keys(errors).length === 0) {
-			this.props.submit(this.state.data)
-				.catch(err => this.setState({ errors: err.response.data.errors }))
+			try {
+				await this.props.submit(this.state.data)
+			} catch(err) {
+				this.setState({ errors: err.response.data.errors })
+			}
 		}
 	}
 
@@ -55,16 +59,25 @@ class Register extends PureComponent {
 
 	validate = (data) => {
 		const errors = {};
-		if (!validator.isEmail(data.email)) errors.email = this.txt.emailError;
-		if (!validator.isLength(data.uname, { min:3, max: 12 })) errors.uname = this.txt.unameError;
-		if (!data.pass) errors.password = this.txt.passError;
+		if (!validator.isEmail(data.email)) {
+			toast.warn(this.txt.emailError)
+			errors.email = this.txt.emailError;
+		}
+		if (!validator.isLength(data.uname, { min:3, max: 12 })) {
+			toast.warn(this.txt.unameError)
+			errors.uname = this.txt.unameError;
+		}
+		if (!data.pass) {
+			toast.warn(this.txt.passError)
+			errors.password = this.txt.passError;
+		}
 		return errors;
 	}
 
 	render() {
 		const { data, errors } = this.state;
-		const handleEmailErr = errors.global && (errors.global.email && this.txt.globalEmailErr)
-		const handleEmailUn = errors.global && (errors.global.username && this.txt.globalUnameErr)
+		errors.global && (errors.global.email && toast.warn(this.txt.globalEmailErr))
+		errors.global && (errors.global.username && toast.warn(this.txt.globalUnameErr))
 
 		return (
 			<div className={!this.props.toggle ? "row justify-content-center" : "d-none"}>
@@ -79,13 +92,13 @@ class Register extends PureComponent {
 							<CardBody>
 
 								<UserInput label="input.uname" icon="vcard" type="text" name="uname"
-								           onChange={this.onChange} value={data.uname} errorLabel={errors.uname || handleEmailUn} />
+								           onChange={this.onChange} value={data.uname} />
 
 								<UserInput label="input.email" icon="envelope" type="email" name="email"
-								           onChange={this.onChange} value={data.email} errorLabel={errors.email || handleEmailErr} />
+								           onChange={this.onChange} value={data.email} />
 
 								<UserInput label="input.pass" icon="lock" type="password" name="pass"
-								           onChange={this.onChange} value={data.pass} errorLabel={errors.password} />
+								           onChange={this.onChange} value={data.pass} />
 
 								<div className="">
 									<Button type="submit"><Fa icon="sign-in" />&nbsp; { this.txt.register }</Button>
@@ -99,6 +112,7 @@ class Register extends PureComponent {
 						</Card>
 					</form>
 				</div>
+				<ToastContainer />
 			</div>
 		);
 	}

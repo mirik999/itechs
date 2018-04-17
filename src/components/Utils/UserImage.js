@@ -7,8 +7,6 @@ import ProgressiveImage from 'react-progressive-image';
 class UserImage extends PureComponent {
 	render() {
 		const { image, alt, className, style, zoom, load2image  } = this.props;
-		// const beforeLoad2Image = require("../../lib/images/blur.png");
-		// const smallImage = load2image.length > 5 ? load2image : beforeLoad2Image;
 
 		if (zoom) {
 			return (
@@ -37,7 +35,10 @@ class UserImage extends PureComponent {
 
 UserImage.defaultProps = {
 	zoom: false,
-	load2image: " "
+	load2image: " ",
+	style: {
+		cursor: "pointer"
+	}
 }
 
 UserImage.propTypes = {

@@ -1,5 +1,4 @@
-import React, {PureComponent, Fragment} from 'react';
-import { connect } from 'react-redux';
+import React, {PureComponent} from 'react';
 import { Link } from 'react-router-dom';
 import renderHTML from 'react-render-html';
 import { FormattedMessage } from 'react-intl';
@@ -14,8 +13,6 @@ import io from 'socket.io-client';
 import Tooltip from 'material-ui/Tooltip';
 //user components
 import HandleDate from '../../Utils/HandleDate';
-//actions
-import { delComment, editComment } from '../../../actions/comment';
 //socket setting
 if (process.env.NODE_ENV === 'production') {
 	var socket = io('https://itechs.info');
@@ -54,12 +51,12 @@ class EachComment extends PureComponent {
 		this.fireSockets = this.fireSockets.bind(this)
 	}
 
-	componentDidMount() {
-		this.fireSockets();
-		this.setState({
+	async componentDidMount() {
+		await this.setState({
 			comments: this.props.comments,
 			profile: this.props.profile
 		})
+		this.fireSockets();
 	}
 
 	onEditorStateChange = (editorState) => {
@@ -74,24 +71,24 @@ class EachComment extends PureComponent {
 		socket.emit('delComment', data)
 	}
 
-	onSave = (id) => {
-		const htmlContent = draftToHtml(convertToRaw(this.state.editorState.getCurrentContent()));
+	onSave = async (id) => {
+		const htmlContent = await draftToHtml(convertToRaw(this.state.editorState.getCurrentContent()));
 		const data = {
 			handleID: id,
 			articleID: this.props.id,
 			text: htmlContent,
 		}
-		const errors = this.validate(data)
+		const errors = await this.validate(data)
 		this.setState({ errors })
 		if (Object.keys(errors).length === 0) {
-			socket.emit('editComment', data)
+			await socket.emit('editComment', data)
 			this.setState({toggle: !this.state.toggle})
 		}
 	}
 
-	onEdit = (comment) => {
-		const target = this.state.comments.filter(com => com.handleID === comment.handleID)[0]
-		const editorState = EditorState.createWithContent(stateFromHTML(comment.text))
+	onEdit = async (comment) => {
+		const target = await this.state.comments.filter(com => com.handleID === comment.handleID)[0]
+		const editorState = await EditorState.createWithContent(stateFromHTML(comment.text))
 		this.setState({
 			target: target.handleID,
 			toggle: !this.state.toggle,
@@ -162,7 +159,7 @@ class EachComment extends PureComponent {
 										<li className="reply">
 											{
 												comment.author.username === profile.username ?
-													<span onClick={() => this.onEdit(comment).bind(this)}>
+													<span onClick={() => this.onEdit(comment)}>
 														{ comment.handleID === target && toggle  ? this.txt.cancel : this.txt.edit }
 													</span> : <span>reply</span>
 											}
@@ -225,4 +222,4 @@ const styles = {
 	}
 }
 
-export default connect(null, { delComment, editComment })(EachComment);
+export default EachComment;

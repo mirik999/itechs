@@ -524,6 +524,7 @@
 	margin-bottom: 6px;
 	position: relative;
 }
+
 .rdw-image-modal {
 	position: absolute;
 	top: 35px;
@@ -782,6 +783,12 @@
 .rdw-image-imagewrapper {
 	position: relative;
 }
+
+.rdw-image-imagewrapper img {
+	width: 100% !important;
+	height: auto;
+}
+
 .rdw-image-center {
 	display: flex;
 	justify-content: center;
@@ -829,6 +836,7 @@
 	box-sizing: content-box;
 }
 .rdw-editor-main blockquote {
+	word-wrap: break-word;
 	border-left: 5px solid #f1f1f1;
 	padding-left: 5px;
 }

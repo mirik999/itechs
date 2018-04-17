@@ -1,5 +1,4 @@
 import React, {PureComponent} from 'react';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Button, Card, CardImage, CardBody, CardTitle, CardText, Fa } from 'mdbreact';
 import { FormattedMessage } from 'react-intl';
@@ -169,4 +168,4 @@ PublicProfile.propTypes = {
 	articles: PropTypes.array.isRequired,
 };
 
-export default connect(null)(PublicProfile);
+export default PublicProfile;

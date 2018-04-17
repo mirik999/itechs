@@ -7,6 +7,7 @@ import sha1 from 'sha1';
 import superagent from 'superagent';
 import Dropzone from 'react-dropzone';
 import NProgress from 'nprogress';
+import mediumZoom from 'medium-zoom';
 //user components
 import UserInput from '../../Utils/UserInput';
 import UserImage from '../../Utils/UserImage';
@@ -104,7 +105,7 @@ class Settings extends PureComponent {
 							<UserImage load2image={thumbnailSmall}
 							           image={thumbnail} alt="thumbnail"
 							           zoom={true}
-							           className="img-fluid img-thumbnail w-100 h-100"
+							           className="img-fluid img-thumbnail w-100 h-100 settingImage"
 							/>
 						}
 					</div>
