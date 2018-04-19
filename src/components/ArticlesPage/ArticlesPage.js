@@ -8,6 +8,8 @@ import ArticleCard from './ArticleCard';
 import ArticleSearchPanel from "./ArticleSearchPanel";
 //direct api requests
 import api from '../../api';
+//selectors
+import {profileSelector} from "../../reducer/profile";
 
 
 class ArticlesPage extends PureComponent {
@@ -27,10 +29,10 @@ class ArticlesPage extends PureComponent {
 	async componentDidMount() {
 		NProgress.start();
 		const articles = await api.article.getAllArticles()
-		const profile = Object.keys(this.props.user).length !== 0 && await api.user.getProfile(this.props.user.email)
+		// const profile = Object.keys(this.props.user).length !== 0 && await api.user.getProfile(this.props.user.email)
 		this.setState({
 			articles,
-			profile
+			profile: this.props.profile
 		}, () => NProgress.done())
 	}
 
@@ -58,7 +60,7 @@ class ArticlesPage extends PureComponent {
 		const { articles, profile, searchTerm } = this.state;
 
 		if (Object.keys(articles).length === 0 && Object.keys(profile).length === 0) return <div></div>;
-	
+
 		return (
 			<Wrapper>
 				<ArticleSearchPanel searchTerm={searchTerm} search={this.handleSearchFilter} />
@@ -91,6 +93,7 @@ function mapStateToProps(state) {
 	//console.log('selector', articlesSelector(state) === articlesSelector(state))
 	return {
 		lang: state.locale.lang,
+		profile: profileSelector(state),
 		user: state.user
 	}
 }

@@ -2,6 +2,7 @@ import React, {PureComponent} from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Fa } from 'mdbreact';
+import mediumZoom from 'medium-zoom';
 //user components
 import UserImage from '../../Utils/UserImage';
 import HandleDate from '../../Utils/HandleDate';
@@ -14,23 +15,17 @@ class MyArticles extends PureComponent {
 	constructor(props) {
 		super(props);
 
-		this.responsive = {
-			0:{
-				items:1,
-				nav:true
-			},
-			600:{
-				items:2,
-				nav:false
-			},
-			1000:{
-				items:3,
-				nav:true,
-				loop:false
-			}
-		}
-
 		this.onDelete = this.onDelete.bind(this);
+		this.myArticles = this.myArticles.bind(this);
+	}
+
+	componentDidMount() {
+		mediumZoom('#articleImages', {
+			margin: 24,
+			background: 'rgba(0, 0, 0, 0.7)',
+			scrollOffset: 0,
+			metaClick: false,
+		});
 	}
 
 	onDelete = async (id) => {
@@ -38,31 +33,40 @@ class MyArticles extends PureComponent {
 		this.props.deletedArticle(deletedArticle)
 	}
 
+	myArticles = (articles, profile) => {
+		const article = articles.filter(art => art.author.username === profile.username)
+														 .sort((a, b) => new Date(b.added) - new Date(a.added));
+		return article;
+	}
+
 	render() {
 		const { profile, articles, txt } = this.props;
-		const article = articles.filter(art => art.author.username === profile.username);
 
-		if (Object.keys(article).length === 0) return <div>No Articles</div>
+		if (Object.keys(this.myArticles(articles, profile)).length === 0) return <h4 className="text-center">{ txt.noArticles }</h4>
 
 		return (
 			<section>
-				<h4 className="text-center">My Articles</h4>
+				<h4 className="text-center">{ txt.articles }</h4>
 					{
-						article.map((art, idx) =>
+						this.myArticles(articles, profile).map((art, idx) =>
 							<div className="row border-list-article" key={idx}>
 								<div className="d-none d-md-block col-md-3" style={styles.imgWrapper}>
-									<UserImage image={art.thumbnail} load2image={art.thumbnailSmall} style={styles.img} className="img-fluid" />
+									<UserImage image={art.thumbnail} load2image={art.thumbnailSmall} style={styles.img}
+									           className="img-fluid img-thumbnail cursor-pointer"
+									/>
 								</div>
 								<div className="col-8 col-md-6 d-flex align-items-start flex-column">
-									<div className="mb-auto"><span>{art.title}</span></div>
+									<div className="mb-auto word-wrap"><span>{art.title}</span></div>
 									<div><small><HandleDate date={art.added} /></small></div>
 								</div>
 								<div className="col-4 col-md-3 d-flex align-items-end flex-column justify-content-end">
 									<span className="py-1 px-3 profile-article-btns">
-										<Link to={`/article/edit/${art._id}`} className="text-secondary"><Fa icon="edit"/> {txt.edit}</Link>
+										<small>
+											<Link to={`/article/edit/${art._id}`} className="text-secondary"><Fa icon="edit"/> {txt.edit}</Link>
+										</small>
 									</span>
 									<span className="py-1 px-3 text-secondary profile-article-btns" onClick={ () => this.onDelete(art._id) }>
-										<Fa icon="trash-o" /> {txt.delete}
+										<small><Fa icon="trash-o" /> {txt.delete}</small>
 									</span>
 								</div>
 							</div>

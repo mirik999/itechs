@@ -9,11 +9,6 @@ import { FormattedMessage } from 'react-intl';
 import Wrapper from '../Utils/Wrapper';
 import MyEditor from './Editor/Editor';
 import Settings from './Editor/Settings';
-//actions
-import { addNewArticle } from '../../actions/article';
-import { getProfile } from '../../actions/profile';
-//selector
-import {profileSelector} from "../../reducer/profile";
 //direct api requests
 import api from '../../api';
 
@@ -69,11 +64,11 @@ class ArticleCreate extends PureComponent {
 
 	validate = (data) => {
 		const errors = {};
-		if (!data.settings.title || !validator.isLength(data.settings.title, { min: 10, max: 50 }) ) {
+		if (!data.settings.title || !validator.isLength(data.settings.title, { min: 10, max: 40 }) ) {
 			toast.warn(this.txt.titleErr)
 			errors.title = this.txt.titleErr
 		}
-		if (!data.content || !validator.isLength(data.content, { min: 50 }) ) {
+		if (!data.content.toString() || !validator.isLength(data.content.toString(), { min: 50 }) ) {
 			toast.warn(this.txt.contentErr)
 			errors.content = this.txt.contentErr
 		}

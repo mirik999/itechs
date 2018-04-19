@@ -15,6 +15,18 @@
       html, body {
         background-color: #DEE1E5;
         min-height: 100%;
+	      overflow-x: hidden;
+	      margin-right: calc(-1 * (100vw - 100%));
+      }
+      body::-webkit-scrollbar {
+	      width: 1em;
+      }
+      body::-webkit-scrollbar-track {
+	      -webkit-box-shadow: inset 0 0 6px #DEE1E5;
+      }
+      body::-webkit-scrollbar-thumb {
+	      background-color: darkgrey;
+	      outline: 1px solid slategrey;
       }
     </style>
   </head>

@@ -20,7 +20,7 @@ class ArticleCard extends PureComponent {
 		const { article, id, lang, profile } = this.props;
 
 		return (
-			<div className="col-12 col-md-10 col-lg-8 col-xl-6 my-2">
+			<div className="col-12 col-md-10 col-lg-8 col-xl-6 mt-1 mb-2">
 				<section className="artile-card" style={styles.card}>
 
 					<section style={styles.cardHeader}>
@@ -45,7 +45,7 @@ class ArticleCard extends PureComponent {
 
 					<section style={styles.cardBody}>
 						<Link to={`/article/read/${id}`}>
-							<h3 className="text-secondary">{article.title}</h3>
+							<h3 className="text-secondary word-wrap">{article.title}</h3>
 						</Link>
 						<small className="text-secondary" style={styles.wordWrap}>
 							<i>{_.truncate(article.content, { 'length': 250 }).replace(/<\/?[^>]+>/g,'').replace('&nbsp;', ' ')}</i>

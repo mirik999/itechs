@@ -5,6 +5,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "bootstrap": "4.0.0",
+    "classnames": "^2.2.5",
     "decode": "^0.3.0",
     "draft-js": "^0.10.5",
     "draft-js-import-html": "^1.2.1",

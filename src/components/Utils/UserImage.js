@@ -6,7 +6,7 @@ import ProgressiveImage from 'react-progressive-image';
 
 class UserImage extends PureComponent {
 	render() {
-		const { image, alt, className, style, zoom, load2image  } = this.props;
+		const { image, alt, className, style, zoom, load2image, id  } = this.props;
 
 		if (zoom) {
 			return (
@@ -27,7 +27,7 @@ class UserImage extends PureComponent {
 
 		return (
 			<ProgressiveImage src={image} placeholder={load2image}>
-				{ (src, loading, placeholder) => <img src={src} alt={alt} className={ className } style={style} /> }
+				{ (src, loading, placeholder) => <img src={src} alt={alt} className={ className } style={style} id={id} /> }
 			</ProgressiveImage>
 		);
 	}
@@ -38,7 +38,8 @@ UserImage.defaultProps = {
 	load2image: " ",
 	style: {
 		cursor: "pointer"
-	}
+	},
+	id: "articleImages"
 }
 
 UserImage.propTypes = {
@@ -48,6 +49,7 @@ UserImage.propTypes = {
 	className: PropTypes.string,
 	style: PropTypes.object,
 	zoom: PropTypes.bool,
+	id: PropTypes.string,
 };
 
 export default UserImage;

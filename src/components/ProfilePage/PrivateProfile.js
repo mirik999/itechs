@@ -15,6 +15,9 @@ import UserImage from '../Utils/UserImage';
 import StatisticPanel from './Sections/StatisticPanel';
 import Inputs from './Sections/Inputs';
 import MyArticles from './Sections/MyArticles';
+import MyComments from './Sections/MyComments';
+import MyFollows from './Sections/MyFollows';
+import MyFollowers from './Sections/MyFollowers';
 //actions
 import { logout } from '../../actions/user'
 //direct api requests
@@ -51,9 +54,15 @@ class PrivateProfile extends PureComponent {
 			ptfError: <FormattedMessage id="error.ptf" />,
 			githubError: <FormattedMessage id="error.github" />,
 			articles: <FormattedMessage id="profile.articles" />,
+			noArticles: <FormattedMessage id="article.empty" />,
+			noComments: <FormattedMessage id="comment.empty" />,
 			comments: <FormattedMessage id="button.comments" />,
 			following: <FormattedMessage id="profile.following" />,
 			followers: <FormattedMessage id="profile.followers" />,
+			follow: <FormattedMessage id="button.follow" />,
+			unFollow: <FormattedMessage id="button.unfollow" />,
+			nofollowing: <FormattedMessage id="profile.nofollowing" />,
+			nofollowers: <FormattedMessage id="profile.nofollowers" />,
 		}
 
 		this.handleLogout = this.handleLogout.bind(this);
@@ -62,6 +71,7 @@ class PrivateProfile extends PureComponent {
 		this.onChange = this.onChange.bind(this);
 		this.onChangeTable = this.onChangeTable.bind(this);
 		this.onRemoveFromArticles = this.onRemoveFromArticles.bind(this);
+		this.onRemoveFollows = this.onRemoveFollows.bind(this);
 	}
 
 	static getDerivedStateFromProps(nextProps, prevState) {
@@ -192,6 +202,11 @@ class PrivateProfile extends PureComponent {
 		this.setState({ articles })
 	}
 
+	onRemoveFollows = async (deletedFollower) => {
+		const myFollows = await this.state.profile.myFollows.filter(user => user.user._id !== deletedFollower._id)
+		this.setState({ ...this.state, profile: { ...this.state.profile, myFollows } })
+	}
+
 	render() {
 		const { edit, articles, profile, tableNumber, errors } = this.state;
 		const { lang } = this.props;
@@ -262,16 +277,28 @@ class PrivateProfile extends PureComponent {
 							{
 								tableNumber === 1 &&
 								<Inputs profile={profile} editable={editable} getValue={this.onChange}
-								        style={styles.counts}
-								        lang={lang}
-								/>
+								        style={styles.counts} lang={lang} />
 							}
 
 							{
 								tableNumber === 2 &&
-							<MyArticles articles={articles} profile={profile} txt={this.txt}
-							            lang={lang} deletedArticle={this.onRemoveFromArticles}
-							/>
+								<MyArticles articles={articles} profile={profile} txt={this.txt}
+							            lang={lang} deletedArticle={this.onRemoveFromArticles} />
+							}
+
+							{
+								tableNumber === 3 &&
+								<MyComments articles={articles} profile={profile} txt={this.txt} lang={lang} />
+							}
+
+							{
+								tableNumber === 4 &&
+								<MyFollows profile={profile} txt={this.txt} lang={lang} deleteFollower={this.onRemoveFollows} />
+							}
+
+							{
+								tableNumber === 5 &&
+								<MyFollowers profile={profile} txt={this.txt} lang={lang} />
 							}
 
 						</CardBody>

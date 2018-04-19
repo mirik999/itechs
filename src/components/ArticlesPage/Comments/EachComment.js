@@ -1,4 +1,4 @@
-import React, {PureComponent} from 'react';
+import React, {PureComponent, Fragment} from 'react';
 import { Link } from 'react-router-dom';
 import renderHTML from 'react-render-html';
 import { FormattedMessage } from 'react-intl';
@@ -10,6 +10,7 @@ import { stateFromHTML } from 'draft-js-import-html';
 import { ToastContainer, toast } from 'react-toastify';
 import _ from 'lodash';
 import io from 'socket.io-client';
+import { Fa } from 'mdbreact';
 import Tooltip from 'material-ui/Tooltip';
 //user components
 import HandleDate from '../../Utils/HandleDate';
@@ -39,7 +40,8 @@ class EachComment extends PureComponent {
 			edit: <FormattedMessage id="edit" />,
 			cancel: <FormattedMessage id="reject" />,
 			delete: <FormattedMessage id="delete" />,
-			save: <FormattedMessage id="resolve" />,
+			save: <FormattedMessage id="save" />,
+			like: <FormattedMessage id="button.like" />,
 			editorArea: <FormattedMessage id="editor.area" />,
 		}
 
@@ -107,7 +109,7 @@ class EachComment extends PureComponent {
 	}
 
 	render() {
-		const { comments, profile, editorState, toggle, target, errors } = this.state;
+		const { comments, profile, editorState, toggle, target } = this.state;
 
 		return (
 			<div className="comments">
@@ -160,22 +162,26 @@ class EachComment extends PureComponent {
 											{
 												comment.author.username === profile.username ?
 													<span onClick={() => this.onEdit(comment)}>
-														{ comment.handleID === target && toggle  ? this.txt.cancel : this.txt.edit }
-													</span> : <span>reply</span>
+														{ comment.handleID === target && toggle  ?
+															<Fragment><Fa icon="close" /> {this.txt.cancel}</Fragment> :
+															<Fragment><Fa icon="edit" /> {this.txt.edit}</Fragment> }
+													</span> : <span><Fa icon="thumbs-o-up" /> {this.txt.like}</span>
 											}
 										</li>
 										{
 											comment.handleID === target &&
 											comment.author.username === profile.username &&
 											toggle && <li className="reply complain">
-												<span onClick={() => this.onSave(comment.handleID)} className="mr-1">{this.txt.save}</span>
+												<span onClick={() => this.onSave(comment.handleID)} className="mr-1">
+													<Fa icon="check-square-o" /> {this.txt.save}
+												</span>
 											</li>
 										}
 										{
 											comment.author.username === profile.username &&
 											<li className="reply">
 												<span onClick={() => this.onDelete(comment.handleID)}>
-													{ this.txt.delete }
+													<Fa icon="trash-o" /> { this.txt.delete }
 												</span>
 											</li>
 										}

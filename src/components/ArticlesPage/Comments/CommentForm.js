@@ -83,7 +83,7 @@ class CommentForm extends PureComponent {
 
 	validate = (data) => {
 		const errors = {};
-		if (!validator.isLength(data.text, { min: 10 })) {
+		if (!validator.isLength(data.text.toString(), { min: 10 })) {
 			toast.warn(this.txt.editorArea)
 			errors.text = this.txt.editorArea;
 		}
@@ -120,7 +120,7 @@ class CommentForm extends PureComponent {
 				<section className="bottom-comment">
 					<ul className="comment-actions">
 						<li className="reply">
-							<span onClick={this.onComment} className="mr-2">{this.txt.onComment}</span>
+							<span onClick={this.onComment} className="mr-2"><Fa icon="send-o"/> {this.txt.onComment}</span>
 						</li>
 					</ul>
 				</section>

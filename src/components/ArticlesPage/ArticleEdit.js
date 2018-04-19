@@ -12,11 +12,14 @@ import { ToastContainer, toast } from 'react-toastify';
 import { Fa } from 'mdbreact';
 //user compoenents
 import Wrapper from '../Utils/Wrapper'
-// direct api requests
+//direct api requests
 import api from '../../api';
+//selectors
+import {profileSelector} from "../../reducer/profile";
 //css
 import './Editor/react-draft-wysiwyg.css';
 import './style.css';
+
 
 
 class ArticleEdit extends PureComponent {
@@ -44,13 +47,13 @@ class ArticleEdit extends PureComponent {
 	async componentDidMount() {
 		NProgress.start()
 		const { id } = this.props.match.params;
-		const { email } = this.props.user;
+		//const { email } = this.props.user;
 		const article = await api.article.getArticle(id)
-		const profile = await api.user.getProfile(email)
+		// const profile = await api.user.getProfile(email)
 		const editorState = await EditorState.createWithContent(ContentState.createFromBlockArray(htmlToDraft(article.content).contentBlocks))
 		this.setState({
 			article,
-			profile,
+			profile: this.props.profile,
 			editorState,
 			articleImages: article.articleImages
 		}, () => NProgress.done())
@@ -102,7 +105,7 @@ class ArticleEdit extends PureComponent {
 
 	validate = (content) => {
 		const errors = {};
-		if (!content.editorState || !validator.isLength(content.editorState, { min: 50 }) ) {
+		if (!content.editorState.toString() || !validator.isLength(content.editorState.toString(), { min: 50 }) ) {
 			toast.warn(this.txt.contentErr)
 			errors.editorState = this.txt.contentErr
 		}
@@ -161,6 +164,7 @@ ArticleEdit.propTypes = {};
 function mapStateToProps(state) {
 	return {
 		user: state.user,
+		profile: profileSelector(state),
 		lang: state.locale.lang
 	}
 }

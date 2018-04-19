@@ -5,29 +5,29 @@ import { push as Menu } from 'react-burger-menu';
 import MenuList from './MenuList';
 import Language from './Language';
 //direct api requests
-import api from '../../api';
+//import api from '../../api';
+//selectors
+import {profileSelector} from "../../reducer/profile";
 //css
 import './LeftNavBar.css';
-
 
 
 class LeftNavBar extends PureComponent {
 	constructor(props) {
 		super(props);
 		this.state = {
-			profile: {},
 			menuOpen: false
 		}
 	}
 
-	async componentDidMount() {
-		const profile = Object.keys(this.props.user).length !== 0 && await api.user.getProfile(this.props.user.email)
-		this.setState({ profile })
-	}
+	// async componentDidMount() {
+	// 	const profile = Object.keys(this.props.user).length !== 0 && await api.user.getProfile(this.props.user.email)
+	// 	this.setState({ profile: this.props.profile })
+	// }
 
 	render() {
-		const { lang } = this.props;
-		const { menuOpen, profile } = this.state;
+		const { profile, lang } = this.props;
+		const { menuOpen } = this.state;
 
 		return (
 			<div className="row" id="outer">
@@ -91,7 +91,7 @@ const styles = {
 function mapStateToProps(state) {
 	return {
 		lang: state.locale.lang,
-		user: state.user,
+		profile: profileSelector(state)
 	};
 }
 

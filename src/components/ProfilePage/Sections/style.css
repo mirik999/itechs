@@ -7,7 +7,7 @@
 	background-color: #f8f8f8;
 }
 
-.border-list-article:nth-child(odd) {
+.border-list-article:nth-child(even) {
 	background-color: #f8f8f8;
 }
 
@@ -24,4 +24,19 @@
 .profile-article-btns:hover {
 	background-color: #f0f0f0;
 	cursor: pointer;
+}
+
+.word-wrap {
+	display: inline-block;
+	word-wrap: break-word;
+	word-break: break-all;
+	width: 100%;
+}
+
+.bg {
+	background-color: #f0f0f0;
+}
+
+.hoverme:hover {
+	background-color: #f0f0f0;
 }

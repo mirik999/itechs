@@ -18,6 +18,7 @@ import api from '../../api';
 import './style.css';
 
 
+
 class ArticleContent extends PureComponent {
 	constructor(props) {
 		super(props);
@@ -46,7 +47,11 @@ class ArticleContent extends PureComponent {
 			"className='img-fluid my-3 mx-auto d-block img-thumbnail' alt='content_image'"
 		}
 		html = await html.replace(/<img/gi, (matched) => stringOpt[matched])
-		this.setState({ article, profile, html })
+		this.setState({
+			article,
+			profile,
+			html
+		})
 		await mediumZoom('#articleImages', {
 			margin: 24,
 			background: 'rgba(0, 0, 0, 0.7)',

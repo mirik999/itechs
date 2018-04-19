@@ -39,12 +39,13 @@ class AuthPage extends PureComponent {
 
 	render() {
 		const { toggle } = this.state;
+		const { lang } = this.props;
 
 		return (
 			<Wrapper>
 				<div className="py-3"></div>
-				<Register submit={this.onSubmit} toggle={toggle} set={this.setDsiplay} />
-				<Enter submit={this.onSubmit} toggle={toggle} set={this.setDsiplay} />
+				<Register submit={this.onSubmit} toggle={toggle} set={this.setDsiplay} lang={lang} />
+				<Enter submit={this.onSubmit} toggle={toggle} set={this.setDsiplay} lang={lang} />
 			</Wrapper>
 		);
 	}

@@ -37,7 +37,7 @@ class LikeShareButtons extends PureComponent {
 	async componentDidMount() {
 		const { article, profile } = this.props;
 		const check = Object.keys(profile).length !== 0;
-		const follows = check && await profile.myFollows.map(user => user.followedUserName === article.author.username)
+		const follows = check && await profile.myFollows.map(myFollow => myFollow.user.username === article.author.username)
 		const likes = await article.like.map(like => like.likedBy === profile.username);
 		this.setState({
 			liked: likes.includes(true),
@@ -71,10 +71,8 @@ class LikeShareButtons extends PureComponent {
 			return null;
 		}
 		const data = {
-			followUserName: this.props.article.author.username,
-			followUserEmail: this.props.article.author.email,
-			myUserName: this.props.profile.username,
-			myEmail: this.props.profile.email
+			followUserID: this.props.article.author._id,
+			myID: this.props.profile._id,
 		}
 		await this.setState({ followed: !this.state.followed })
 		await	api.user.follow(data)
@@ -138,8 +136,6 @@ class LikeShareButtons extends PureComponent {
 
 LikeShareButtons.propTypes = {
 	article: PropTypes.oneOfType([ PropTypes.object, PropTypes.array ]).isRequired,
-	like: PropTypes.func.isRequired,
-	getArticle: PropTypes.func.isRequired
 };
 
 export default LikeShareButtons;

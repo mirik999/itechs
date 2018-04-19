@@ -48,7 +48,7 @@ class ProfilePage extends PureComponent {
 		const { lang } = this.props;
 		const { articles, profile, profileByName } = this.state;
 
-		if (!articles && Object.keys(profile).length === 0) return <div></div>
+		if (articles.length === 0 && Object.keys(profile).length === 0) return <div></div>
 
 		if (profile.username === profileByName.username) {
 			return (

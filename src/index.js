@@ -23,12 +23,13 @@ import App from './App';
 //actions
 import { setlocale } from './actions/locale';
 import { LoginDispatch } from './actions/user';
+import { getProfile } from './actions/profile';
 // initial locale languages
 addLocaleData(en)
 addLocaleData(ru)
 addLocaleData(az)
 // create store
-export const store = createStore(
+export const store = createStore (
 	rootReducer,
 	composeWithDevTools(applyMiddleware(thunk))
 );
@@ -40,6 +41,7 @@ if (localStorage.Login) {
 		token: localStorage.Login
 	};
 	store.dispatch(LoginDispatch(user))
+	store.dispatch(getProfile(user.email))
 }
 
 if (localStorage.devsLang) {
