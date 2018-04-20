@@ -40,6 +40,7 @@ class PrivateProfile extends PureComponent {
 				bgImg: null,
 			},
 			edit: true,
+			target: "edit",
 			tableNumber: 1,
 			errors: {}
 		}
@@ -49,6 +50,7 @@ class PrivateProfile extends PureComponent {
 			delete: <FormattedMessage id="delete" />,
 			exit: <FormattedMessage id="profile.logout" />,
 			resolve: <FormattedMessage id="resolve" />,
+			save: <FormattedMessage id="save" />,
 			aboutError: <FormattedMessage id="error.about" />,
 			contactError: <FormattedMessage id="error.contact" />,
 			ptfError: <FormattedMessage id="error.ptf" />,
@@ -142,9 +144,9 @@ class PrivateProfile extends PureComponent {
 	onSave = async (e) => {
 		const { email, about, contact, portfolio, github } = this.state.profile;
 		this.setState((prevState) => {
-			return { edit: !prevState.edit }
+			return { edit: !prevState.edit, target: "save" }
 		})
-		if (e.target.name === "save") {
+		if (this.state.target === "save") {
 			const errors = await this.validate(this.state.profile);
 			this.setState({ errors });
 			if (Object.keys(errors).length === 0) {
@@ -153,7 +155,7 @@ class PrivateProfile extends PureComponent {
 					await api.user.editProfile(data)
 					await api.user.getProfile(data.email)
 				} catch(err) {
-					this.setState({errors: {global: err.message}})
+					this.setState({ target: "edit", errors: {global: err.message}})
 				}
 			}
 		}
@@ -250,25 +252,40 @@ class PrivateProfile extends PureComponent {
 							<section className="float-right d-none d-sm-block" style={styles.edit}>
 								{
 									!editable ? (
-										<Tooltip id="tooltip-icon" title={this.txt.resolve}>
-											<Button tag="a" size="sm" name="save" floating gradient="peach" onClick={this.onSave}>
-												<Fa icon="save"/>
-											</Button>
-										</Tooltip>
+										<span className="cursor-pointer hoverme p-2 text-secondary" onClick={this.onSave}>
+											<small><Fa icon="save" /> {this.txt.save}</small>
+										</span>
 									) : (
-										<Tooltip id="tooltip-icon" title={this.txt.edit}>
-											<Button tag="a" size="sm" name="edit" floating gradient="aqua" onClick={this.onSave}>
-												<Fa icon="pencil"/>
-											</Button>
-										</Tooltip>
+										<span className="cursor-pointer hoverme p-2 text-secondary" onClick={this.onSave}>
+											<small><Fa icon="pencil" /> {this.txt.edit}</small>
+										</span>
 									)
 								}
-								<Tooltip id="tooltip-icon" title={this.txt.exit}>
-									<Button tag="a" size="sm" floating gradient="purple" onClick={this.handleLogout}>
-										<Fa icon="sign-out"/>
-									</Button>
-								</Tooltip>
+								<span className="cursor-pointer hoverme p-2 text-secondary" onClick={this.handleLogout}>
+									<small><Fa icon="sign-out" /> {this.txt.exit}</small>
+								</span>
 							</section>
+
+							{/* mobile */}
+
+							<section className="float-right d-block d-sm-none" style={styles.edit}>
+								{
+									!editable ? (
+										<span className="cursor-pointer hoverme p-2 text-secondary" onClick={this.onSave}>
+											<small><Fa icon="save" /></small>
+										</span>
+									) : (
+										<span className="cursor-pointer hoverme p-2 text-secondary" onClick={this.onSave}>
+											<small><Fa icon="pencil" /></small>
+										</span>
+									)
+								}
+								<span className="cursor-pointer hoverme p-2 text-secondary" onClick={this.handleLogout}>
+									<small><Fa icon="sign-out" /></small>
+								</span>
+							</section>
+
+							{/* mobile end */}
 
 							<StatisticPanel articles={articles} profile={profile} style={styles.counts}
 							                txt={this.txt} getNumberOfTables={this.onChangeTable} lang={lang}
@@ -327,7 +344,7 @@ const styles = {
 	},
 	edit: {
 		position: "relative",
-		bottom: "25px"
+		bottom: "15px"
 	},
 	img: {
 		maxWidth: "930px",

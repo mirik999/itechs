@@ -26,6 +26,7 @@
     "react-draft-wysiwyg": "^1.12.11",
     "react-dropzone": "^4.2.9",
     "react-error-overlay": "4.0.0",
+    "react-facebook": "^5.0.3",
     "react-facebook-login": "^4.0.1",
     "react-google-login": "^3.0.10",
     "react-helmet": "^5.2.0",

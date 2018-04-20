@@ -39,7 +39,7 @@ class MenuList extends PureComponent {
 					{
 						isAuth &&
 						<li style={styles.submenu}>
-							<Fa icon="pencil" className="ml-1 mr-2"/>
+							<Fa icon="pencil" className="ml-2 mr-3"/>
 							<NavLink to="/article/create" exact>
 								<span className="text-light" style={styles.link}>{ this.txt.shareYourStory }</span>
 							</NavLink>
@@ -92,12 +92,6 @@ const styles = {
 	},
 	link: {
 		width: "150px"
-	},
-	submenu: {
-		color: "#bdc3c7",
-		position: "relative",
-		left: "30px",
-		marginTop: "0px"
 	}
 }
 

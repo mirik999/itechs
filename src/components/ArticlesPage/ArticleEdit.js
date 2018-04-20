@@ -36,7 +36,7 @@ class ArticleEdit extends PureComponent {
 		this.txt = {
 			placeholder: <FormattedMessage id="profile.article"/>,
 			contentErr: <FormattedMessage id="error.share-content" />,
-			edit: <FormattedMessage id="edit" />,
+			save: <FormattedMessage id="save" />,
 		}
 
 		this.onEditorStateChange = this.onEditorStateChange.bind(this)
@@ -123,7 +123,7 @@ class ArticleEdit extends PureComponent {
 				<div className="row justify-content-center">
 					<div className="col-12 col-md-10 col-xl-8 mt-3 p-3" style={styles.bgEditor}>
 						<div className="my-1 d-flex justify-content-end">
-							<span className="text-secondary p-2 edit-button" onClick={this.onReSave}><Fa icon="edit" /> {this.txt.edit}</span>
+							<span className="text-secondary p-2 edit-button" onClick={this.onReSave}><Fa icon="edit" /> {this.txt.save}</span>
 						</div>
 						<Editor
 							editorState={editorState}

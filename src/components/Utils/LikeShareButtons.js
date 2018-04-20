@@ -8,6 +8,7 @@ import { FormattedMessage } from 'react-intl';
 import { Button, Fa } from 'mdbreact';
 import NProgress from 'nprogress';
 import { FacebookShareButton } from 'react-share';
+import FacebookProvider, { Share } from 'react-facebook';
 //direct api requests
 import api from '../../api';
 
@@ -111,23 +112,32 @@ class LikeShareButtons extends PureComponent {
 
 		return (
 			<Fragment>
-				<Tooltip id="tooltip-icon" title={liked ? this.txt.dislike : this.txt.like}>
-					<Button tag="a" floating gradient="purple" size="sm" onClick={this.onVote}>
-						{ liked ? <Fa icon="heart" /> : <Fa icon="heart-o" /> }
-					</Button>
-				</Tooltip>
-				<Tooltip id="tooltip-icon" title={followed ? this.txt.unfollow : this.txt.follow}>
-					<Button tag="a" floating gradient="peach" size="sm" onClick={this.onFollow}>
-						{ followed ? <Fa icon="user-times" /> : <Fa icon="user-plus" /> }
-					</Button>
-				</Tooltip>
+				<span className="cursor-pointer hoverme p-2 text-secondary" onClick={this.onVote}>
+					<small>{liked ? <Fragment><Fa icon="heart" /> {this.txt.dislike}</Fragment> :
+						<Fragment><Fa icon="heart-o" /> {this.txt.like}</Fragment>}
+					</small>
+				</span>
+				<span className="cursor-pointer hoverme p-2 text-secondary" onClick={this.onFollow}>
+					<small>{followed ? <Fragment><Fa icon="user-times" /> {this.txt.unfollow}</Fragment> :
+						<Fragment><Fa icon="user-plus" /> {this.txt.follow}</Fragment>}
+					</small>
+				</span>
+
+
 				<div className="d-inline-flex">
-					<FacebookShareButton url={url}>
-						<Tooltip id="tooltip-icon" title={this.txt.shareOnFb}>
-							<Button tag="a" floating gradient="blue" size="sm"><Fa icon="share-alt" />
-							</Button>
-						</Tooltip>
-					</FacebookShareButton>
+					<FacebookProvider appId="128678167815456">
+						<Share href={url}>
+							<span className="cursor-pointer hoverme p-2 text-secondary" onClick={this.onFollow}>
+								<small><Fa icon="share-alt" /> {this.txt.shareOnFb}</small>
+							</span>
+						</Share>
+					</FacebookProvider>
+					{/*<FacebookShareButton url={url}>*/}
+						{/*<Tooltip id="tooltip-icon" title={this.txt.shareOnFb}>*/}
+							{/*<Button tag="a" floating gradient="blue" size="sm"><Fa icon="share-alt" />*/}
+							{/*</Button>*/}
+						{/*</Tooltip>*/}
+					{/*</FacebookShareButton>*/}
 				</div>
 			</Fragment>
 		);

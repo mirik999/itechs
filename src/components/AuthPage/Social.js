@@ -1,7 +1,9 @@
 import React, {PureComponent} from 'react';
 import {connect} from 'react-redux';
 import FacebookLogin from 'react-facebook-login';
+import FacebookProvider, { Login } from 'react-facebook';
 import GoogleLogin from 'react-google-login';
+import { Button, Fa } from 'mdbreact';
 // actions
 import { facebookLogin, googleLogin } from '../../actions/user';
 //css
@@ -32,6 +34,14 @@ class Social extends PureComponent {
 		return (
 			<div className="pb-2 d-inline-flex float-right wp">
 				<div className="d-inline-flex">
+					<FacebookProvider appId="128678167815456">
+						<Login
+							scope="email"
+							onResponse={this.responseFacebook}
+						>
+							<Button tag="a" size="sm" floating gradient="aqua"><Fa icon="facebook" /></Button>
+						</Login>
+					</FacebookProvider>
 					<FacebookLogin
 						appId="128678167815456"
 						fields="name,email,picture.width(100).height(100)"
