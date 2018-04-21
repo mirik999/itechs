@@ -6,6 +6,7 @@ import { FormattedMessage } from 'react-intl';
 //user components
 import HandleDate from '../Utils/HandleDate';
 import LikeShareButtons from '../Utils/LikeShareButtons';
+import UserName from '../Utils/UserName';
 
 class ArticleCard extends PureComponent {
 	constructor(props) {
@@ -29,8 +30,7 @@ class ArticleCard extends PureComponent {
 								<img src={article.author.useravatar} alt="User-logo" style={styles.userAvatar} />
 							</td>
 							<td className="pl-2" style={styles.verticalAlign}>
-								<span className="text-secondary font-weight-bold">{article.author.username}</span><br/>
-								<small className="text-secondary font-weight-bold" style={styles.authorAbout}>{article.author.about}</small>
+								<UserName me={profile} userprofile={article} className="text-secondary font-weight-bold cursor-pointer" />
 							</td>
 						</tr></tbody></table>
 						<table className="d-inline-flex float-right"><tbody><tr>

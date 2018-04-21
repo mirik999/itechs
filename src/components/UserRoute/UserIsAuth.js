@@ -5,7 +5,7 @@ import { Route, Redirect } from 'react-router-dom';
 const UserRoute = ({ user, component: Component, ...rest }) => (
   <Route
     { ...rest }
-    render={ props => !user.email ? <Component {...props} /> : <Redirect to="/404" /> }
+    render={ props => !user.email ? <Component {...props} /> : <Redirect to="/" /> }
   />
 );
 

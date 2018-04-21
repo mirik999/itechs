@@ -14,6 +14,7 @@ import { Fa } from 'mdbreact';
 import Tooltip from 'material-ui/Tooltip';
 //user components
 import HandleDate from '../../Utils/HandleDate';
+import UserName from '../../Utils/UserName';
 //socket setting
 if (process.env.NODE_ENV === 'production') {
 	var socket = io('https://itechs.info');
@@ -25,7 +26,7 @@ if (process.env.NODE_ENV === 'production') {
 class EachComment extends PureComponent {
 	constructor(props) {
 		super(props)
-
+		this.fireSockets();
 		this.state = {
 			comments: [],
 			profile: {},
@@ -58,7 +59,6 @@ class EachComment extends PureComponent {
 			comments: this.props.comments,
 			profile: this.props.profile
 		})
-		this.fireSockets();
 	}
 
 	onEditorStateChange = (editorState) => {
@@ -156,7 +156,8 @@ class EachComment extends PureComponent {
 									<div className="comment-date pt-2"><HandleDate date={comment.date} /></div>
 									<ul className="comment-actions pt-2">
 										<li className="complain">
-											<Link to={`/profile/@${comment.author.username}`}>{ comment.author.username }</Link>
+											<UserName me={profile} userprofile={comment}
+											          className="text-secondary font-weight-bold cursor-pointer" />
 										</li>
 										<li className="reply">
 											{

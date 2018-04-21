@@ -127,17 +127,18 @@ class LikeShareButtons extends PureComponent {
 				<div className="d-inline-flex">
 					<FacebookProvider appId="128678167815456">
 						<Share href={url}>
-							<span className="cursor-pointer hoverme p-2 text-secondary" onClick={this.onFollow}>
+							<span className="cursor-pointer hoverme p-2 text-secondary">
 								<small><Fa icon="share-alt" /> {this.txt.shareOnFb}</small>
 							</span>
 						</Share>
 					</FacebookProvider>
-					{/*<FacebookShareButton url={url}>*/}
-						{/*<Tooltip id="tooltip-icon" title={this.txt.shareOnFb}>*/}
-							{/*<Button tag="a" floating gradient="blue" size="sm"><Fa icon="share-alt" />*/}
-							{/*</Button>*/}
-						{/*</Tooltip>*/}
-					{/*</FacebookShareButton>*/}
+				</div>
+				<div className="d-inline-flex">
+					<FacebookShareButton url={url} style={{ textDecoration: "none" }}>
+						<span className="cursor-pointer hoverme p-2 text-secondary">
+							<small><Fa icon="share-alt" /> {this.txt.shareOnFb}</small>
+						</span>
+					</FacebookShareButton>
 				</div>
 			</Fragment>
 		);

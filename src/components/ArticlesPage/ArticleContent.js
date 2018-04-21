@@ -1,6 +1,5 @@
 import React, {PureComponent} from 'react';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import renderHTML from 'react-render-html';
 import { FormattedMessage } from 'react-intl';
@@ -10,6 +9,7 @@ import mediumZoom from 'medium-zoom';
 //user components
 import CommentsWrapper from './Comments/CommentsWrapper';
 import Wrapper from '../Utils/Wrapper';
+import UserName from '../Utils/UserName';
 import HandleDate from '../Utils/HandleDate';
 import LikeShareButtons from '../Utils/LikeShareButtons';
 //direct api requests
@@ -74,13 +74,17 @@ class ArticleContent extends PureComponent {
 			<Wrapper>
 				<Helmet>
 					<title>{`iTechs Article - ${article.title}`}</title>
+					<meta name="description" content="1 person wants answer to this question. Be the first one to respond."
+					      itemProp="description"
+					/>
 					<meta property="og:url" content={url} />
 					<meta property="og:site_name" content="iTechs Information" />
-					<meta property="og:image" content={article.thumbnail} />
-					<meta property="og:image:url" content={article.thumbnail} />
-					<meta property="og:image:secure_url" content={article.thumbnail} />
-					<meta property="og:title" content={`iTechs Article - ${article.title}`} />
+					<meta property="og:image" content={article.thumbnail} itemProp="image" />
+					<meta property="og:image:width" content="700" />
+					<meta property="og:image:height" content="400" />
+					<meta property="og:title" content={`iTechs Article - ${article.title}`} itemProp="name" />
 					<meta property="og:type" content="website" />
+					<meta property="og:description" content="1 person wants answer to this question. Be the first one to respond." />
 					<meta property="fb:app_id" content="128678167815456" />
 				</Helmet>
 				<div className="row justify-content-center" id='page-wrap'>
@@ -91,8 +95,7 @@ class ArticleContent extends PureComponent {
 									<img src={article.author.useravatar} alt="User-logo" style={styles.userAvatar} />
 								</td>
 								<td className="pl-2" style={styles.verticalAlign}>
-									<span className="text-secondary font-weight-bold">{article.author.username}</span><br/>
-									<small className="text-secondary font-weight-bold" style={styles.authorAbout}>{article.author.about}</small>
+									<UserName me={profile} userprofile={article} className="text-secondary font-weight-bold cursor-pointer" />
 								</td>
 							</tr></tbody></table>
 							<table className="d-inline-flex float-right"><tbody><tr>
