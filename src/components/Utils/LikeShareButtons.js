@@ -1,6 +1,4 @@
 import React, {PureComponent, Fragment} from 'react';
-import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Tooltip from 'material-ui/Tooltip';
 import _ from 'lodash';
@@ -8,7 +6,6 @@ import { FormattedMessage } from 'react-intl';
 import { Button, Fa } from 'mdbreact';
 import NProgress from 'nprogress';
 import { FacebookShareButton } from 'react-share';
-import FacebookProvider, { Share } from 'react-facebook';
 //direct api requests
 import api from '../../api';
 
@@ -122,17 +119,6 @@ class LikeShareButtons extends PureComponent {
 						<Fragment><Fa icon="user-plus" /> {this.txt.follow}</Fragment>}
 					</small>
 				</span>
-
-
-				<div className="d-inline-flex">
-					<FacebookProvider appId="128678167815456">
-						<Share href={url}>
-							<span className="cursor-pointer hoverme p-2 text-secondary">
-								<small><Fa icon="share-alt" /> {this.txt.shareOnFb}</small>
-							</span>
-						</Share>
-					</FacebookProvider>
-				</div>
 				<div className="d-inline-flex">
 					<FacebookShareButton url={url} style={{ textDecoration: "none" }}>
 						<span className="cursor-pointer hoverme p-2 text-secondary">

@@ -77,9 +77,11 @@ class ArticleContent extends PureComponent {
 					<meta name="description" content="1 person wants answer to this question. Be the first one to respond."
 					      itemProp="description"
 					/>
+					<meta name="google-site-verification" content="5etYwSJdPvs73RVzF_Hb-YPow1mvMGynMVfCWgoLQuo" />
 					<meta property="og:url" content={url} />
 					<meta property="og:site_name" content="iTechs Information" />
 					<meta property="og:image" content={article.thumbnail} itemProp="image" />
+					<meta property="og:image:url" content={article.thumbnail} itemProp="image" />
 					<meta property="og:image:width" content="700" />
 					<meta property="og:image:height" content="400" />
 					<meta property="og:title" content={`iTechs Article - ${article.title}`} itemProp="name" />
