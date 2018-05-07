@@ -95,7 +95,7 @@ class CommentForm extends PureComponent {
 		const { profile } = this.props;
 
 		if (Object.keys(profile).length === 0) return <div className="text-center">
-			<span>
+			<span className="cursor-pointer hoverme p-2">
 				<Link className="text-secondary" to="/authorization">{ this.txt.noAuth }</Link>
 			</span>
 		</div>

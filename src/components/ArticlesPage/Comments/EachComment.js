@@ -1,5 +1,4 @@
 import React, {PureComponent, Fragment} from 'react';
-import { Link } from 'react-router-dom';
 import renderHTML from 'react-render-html';
 import { FormattedMessage } from 'react-intl';
 import { EditorState, convertToRaw } from 'draft-js';
@@ -16,17 +15,20 @@ import Tooltip from 'material-ui/Tooltip';
 import HandleDate from '../../Utils/HandleDate';
 import UserName from '../../Utils/UserName';
 //socket setting
+let socket;
 if (process.env.NODE_ENV === 'production') {
-	var socket = io('https://itechs.info');
+	socket = io('https://itechs.info');
 } else {
-	var socket = io('http://localhost:4000');
+	socket = io('http://localhost:4000');
 }
 
 
 class EachComment extends PureComponent {
 	constructor(props) {
 		super(props)
+
 		this.fireSockets();
+
 		this.state = {
 			comments: [],
 			profile: {},

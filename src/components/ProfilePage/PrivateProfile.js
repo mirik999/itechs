@@ -2,7 +2,7 @@ import React, {PureComponent} from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Button, Card, CardImage, CardBody, CardTitle, CardText, Fa } from 'mdbreact';
-import Tooltip from 'material-ui/Tooltip';
+import io from 'socket.io-client';
 import { FormattedMessage } from 'react-intl';
 import Dropzone from 'react-dropzone';
 import sha1 from 'sha1';
@@ -22,8 +22,15 @@ import MyFollowers from './Sections/MyFollowers';
 import { logout } from '../../actions/user'
 //direct api requests
 import api from '../../api';
-//cdd
+//css
 import './Sections/style.css';
+//socket setting
+let socket;
+if (process.env.NODE_ENV === 'production') {
+	socket = io('https://itechs.info');
+} else {
+	socket = io('http://localhost:4000');
+}
 
 
 class PrivateProfile extends PureComponent {
@@ -139,6 +146,9 @@ class PrivateProfile extends PureComponent {
 	handleLogout = () => {
 		this.props.logout()
 		window.location.href = '/';
+		socket.emit('userOffline', {
+			myID: this.state.profile._id
+		})
 	}
 
 	onSave = async (e) => {

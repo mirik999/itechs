@@ -25,7 +25,7 @@ class ProfilePage extends PureComponent {
 		await this.setState({
 			articles,
 			profile,
-		}, () => NProgress.done() )
+		}, () => NProgress.done())
 	}
 
 	render() {

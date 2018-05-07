@@ -12,6 +12,7 @@ pre {
 	padding: 10px;
 	margin: 10px 0;
 	word-wrap: break-word;
+	word-break: break-all;
 }
 
 code {

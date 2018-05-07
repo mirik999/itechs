@@ -1,5 +1,10 @@
 import api from '../api';
-import { USER_LOGIN, USER_LOGOUT } from '../types';
+import { USER_LOGIN, USER_LOGOUT, SET_STATUS } from '../types';
+
+export const onlineList = (users) => ({
+	type: SET_STATUS,
+	users
+});
 
 export const LoginDispatch = (user) => ({
 	type: USER_LOGIN,

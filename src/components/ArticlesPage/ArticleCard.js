@@ -90,7 +90,8 @@ const styles = {
 		bottom: "5px"
 	},
 	wordWrap: {
-		wordWrap: "break-word"
+		wordWrap: "break-word",
+		wordBreak: "break-all"
 	}
 }
 

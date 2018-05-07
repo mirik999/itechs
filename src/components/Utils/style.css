@@ -39,3 +39,34 @@ main a {
 	text-decoration: none;
 }
 
+.popover {
+	min-width: 276px !important;
+}
+
+.user-online {
+	position: absolute;
+	top: 157px;
+	left: 157px;
+	border: 3px solid #F7F7F7;
+	-webkit-border-radius: 50%;
+	-moz-border-radius: 50%;
+	border-radius: 50%;
+	width: 20px;
+	height: 20px;
+	background-color: #00ff00;
+	z-index: 999;
+}
+
+.user-offline {
+	position: absolute;
+	top: 157px;
+	left: 157px;
+	border: 3px solid #F7F7F7;
+	-webkit-border-radius: 50%;
+	-moz-border-radius: 50%;
+	border-radius: 50%;
+	width: 20px;
+	height: 20px;
+	background-color: #ff1835;
+	z-index: 999;
+}

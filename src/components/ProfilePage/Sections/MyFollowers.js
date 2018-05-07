@@ -25,7 +25,7 @@ class MyFollowers extends PureComponent {
 				<div className="row border-list-article no-gutters">
 					{
 						profile.followedUsers.map((user, idx) =>
-							<div className="col-12 col-md-6 no-gutters" key={idx}>
+							<div className="col-12 col-md-6 no-gutters p-2" key={idx}>
 								<div className="row no-gutters">
 									<div className="col-2">
 										<img src={user.user.useravatar} alt="useravatar" className="img-thumbnail" style={styles.img}/>

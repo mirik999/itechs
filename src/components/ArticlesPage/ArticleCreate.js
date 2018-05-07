@@ -8,6 +8,7 @@ import { FormattedMessage } from 'react-intl';
 //user components
 import Wrapper from '../Utils/Wrapper';
 import MyEditor from './Editor/Editor';
+import NewEditor from './Editor/NewEditor';
 import Settings from './Editor/Settings';
 //direct api requests
 import api from '../../api';
@@ -88,6 +89,7 @@ class ArticleCreate extends PureComponent {
 					</div>
 					<div className="col-12 col-md-10 col-xl-8 mt-3 px-3" style={styles.bgEditor}>
 						<MyEditor getContent={this.getContent} />
+						{/*<NewEditor /> development - best editor */}
 					</div>
 				</div>
 				<ToastContainer />

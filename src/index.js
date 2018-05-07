@@ -6,33 +6,48 @@ import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
+import io from 'socket.io-client';
 import decode from 'jwt-decode';
 import { addLocaleData } from 'react-intl';
 import en from 'react-intl/locale-data/en';
 import ru from 'react-intl/locale-data/ru';
 import az from 'react-intl/locale-data/az';
-// MDB and NPROGRESS
+//css
 import 'font-awesome/css/font-awesome.min.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import '../node_modules/nprogress/nprogress.css';
 import 'mdbreact/docs/css/mdb.min.css';
 import 'mdbreact/dist/mdbreact';
-import '../node_modules/nprogress/nprogress.css';
-// user components
-import rootReducer from './reducer/rootReducer';
+import 'jquery/src/jquery';
+//user components
 import App from './App';
 //actions
 import { setlocale } from './actions/locale';
-import { LoginDispatch } from './actions/user';
+import { LoginDispatch, onlineList } from './actions/user';
 import { getProfile } from './actions/profile';
-// initial locale languages
+//reducers
+import rootReducer from './reducer/rootReducer';
+//socket setting
+let socket;
+if (process.env.NODE_ENV === 'production') {
+	socket = io('https://itechs.info');
+} else {
+	socket = io('http://localhost:4000');
+}
+//initial locale languages
 addLocaleData(en)
 addLocaleData(ru)
 addLocaleData(az)
-// create store
+//create store
 export const store = createStore (
 	rootReducer,
 	composeWithDevTools(applyMiddleware(thunk))
 );
+
+socket.on('onlineList', data => {
+	store.dispatch(onlineList(data))
+})
+
 
 if (localStorage.Login) {
 	const payload = decode(localStorage.Login);
@@ -42,6 +57,9 @@ if (localStorage.Login) {
 	};
 	store.dispatch(LoginDispatch(user))
 	store.dispatch(getProfile(user.email))
+
+	socket.emit('userOnline', user)
+
 }
 
 if (localStorage.devsLang) {

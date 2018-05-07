@@ -3,6 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { IntlProvider } from 'react-intl';
 import messages from './messages';
+import io from 'socket.io-client';
 //user routes
 import UserIsAuth from './components/UserRoute/UserIsAuth';
 import UserNotAuth from './components/UserRoute/UserNotAuth';
@@ -16,11 +17,31 @@ import AuthPage from './components/AuthPage/AuthPage';
 import DocumentationPage from './components/DocumentationPage/DocumentationPage';
 import ProfilePage from './components/ProfilePage/ProfilePage';
 import NotFound from './components/404-Constructor/NotFound';
+//actions
+import { getProfile } from './actions/profile'
+//direct api requests
+import api from './api';
+//socket setting
+let socket;
+if (process.env.NODE_ENV === 'production') {
+	socket = io('https://itechs.info');
+} else {
+	socket = io('http://localhost:4000');
+}
 
 
 class App extends PureComponent {
 	constructor(props) {
 		super(props);
+	}
+	
+	async componentDidMount() {
+		if (Object.keys(this.props.user).length !== 0) {
+			const profile = await api.user.getProfile(this.props.user.email)
+			socket.emit('userOnline', {
+				myID: profile._id
+			})
+		}
 	}
 
 	render() {
@@ -54,4 +75,4 @@ function mapStateToProps(state) {
 }
 
 
-export default connect(mapStateToProps)(App);
+export default connect(mapStateToProps, { getProfile })(App);

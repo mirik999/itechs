@@ -32,6 +32,7 @@ class Register extends PureComponent {
 			haveAnAccaunt: <FormattedMessage id="button.haveAcc" />,
 		}
 
+
 		this.validate = this.validate.bind(this);
 		this.onChange = this.onChange.bind(this);
 		this.onSubmit = this.onSubmit.bind(this);
