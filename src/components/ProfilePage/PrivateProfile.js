@@ -229,7 +229,7 @@ class PrivateProfile extends PureComponent {
 
 		return (
 			<div className="row justify-content-center">
-				<div className="col-12 col-lg-10 col-xl-8">
+				<div className="col-12 col-lg-10 col-xl-8" style={styles.profileInfoWrap}>
 					<Card reverse className="mt-3">
 						<section>
 							<UserImage className="img-fluid w-100"
@@ -377,6 +377,9 @@ const styles = {
 	counts: {
 		position: "relative",
 		bottom: "40px"
+	},
+	profileInfoWrap: {
+		overflow: "auto"
 	}
 }
 

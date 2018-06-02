@@ -3,115 +3,189 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import { Fa, Button, Popover, PopoverBody, PopoverHeader } from 'mdbreact';
+import { Fa, Button } from 'mdbreact';
+import Popover from 'react-popover';
+import Tooltip from 'material-ui/Tooltip';
+import { FormattedMessage } from 'react-intl';
+import io from 'socket.io-client';
 //user components
 import UserImage from './UserImage';
-//selectors
-import { onlineListSelector } from '../../reducer/user';
 //css
 import './style.css';
-
+//socket setting
+let socket;
+if (process.env.NODE_ENV === 'production') {
+	socket = io('https://itechs.info');
+} else {
+	socket = io('http://localhost:4000');
+}
 
 class UserName extends PureComponent {
 	constructor(props) {
 		super(props);
 		this.state = {
-			message: ''
+			message: '',
+			privateMessages: [],
+			info: null,
+			showPopover: false,
+			disChatInput: false
 		}
 
 		this.onMessage = this.onMessage.bind(this)
 		this.onChange = this.onChange.bind(this)
+		this.onShowInfo = this.onShowInfo.bind(this)
+		this.onShowPopover = this.onShowPopover.bind(this)
+		this.onShowPopover = this.onShowPopover.bind(this)
+
+		this.txt = {
+			about: <FormattedMessage id="profile.about" />,
+			github: <FormattedMessage id="profile.git" />,
+			contact: <FormattedMessage id="profile.contact" />,
+			portfolio: <FormattedMessage id="profile.ptf" />,
+		}
+
 	}
 
 	onChange = (e) => {
 		this.setState({ message: e.target.value })
 	}
-	
-	onMessage = (e) => {
-		console.log(this.state.message)
+
+	onShowPopover = (e) => {
+		this.setState({ showPopover: !this.state.showPopover })
 	}
 
-	render() {
-		const { userprofile, me, className, online } = this.props;
-		const onlineUsers = online.length !== 0 && online.map(users => users.username);
-		const checkForStatus = onlineUsers && onlineUsers.indexOf(userprofile.author.username) > -1;
+	onShowInfo = (e) => {
+		e == "about" && this.setState({ info: "about" })
+		e == "gitlink" && this.setState({ info: "gitlink" })
+		e == "contact" && this.setState({ info: "contact" })
+		e == "portfolio" && this.setState({ info: "portfolio" })
+	}
+	
+	onMessage = (e, author, reciever) => {
+		if (e.key == "Enter") {
+			const { message } = this.state;
+			const data = {
+				text: message,
+				author,
+				reciever
+			}
+			socket.emit('privateMessage', data)
+			this.setState({ message: '', disChatInput: true })
+			setTimeout(() => {
+				this.setState({ disChatInput: false })
+			}, 2000);
+		}
+	}
+
+	renderPopoverContent = (state, props) => {
+
+		const { message, info, disChatInput } = state;
+		const { userprofile, me, userSocket } = props;
+
 		const load2image = "http://res.cloudinary.com/developers/image/upload/v1524312085/load2image_b3hqn9.jpg";
 
 		return (
-			<section className="d-inline-flex">
-				<Popover component="span" placement="right" popoverBody={userprofile.author.username}
-				         className={className}>
-					<PopoverHeader className="p-0">
-						<UserImage image={userprofile.author.bgImg} load2image={userprofile.author.smallImage} style={styles.bgImg}/>
-						<UserImage image={userprofile.author.useravatar} load2image={load2image} style={styles.avatarImg} />
-						<span className={classNames({
-							"user-online": checkForStatus,
-							"user-offline": !checkForStatus,
-						})}></span>
-						<div className="my-4">&nbsp;</div>
-						<div className="text-center text-secondary font-weight-bold">
-							<span>{userprofile.author.username}</span>
+			<div className="username-pop-wrap">
+				<div className="p-0" style={{ backgroundColor: "#2f3136" }}>
+					<div className="useravatar-wrap d-flex justify-content-center py-3" style={{ backgroundColor: "#202225" }}>
+						<UserImage image={userprofile.useravatar} load2image={load2image} style={styles.avatarImg} />
+					</div>
+					{/* online / offline circle */}
+					<span className={classNames({
+						"user-online": userSocket.online,
+						"user-offline": !userSocket.online,
+					})}></span>
+					{/* online / offline circle */}
+					<div className="text-center text-cardlight font-weight-bold mt-2">
+						<span>{userprofile.username}</span>
+					</div>
+					<div className="text-center text-cardlight font-weight-bold">
+						<small>{userprofile.email}</small>
+					</div>
+					<div className="text-cardlight font-weight-bold pt-2 word-wrap d-flex justify-content-center">
+						<Tooltip title={this.txt.about}>
+								<span className="mx-3 cursor-pointer p-2 card-icons-hover" onClick={() => this.onShowInfo('about') }>
+									<Fa icon="address-card-o" />
+								</span>
+						</Tooltip>
+						<Tooltip title={this.txt.github}>
+								<span className="mx-3 cursor-pointer p-2 card-icons-hover" onClick={() => this.onShowInfo('gitlink') }>
+									<Fa icon="github" />
+								</span>
+						</Tooltip>
+						<Tooltip title={this.txt.contact}>
+								<span className="mx-3 cursor-pointer p-2 card-icons-hover" onClick={() => this.onShowInfo('contact') }>
+									<Fa icon="envelope-o" />
+								</span>
+						</Tooltip>
+						<Tooltip title={this.txt.portfolio}>
+								<span className="mx-3 cursor-pointer p-2 card-icons-hover" onClick={() => this.onShowInfo('portfolio') }>
+									<Fa icon="briefcase" />
+								</span>
+						</Tooltip>
+					</div>
+					<div className="text-cardlight text-center font-weight-bold p-2 word-wrap br-bottom">
+							<span className="mx-2 cursor-pointer font-weight-light" style={{ fontSize: "14px" }}>
+								{ info !== null && info == "about" && userprofile.about }
+								{ info !== null && info == "gitlink" && userprofile.github }
+								{ info !== null && info == "contact" && userprofile.contact }
+								{ info !== null && info == "portfolio" && userprofile.portfolio }
+							</span>
+					</div>
+				</div>
+				<div style={{ backgroundColor: "#2f3136" }}>
+					<div className="row">
+						<div className="col-12 d-inline-flex">
+							{
+								me.username ? (userprofile.username !== me.username ?
+									<div className="card-input-wrap">
+										<input type="text" className="profile-card-input" id="inlineFormInputGroupUsername2"
+										       placeholder={`msg for @${userprofile.username}`}
+										       value={message} onChange={this.onChange} disabled={disChatInput}
+										       onKeyPress={(e) => this.onMessage(e, me, userSocket)} autoComplete="off" />
+									</div> :
+									<span className="text-center p-3"><small className="text-secondary">Go to your - <Link
+										to={`/profile/@${userprofile.username}`} className="text-cardlight font-weight-bold">
+											profile</Link></small>
+										</span>) :
+									<span className="text-center text-cardlight font-weight-bold p-3">
+										<small>Please <Link
+											to="/authorization" className="text-cardlight font-weight-bold">
+											sign in</Link> for sending message</small>
+									</span>
+							}
 						</div>
-						<div className="text-center text-secondary font-weight-bold">
-							<small>{userprofile.author.email}</small>
-						</div>
-						<div className="text-secondary font-weight-bold p-2 word-wrap">
-							{ userprofile.author.about &&
-							<Fragment><small>About: <em>{ userprofile.author.about }</em></small><br/></Fragment> }
-							{ userprofile.author.github &&
-							<Fragment><small>GitHub: <em>{ userprofile.author.github }</em></small><br/></Fragment> }
-							{ userprofile.author.contact &&
-							<Fragment><small>Contact: <em>{ userprofile.author.contact }</em></small><br/></Fragment> }
-							{ userprofile.author.portfolio &&
-							<Fragment><small>Portfolio: <em>{ userprofile.author.portfolio }</em></small></Fragment> }
-						</div>
-					</PopoverHeader>
-					<PopoverBody>
-						<div className="row">
-							<div className="col-12 d-inline-flex">
-								<form className="form-inline">
-									{
-										me.username ? (userprofile.author.username !== me.username ?
-											<div className="input-group mb-2 mr-sm-2">
-												<input type="text" className="form-control" id="inlineFormInputGroupUsername2"
-												       placeholder={`msg for @${userprofile.author.username}`}
-												       value={this.state.message} onChange={this.onChange} />
-												<div className="input-group-prepend">
-													<div className="input-group-text cursor-pointer hoverme" onClick={this.onMessage}>
-														<Fa icon="send" />
-													</div>
-												</div>
-											</div> :
-											<span className="text-center"><small>For more information - <Link
-												to={`/profile/@${userprofile.author.username}`} className="text-secondary font-weight-bold">
-												click</Link></small>
-											</span>) :
-											<span className="text-center text-secondary font-weight-bold">
-												<small>Please <Link
-													to="/authorization" className="text-secondary font-weight-bold">
-													sign in</Link> for sending message</small>
-											</span>
-									}
-								</form>
-							</div>
-						</div>
-					</PopoverBody>
+					</div>
+				</div>
+			</div>
+		)
+	}
+
+	render() {
+		const { showPopover, privateMessages } = this.state;
+		const { userprofile, me, userSocket } = this.props;
+
+		// if (Object.keys(userSocket).length === 0 && Object.keys(me).length === 0) return <div></div>
+
+		return (
+			<Fragment>
+				<Popover
+					body={this.renderPopoverContent(this.state, this.props)}
+					place="right"
+					isOpen={showPopover}
+					onOuterAction={this.onShowPopover}
+				>
+					<span className="text-secondary cursor-pointer font-weight-bold" onClick={this.onShowPopover}>
+						{userprofile.username}
+					</span>
 				</Popover>
-			</section>
-		);
+			</Fragment>
+		)
 	}
 }
 
 const styles = {
-	bgImg: {
-		position: "relative",
-		width: "100%",
-		height: "125px",
-	},
 	avatarImg: {
-		position: "absolute",
-		top: "75px",
-		left: "90px",
 		width: "100px",
 		height: "100px",
 		borderRadius: "50%",
@@ -127,7 +201,7 @@ UserName.propTypes = {
 
 function mapStateToProps(state) {
 	return {
-		online: onlineListSelector(state)
+		lang: state.locale.lang
 	}
 }
 

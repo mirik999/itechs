@@ -1,0 +1,125 @@
+.chatbox-circle {
+	position: absolute;
+	top: 50px;
+	right: 50px;
+	width: 50px;
+	height: 50px;
+	border: 1px solid #d6d6d6;
+	border-radius: 50%;
+	background-color: white;
+	cursor: pointer;
+	-webkit-transition: box-shadow 0.2s;
+	-moz-transition: box-shadow 0.2s;
+	-ms-transition: box-shadow 0.2s;
+	-o-transition: box-shadow 0.2s;
+	transition: box-shadow 0.2s;
+	z-index: 999;
+}
+
+.chatbox-circle:hover {
+	-webkit-box-shadow: 0px 3px 2px 0px rgba(0,0,0,0.15);
+	-moz-box-shadow: 0px 3px 2px 0px rgba(0,0,0,0.15);
+	box-shadow: 0px 3px 2px 0px rgba(0,0,0,0.15);
+}
+
+.circle-check {
+	position: absolute !important;
+	width: 40px;
+	height: 40px;
+	left: 5px;
+	top: 5px;
+	visibility: visible;
+	opacity: 0;
+	cursor: pointer;
+}
+
+.chatbox-users {
+	display: none;
+	position: absolute;
+	top: 60px;
+	right: -2px;
+}
+
+.circle-check:checked + .chatbox-users {
+	display: block;
+}
+
+.cant-user {
+	border: 1px solid red !important;
+}
+
+.chatting-wrap {
+	min-width: 500px;
+	max-width: 500px;
+	min-height: 400px;
+	max-height: 400px;
+	-ms-word-wrap: break-word;
+	word-wrap: break-word;
+	word-break: break-all;
+	overflow: auto;
+	padding-bottom: 40px;
+}
+
+.each-sms {
+	-ms-word-wrap: break-word;
+	word-wrap: break-word;
+	word-break: break-all;
+	padding: 10px 0;
+	font-size: 14px;
+	font-weight: bolder;
+}
+
+.sms-bg {
+}
+
+.chatbox-inputarea {
+	padding: 10px 20px;
+}
+
+.userlogo {
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+}
+
+
+.chatbox-input {
+	margin:0 !important;
+	border: 1px solid silver !important;
+	border-radius: 5px !important;
+	padding: 0px 10px !important;
+	display:inline-block !important;
+	vertical-align:middle !important;
+	white-space:normal !important;
+	line-height:1 !important;
+	width: 385px !important;
+	outline: none !important;
+	font-size: 14px;
+}
+
+.chatbox-input:focus {
+	-webkit-box-shadow: none !important;
+	-moz-box-shadow:  none !important;
+	box-shadow:  none !important;
+	outline: none !important;
+}
+
+.chatbox-input::placeholder {
+	font-size: 14px;
+}
+
+.chatbox-sendbtn {
+	padding: 6px 15px;
+	border-radius: 5px;
+}
+
+/* modal style - globala kecirt */
+
+.Overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: rgba(0, 0, 0, 0.19) !important;
+}

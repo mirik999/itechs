@@ -17,7 +17,7 @@ class CommentsWrapper extends PureComponent {
 	}
 
 	render() {
-		const { id, article, profile, lang, hash } = this.props;
+		const { id, article, profile, lang, hash, socketUsers } = this.props;
 
 		if (article.disableComment) {
 			return <div className="col-12 text-center pt-3">
@@ -33,6 +33,7 @@ class CommentsWrapper extends PureComponent {
 						             profile={profile}
 						             id={id}
 						             lang={lang}
+						             socketUsers={socketUsers}
 						/>
 						<CommentForm profile={profile}
 						             comments={article.comments}

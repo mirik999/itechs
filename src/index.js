@@ -19,6 +19,7 @@ import '../node_modules/nprogress/nprogress.css';
 import 'mdbreact/docs/css/mdb.min.css';
 import 'mdbreact/dist/mdbreact';
 import 'jquery/src/jquery';
+import './globalStyles.css';
 //user components
 import App from './App';
 //actions
@@ -57,9 +58,6 @@ if (localStorage.Login) {
 	};
 	store.dispatch(LoginDispatch(user))
 	store.dispatch(getProfile(user.email))
-
-	socket.emit('userOnline', user)
-
 }
 
 if (localStorage.devsLang) {

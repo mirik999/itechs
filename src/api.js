@@ -66,6 +66,11 @@ export default {
 			return axios.post('/api/feedback/new-feedback', { data })
 		}
 	},
+	chat: {
+		history: () => {
+			return axios.get('/api/chat/get-history').then(res => res.data.messages)
+		}
+	}
 	// notify: {
 	// getNotify: (data) => {
 	// 	return axios.post('/notify/get-my-nots', { data }).then(res => res.data.notify)

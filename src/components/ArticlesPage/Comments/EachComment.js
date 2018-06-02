@@ -10,7 +10,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import _ from 'lodash';
 import io from 'socket.io-client';
 import { Fa } from 'mdbreact';
-import Tooltip from 'material-ui/Tooltip';
+import Tooltip from '@material-ui/core/Tooltip';
 //user components
 import HandleDate from '../../Utils/HandleDate';
 import UserName from '../../Utils/UserName';
@@ -112,6 +112,7 @@ class EachComment extends PureComponent {
 
 	render() {
 		const { comments, profile, editorState, toggle, target } = this.state;
+		const { socketUsers } = this.props;
 
 		return (
 			<div className="comments">
@@ -124,6 +125,20 @@ class EachComment extends PureComponent {
 						</div>
 						:
 					comments && comments.map((comment, idx) => {
+
+						// filter single user from socketOnlineList and convert to object
+						const userSocket = socketUsers.filter(socket => socket.username === comment.author.username)
+							.reduce((result, item, index) => {
+								result[index] = item;
+								return result[0];
+							}, {})
+						// filter my profile from socketOnlineList and convert to object
+						const mySocket = socketUsers.filter(socket => socket.username === profile.username)
+							.reduce((result, item, index) => {
+								result[index] = item;
+								return result[0];
+							}, {})
+
 						return (
 							<div className="comment-wrap" key={idx}>
 								<div className="photo">
@@ -157,36 +172,35 @@ class EachComment extends PureComponent {
 								<div className="bottom-comment">
 									<div className="comment-date pt-2"><HandleDate date={comment.date} /></div>
 									<ul className="comment-actions pt-2">
-										<li className="complain">
-											<UserName me={profile} userprofile={comment}
-											          className="text-secondary font-weight-bold cursor-pointer" />
-										</li>
-										<li className="reply">
-											{
-												comment.author.username === profile.username ?
-													<span onClick={() => this.onEdit(comment)}>
-														{ comment.handleID === target && toggle  ?
-															<Fragment><Fa icon="close" /> {this.txt.cancel}</Fragment> :
-															<Fragment><Fa icon="edit" /> {this.txt.edit}</Fragment> }
-													</span> : <span><Fa icon="thumbs-o-up" /> {this.txt.like}</span>
-											}
-										</li>
+										<UserName me={mySocket} userprofile={comment.author} userSocket={userSocket} profile={profile}
+										          className="text-secondary cursor-pointer" />
+										{
+											comment.author.username === profile.username ?
+												<span onClick={() => this.onEdit(comment)}
+												      className="cursor-pointer hoverme p-2 ml-2 text-secondary">
+													{ comment.handleID === target && toggle  ?
+														<Fragment><small><Fa icon="close" /> {this.txt.cancel}</small></Fragment> :
+														<Fragment><small><Fa icon="edit" /> {this.txt.edit}</small></Fragment> }
+												</span> :
+												<span className="cursor-pointer hoverme p-2 mx-1 text-secondary">
+													<small><Fa icon="thumbs-o-up" /> {this.txt.like}</small>
+												</span>
+										}
 										{
 											comment.handleID === target &&
 											comment.author.username === profile.username &&
-											toggle && <li className="reply complain">
-												<span onClick={() => this.onSave(comment.handleID)} className="mr-1">
-													<Fa icon="check-square-o" /> {this.txt.save}
+											toggle &&
+												<span onClick={() => this.onSave(comment.handleID)}
+												      className="cursor-pointer hoverme p-2 mx-1 text-secondary">
+													<small><Fa icon="check-square-o" /> {this.txt.save}</small>
 												</span>
-											</li>
 										}
 										{
 											comment.author.username === profile.username &&
-											<li className="reply">
-												<span onClick={() => this.onDelete(comment.handleID)}>
-													<Fa icon="trash-o" /> { this.txt.delete }
-												</span>
-											</li>
+											<span onClick={() => this.onDelete(comment.handleID)}
+											      className="cursor-pointer hoverme p-2 mx-1 text-secondary">
+												<small><Fa icon="trash-o" /> { this.txt.delete }</small>
+											</span>
 										}
 									</ul>
 								</div>

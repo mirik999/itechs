@@ -2,7 +2,7 @@ import React, {PureComponent} from 'react';
 import validator from 'validator';
 import { FormattedMessage } from 'react-intl';
 import { Card, CardImage, CardBody, Button, Fa } from 'mdbreact';
-import Tooltip from 'material-ui/Tooltip';
+import Tooltip from '@material-ui/core/Tooltip';
 import { ToastContainer, toast } from 'react-toastify';
 //user components
 import UserInput from '../Utils/UserInput';

@@ -2,7 +2,6 @@ import React, {PureComponent} from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Fa } from 'mdbreact';
-import mediumZoom from 'medium-zoom';
 //user components
 import UserImage from '../../Utils/UserImage';
 import HandleDate from '../../Utils/HandleDate';
@@ -17,15 +16,6 @@ class MyArticles extends PureComponent {
 
 		this.onDelete = this.onDelete.bind(this);
 		this.myArticles = this.myArticles.bind(this);
-	}
-
-	componentDidMount() {
-		mediumZoom('#articleImages', {
-			margin: 24,
-			background: 'rgba(0, 0, 0, 0.7)',
-			scrollOffset: 0,
-			metaClick: false,
-		});
 	}
 
 	onDelete = async (id) => {
@@ -52,7 +42,7 @@ class MyArticles extends PureComponent {
 							<div className="row border-list-article" key={idx}>
 								<div className="d-none d-md-block col-md-3" style={styles.imgWrapper}>
 									<UserImage image={art.thumbnail} load2image={art.thumbnailSmall} style={styles.img}
-									           className="img-fluid img-thumbnail cursor-pointer"
+									           className="img-fluid img-thumbnail cursor-pointer" zoom={true}
 									/>
 								</div>
 								<div className="col-8 col-md-6 d-flex align-items-start flex-column">
@@ -85,7 +75,9 @@ const styles = {
 	},
 	img: {
 		height: "100px",
-		width: "150px"
+		width: "150px",
+		maxWidth: "150px",
+		zIndex: "9999999"
 	}
 }
 

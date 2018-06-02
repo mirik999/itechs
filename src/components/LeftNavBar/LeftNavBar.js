@@ -1,6 +1,6 @@
 import React, {PureComponent} from 'react';
 import {connect} from 'react-redux';
-import { push as Menu } from 'react-burger-menu';
+import { slide as Menu } from 'react-burger-menu';
 //user components
 import MenuList from './MenuList';
 import Language from './Language';
@@ -30,8 +30,8 @@ class LeftNavBar extends PureComponent {
 		const { menuOpen } = this.state;
 
 		return (
-			<div className="row" id="outer">
-				<Menu styles={ styles } isOpen={menuOpen} customCrossIcon={false} outerContainerId={'outer'} pageWrapId={'page-wrap'}>
+			<div className="row">
+				<Menu styles={ styles } isOpen={menuOpen} customCrossIcon={false}>
 					<div className="content">
 						<div className="mt-2"></div>
 						<div className="logo-name text-center" style={styles.logobm}>
@@ -71,7 +71,7 @@ const styles = {
 	bmMenu: {
 		background: '#4F5A6E',
 		// padding: '2.5em 1.5em 0',
-		fontSize: '1.15em'
+		fontSize: '1.15em',
 	},
 	bmMorphShape: {
 		fill: '#4F5A6E'

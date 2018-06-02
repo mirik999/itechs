@@ -52,7 +52,7 @@ p.comment-p {
 	background-size: contain;
 }
 
-@media screen and (max-width: 420px) {
+@media screen and (max-width: 500px) {
 	.photo {
 		display: none;
 	}
@@ -86,16 +86,26 @@ p.comment-p {
 
 .bottom-comment {
 	color: #acb4c2;
-	font-size: 0.875rem;
 }
 
 .comment-date {
 	float: left;
+	font-size: 14px !important;
 }
 
 .comment-actions {
 	float: right;
 }
+
+@media screen and (max-width: 900px) {
+	.comment-actions {
+		font-size: 10px;
+	}
+	.comment-date {
+		font-size: 10px;
+	}
+}
+
 .comment-actions li {
 	display: inline;
 	margin: -2px;

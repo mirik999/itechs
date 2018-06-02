@@ -119,9 +119,10 @@ class CommentForm extends PureComponent {
 				/>
 				<section className="bottom-comment">
 					<ul className="comment-actions">
-						<li className="reply">
-							<span onClick={this.onComment} className="mr-2"><Fa icon="send-o"/> {this.txt.onComment}</span>
-						</li>
+						<span onClick={this.onComment}
+						      className="cursor-pointer hoverme p-2 mx-1 text-secondary">
+							<small><Fa icon="send-o"/> {this.txt.onComment}</small>
+						</span>
 					</ul>
 				</section>
 				<ToastContainer />

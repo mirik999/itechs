@@ -10,6 +10,7 @@ import ArticleSearchPanel from "./ArticleSearchPanel";
 import api from '../../api';
 //selectors
 import {profileSelector} from "../../reducer/profile";
+import {onlineListSelector} from "../../reducer/user";
 
 
 class ArticlesPage extends PureComponent {
@@ -56,7 +57,7 @@ class ArticlesPage extends PureComponent {
 	}
 
 	render() {
-		const { lang } = this.props;
+		const { lang, socketUsers } = this.props;
 		const { articles, profile, searchTerm } = this.state;
 
 		if (Object.keys(articles).length === 0 && Object.keys(profile).length === 0) return <div></div>;
@@ -67,6 +68,19 @@ class ArticlesPage extends PureComponent {
 					<div className="row justify-content-center">
 						{
 							articles.filter(this.onFilter(searchTerm)).map((article, idx) => {
+								// filter single user from socketOnlineList and convert to object
+								const userSocket = socketUsers.filter(socket => socket.username === article.author.username)
+									.reduce((result, item, index) => {
+										result[index] = item;
+										return result[0];
+									}, {})
+								// filter my profile from socketOnlineList and convert to object
+								const mySocket = socketUsers.filter(socket => socket.username === profile.username)
+									.reduce((result, item, index) => {
+										result[index] = item;
+										return result[0];
+									}, {})
+
 								return (
 									<ArticleCard
 										key={idx}
@@ -74,7 +88,8 @@ class ArticlesPage extends PureComponent {
 										article={article}
 										articles={articles}
 										lang={lang}
-										profile={profile}
+										profile={mySocket}
+										userSocket={userSocket}
 									/>
 								)
 							})
@@ -92,6 +107,7 @@ ArticlesPage.propTypes = {
 function mapStateToProps(state) {
 	//console.log('selector', articlesSelector(state) === articlesSelector(state))
 	return {
+		socketUsers: onlineListSelector(state),
 		lang: state.locale.lang,
 		profile: profileSelector(state),
 		user: state.user

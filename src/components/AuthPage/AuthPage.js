@@ -26,6 +26,7 @@ class AuthPage extends PureComponent {
 		this.setState({ toggle: !this.state.toggle })
 	}
 
+
 	onSubmit = async (data) => {
 		if (Object.keys(data).length === 3) {
 			await this.props.register(data)

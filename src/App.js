@@ -16,6 +16,7 @@ import ArticleEdit from './components/ArticlesPage/ArticleEdit';
 import AuthPage from './components/AuthPage/AuthPage';
 import DocumentationPage from './components/DocumentationPage/DocumentationPage';
 import ProfilePage from './components/ProfilePage/ProfilePage';
+import ChatBox from './components/ChatBox/ChatBox';
 import NotFound from './components/404-Constructor/NotFound';
 //actions
 import { getProfile } from './actions/profile'
@@ -33,24 +34,31 @@ if (process.env.NODE_ENV === 'production') {
 class App extends PureComponent {
 	constructor(props) {
 		super(props);
+		this.state = {
+			profile: {}
+		}
 	}
 	
 	async componentDidMount() {
 		if (Object.keys(this.props.user).length !== 0) {
 			const profile = await api.user.getProfile(this.props.user.email)
+			this.setState({ profile });
 			socket.emit('userOnline', {
 				myID: profile._id
-			})
+			});
 		}
+
 	}
 
 	render() {
+		const { profile } = this.state;
 		const { location, lang } = this.props;
 
 		return (
 			<IntlProvider locale={lang} messages={messages[lang]}>
 				<div className="container-fluid grey-skin" style={{ backgroundColor: "#DEE1E5", minHeight: "100%" }}>
 					<LeftNavBar />
+					{ Object.keys(profile).length !== 0 && <ChatBox profile={profile} socket={socket} /> }
 					<Switch>
 						<Route exact location={location} path="/" component={ArticlesPage} />
 						<Route location={location} path="/article/read/:id" component={ArticleContent} />

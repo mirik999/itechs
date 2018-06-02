@@ -18,7 +18,7 @@ class ArticleCard extends PureComponent {
 	}
 
 	render() {
-		const { article, id, lang, profile } = this.props;
+		const { article, id, lang, profile, userSocket } = this.props;
 
 		return (
 			<div className="col-12 col-md-10 col-lg-8 col-xl-6 mt-1 mb-2">
@@ -30,7 +30,10 @@ class ArticleCard extends PureComponent {
 								<img src={article.author.useravatar} alt="User-logo" style={styles.userAvatar} />
 							</td>
 							<td className="pl-2" style={styles.verticalAlign}>
-								<UserName me={profile} userprofile={article} className="text-secondary font-weight-bold cursor-pointer" />
+								<UserName me={profile} userprofile={article.author} userSocket={userSocket}
+								          className="text-secondary font-weight-bold cursor-pointer" />
+								<br/>
+								<small><em className="text-secondary">{article.author.about}</em></small>
 							</td>
 						</tr></tbody></table>
 						<table className="d-inline-flex float-right"><tbody><tr>

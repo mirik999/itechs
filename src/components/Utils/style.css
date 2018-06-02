@@ -39,34 +39,92 @@ main a {
 	text-decoration: none;
 }
 
-.popover {
-	min-width: 276px !important;
+.Popover {
+	z-index: 9999999 !important;
+}
+
+.username-pop-wrap {
+	border-radius:  5px !important;
 }
 
 .user-online {
 	position: absolute;
-	top: 157px;
+	top: 95px;
 	left: 157px;
-	border: 3px solid #F7F7F7;
+	border: 3px solid #202225;
 	-webkit-border-radius: 50%;
 	-moz-border-radius: 50%;
 	border-radius: 50%;
 	width: 20px;
 	height: 20px;
-	background-color: #00ff00;
+	background-color: #9fff72;
 	z-index: 999;
 }
 
 .user-offline {
 	position: absolute;
-	top: 157px;
+	top: 95px;
 	left: 157px;
-	border: 3px solid #F7F7F7;
+	border: 3px solid #202225;
 	-webkit-border-radius: 50%;
 	-moz-border-radius: 50%;
 	border-radius: 50%;
 	width: 20px;
 	height: 20px;
-	background-color: #ff1835;
+	background-color: #ff6668;
 	z-index: 999;
 }
+
+.profile-card-input {
+	margin:0 !important;
+	border: none !important;
+	border-radius: 5px !important;
+	padding: 0px 10px !important;
+	display:inline-block !important;
+	vertical-align:middle !important;
+	white-space:normal !important;
+	line-height:1 !important;
+	min-width: 100% !important;
+	background-color: #36393f !important;
+	color: silver !important;
+	outline: none !important;
+	font-size: 14px;
+}
+
+.profile-card-input:focus {
+	-webkit-box-shadow: none !important;
+	-moz-box-shadow:  none !important;
+	box-shadow:  none !important;
+	outline: none !important;
+}
+
+.profile-card-input::placeholder {
+	font-size: 14px;
+}
+
+.card-input-wrap {
+	min-width: 235px;
+	max-width: 235px;
+	padding: 15px 15px;
+}
+
+.bs-popover-auto[x-placement^=right] .arrow::after, .bs-popover-right .arrow::after {
+	border-right-color: #313539 !important;
+}
+
+.br-bottom {
+	border-bottom: 1px solid #27292d !important;
+}
+
+.text-cardlight {
+	color: #bebebe !important;
+}
+
+.card-icons-hover {
+	border-radius: 5px;
+}
+
+.card-icons-hover:hover {
+	background-color: rgba(39, 41, 45, 0.44);
+}
+

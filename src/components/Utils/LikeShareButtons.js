@@ -1,6 +1,6 @@
 import React, {PureComponent, Fragment} from 'react';
 import PropTypes from 'prop-types';
-import Tooltip from 'material-ui/Tooltip';
+import Tooltip from '@material-ui/core/Tooltip';
 import _ from 'lodash';
 import { FormattedMessage } from 'react-intl';
 import { Button, Fa } from 'mdbreact';
@@ -81,7 +81,8 @@ class LikeShareButtons extends PureComponent {
 		const { liked, followed } = this.state;
 		const { url, card, article } = this.props;
 
-		if (Object.keys(article).length === 0) return <div></div>
+
+		if (Object.keys(article).length === 0) return <div></div>;
 
 		if (card) {
 			const likeCount = article.like.length

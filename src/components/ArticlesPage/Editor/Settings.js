@@ -1,6 +1,6 @@
 import React, {PureComponent, Fragment} from 'react';
 import { Button, Fa } from 'mdbreact';
-import Tooltip from 'material-ui/Tooltip';
+import Tooltip from '@material-ui/core/Tooltip';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import sha1 from 'sha1';
@@ -27,9 +27,12 @@ class Settings extends PureComponent {
 
 		this.txt = {
 			share: <FormattedMessage id="profile.article" />,
+			publish: <FormattedMessage id="publish.article" />,
 			disableComment: <FormattedMessage id="comment.toggle" />,
+			comment: <FormattedMessage id="comment.toggle-short" />,
 			enableComment: <FormattedMessage id="comment.toggle-enable" />,
 			selectThumb: <FormattedMessage id="select.thumb" />,
+			selectThumbShort: <FormattedMessage id="select.thumb-short" />,
 		}
 
 		this.onSave = this.onSave.bind(this)
@@ -91,14 +94,14 @@ class Settings extends PureComponent {
 
 		return (
 			<div className="row justify-content-center">
-				<div className="col-12 col-sm-6" style={{ height: "60px"}}>
+				<div className="col-12 col-sm-6 col-lg-4" style={{ height: "60px"}}>
 					<UserInput label="article.title"
 					           name="title" value={title}
 					           onChange={this.onChange} icon="header"
 					           className="mb-0"
 					/>
 				</div>
-				<div className="col-12 col-sm-6 d-flex justify-content-end">
+				<div className="col-12 col-sm-6 col-lg-8 d-flex justify-content-end">
 					<div style={styles.thumbnailView}>
 						{
 							thumbnail && thumbnailSmall &&
@@ -109,28 +112,33 @@ class Settings extends PureComponent {
 							/>
 						}
 					</div>
-					<Tooltip id="tooltip-icon" title={disableComment ? this.txt.enableComment : this.txt.disableComment}>
-						<Button tag="a" size="sm" name="save" floating gradient="peach" onClick={this.onToggle}>
-							{disableComment ? <Fa icon="lock"/> : <Fa icon="unlock"/>}
-						</Button>
-					</Tooltip>
-					<Tooltip id="tooltip-icon" title={this.txt.selectThumb}>
-						<Dropzone
-							style={styles.dropzone}
-							onDrop={this.uploadFile}
-							maxSize={1240000}
-							multiple={false}
-						>
-							<Button tag="a" size="sm" name="thumb" floating gradient="aqua">
-								<Fa icon="image" />
-							</Button>
-						</Dropzone>
-					</Tooltip>
-					<Tooltip id="tooltip-icon" title={this.txt.share}>
-						<Button tag="a" size="sm" name="save" floating gradient="purple" onClick={this.onSave}>
-							<Fa icon="send"/>
-						</Button>
-					</Tooltip>
+					<div className="d-flex align-items-center">
+						<Tooltip id="tooltip-icon" title={disableComment ? this.txt.enableComment : this.txt.disableComment}>
+							<span className="cursor-pointer hoverme text-secondary p-2 art-create-text" onClick={this.onToggle}>
+							{
+								disableComment ?
+									<Fragment><small><Fa icon="lock"/> {this.txt.comment}</small></Fragment> :
+									<Fragment><small><Fa icon="unlock"/> {this.txt.comment}</small></Fragment>
+							}
+							</span>
+						</Tooltip>
+						<Tooltip id="tooltip-icon" title={this.txt.selectThumb} style={styles.dropzonePosition}>
+							<Dropzone
+								style={styles.dropzone}
+								onDrop={this.uploadFile}
+								maxSize={1240000}
+								multiple={false}>
+								<span className="cursor-pointer hoverme p-2 text-secondary art-create-text">
+									<small><Fa icon="image" /> {this.txt.selectThumbShort}</small>
+								</span>
+							</Dropzone>
+						</Tooltip>
+						<div>
+							<span className="cursor-pointer hoverme p-2 text-secondary art-create-text" onClick={this.onSave}>
+								<small><Fa icon="send"/> {this.txt.publish}</small>
+							</span>
+						</div>
+					</div>
 				</div>
 			</div>
 		);
@@ -139,8 +147,10 @@ class Settings extends PureComponent {
 
 const styles = {
 	dropzone: {
-		width: "45px",
-		height: "45px"
+		height: "45px",
+	},
+	dropzonePosition: {
+		margin: "22px 0 0 0"
 	},
 	thumbnailView: {
 		maxWidth: "120px",

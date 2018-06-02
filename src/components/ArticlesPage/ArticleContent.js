@@ -14,6 +14,8 @@ import HandleDate from '../Utils/HandleDate';
 import LikeShareButtons from '../Utils/LikeShareButtons';
 //direct api requests
 import api from '../../api';
+//selectors
+import {onlineListSelector} from "../../reducer/user";
 //css
 import './style.css';
 
@@ -62,10 +64,23 @@ class ArticleContent extends PureComponent {
 	}
 
 	render() {
-		const { lang, user } = this.props;
+		const { lang, user, socketUsers } = this.props;
 		const { html, article, profile } = this.state;
 
 		if (Object.keys(article).length === 0) return <div></div>;
+
+		// filter single user from socketOnlineList and convert to object
+		const userSocket = socketUsers.filter(socket => socket.username === article.author.username)
+			.reduce((result, item, index) => {
+				result[index] = item;
+				return result[0];
+			}, {})
+		// filter my profile from socketOnlineList and convert to object
+		const mySocket = socketUsers.filter(socket => socket.username === profile.username)
+			.reduce((result, item, index) => {
+				result[index] = item;
+				return result[0];
+			}, {})
 
 		const url = window.location.href;
 		const hash = window.location.hash;
@@ -97,7 +112,8 @@ class ArticleContent extends PureComponent {
 									<img src={article.author.useravatar} alt="User-logo" style={styles.userAvatar} />
 								</td>
 								<td className="pl-2" style={styles.verticalAlign}>
-									<UserName me={profile} userprofile={article} className="text-secondary font-weight-bold cursor-pointer" />
+									<UserName me={mySocket} userprofile={article.author} userSocket={userSocket}
+									          className="text-secondary font-weight-bold cursor-pointer" />
 								</td>
 							</tr></tbody></table>
 							<table className="d-inline-flex float-right"><tbody><tr>
@@ -117,7 +133,8 @@ class ArticleContent extends PureComponent {
 						</section>
 						<hr />
 						<section className="footer px-3 pb-3 mb-3" style={styles.bg}>
-							<CommentsWrapper article={article} user={user} profile={profile} id={article._id} hash={hash} />
+							<CommentsWrapper article={article} user={user} profile={profile} mySocket={mySocket}
+							                 id={article._id} hash={hash} socketUsers={socketUsers} />
 						</section>
 					</div>
 				</div>
@@ -156,6 +173,7 @@ ArticleContent.propTypes = {
 
 function mapStateToProps(state) {
 	return {
+		socketUsers: onlineListSelector(state),
 		user: state.user,
 		lang: state.locale.lang
 	}

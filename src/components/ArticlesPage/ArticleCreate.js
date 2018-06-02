@@ -78,17 +78,18 @@ class ArticleCreate extends PureComponent {
 
 	render() {
 		const { profile } = this.state;
-		
+		const { lang } = this.props;
+
 		if (Object.keys(profile).length === 0) return <div></div>
 		
 		return (
 			<Wrapper>
 				<div className="row justify-content-center">
 					<div className="col-12 col-md-10 col-xl-8 mt-3 p-3" style={styles.bg}>
-						<Settings getSettings={this.getSettingsAndPush} />
+						<Settings getSettings={this.getSettingsAndPush} lang={lang} />
 					</div>
 					<div className="col-12 col-md-10 col-xl-8 mt-3 px-3" style={styles.bgEditor}>
-						<MyEditor getContent={this.getContent} />
+						<MyEditor getContent={this.getContent} lang={lang} />
 						{/*<NewEditor /> development - best editor */}
 					</div>
 				</div>
@@ -112,7 +113,8 @@ ArticleCreate.propTypes = {};
 
 function mapStateToProps(state) {
 	return {
-		user: state.user
+		user: state.user,
+		lang: state.locale.lang
 	}
 }
 

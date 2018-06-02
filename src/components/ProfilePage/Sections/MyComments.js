@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Fa } from 'mdbreact';
 import renderHTML from 'react-render-html';
-import Tooltip from 'material-ui/Tooltip';
+import Tooltip from '@material-ui/core/Tooltip';
 //user components
 import HandleDate from '../../Utils/HandleDate';
 //direct api requests

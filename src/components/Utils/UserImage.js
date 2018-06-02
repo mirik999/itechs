@@ -8,7 +8,7 @@ class UserImage extends PureComponent {
 	render() {
 		const { image, alt, className, style, zoom, load2image, id  } = this.props;
 
-		if (zoom) {
+		if (zoom === true) {
 			return (
 				<ProgressiveImage src={image} placeholder={load2image}>
 					{ (src, loading) => (
@@ -24,7 +24,6 @@ class UserImage extends PureComponent {
 				</ProgressiveImage>
 			);
 		}
-
 		return (
 			<ProgressiveImage src={image} placeholder={load2image}>
 				{ (src, loading, placeholder) => <img src={src} alt={alt} className={ className } style={style} id={id} /> }
@@ -37,7 +36,7 @@ UserImage.defaultProps = {
 	zoom: false,
 	load2image: " ",
 	style: {
-		cursor: "pointer"
+		cursor: "pointer",
 	},
 	id: "articleImages"
 }

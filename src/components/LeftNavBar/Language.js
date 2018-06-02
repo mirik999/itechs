@@ -1,7 +1,7 @@
 import React, {PureComponent} from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import Divider from 'material-ui/Divider';
+import Divider from '@material-ui/core/Divider';
 import { Fa } from 'mdbreact';
 // actions
 import { setlocale } from '../../actions/locale';

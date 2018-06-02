@@ -1,0 +1,18 @@
+@media screen and (max-width: 1282px) {
+	.art-create-text {
+		font-size: 12px !important;
+	}
+}
+
+@media screen and (max-width: 995px) {
+	.art-create-text {
+		font-size: 10px !important;
+		white-space: nowrap; /* forces text to single line */
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+}
+
+.SocialMediaShareButton {
+	outline: none !important;
+}
