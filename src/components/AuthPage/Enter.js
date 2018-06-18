@@ -1,4 +1,6 @@
 import React, {PureComponent} from 'react';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import validator from 'validator';
 import { FormattedMessage } from 'react-intl';
 import { Card, CardImage, CardBody, Button, Fa } from 'mdbreact';
@@ -7,6 +9,9 @@ import { ToastContainer, toast } from 'react-toastify';
 //user components
 import UserInput from '../Utils/UserInput';
 import Social from './Social';
+import Wrapper from '../Utils/Wrapper';
+//actions
+import { enter } from '../../actions/user';
 
 
 class Enter extends PureComponent {
@@ -41,7 +46,8 @@ class Enter extends PureComponent {
 		this.setState({ errors });
 		if (Object.keys(errors).length === 0) {
 			try {
-				await this.props.submit(this.state.data)
+				await this.props.enter(this.state.data)
+				window.location.href = '/';
 			} catch(err) {
 				this.setState({ errors: err.response.data.errors })
 			}
@@ -74,7 +80,8 @@ class Enter extends PureComponent {
 		errors.global && (errors.global && toast.warn(this.txt.globalEnterErr))
 		
 		return (
-			<div className={this.props.toggle ? "row justify-content-center" : "d-none"}>
+			<Wrapper>
+			<div className="row justify-content-center">
 				<div className="col-12 col-sm-10 col-md-8 col-xl-6 mt-5">
 					<form onSubmit={this.onSubmit}>
 						<Card cascade>
@@ -94,9 +101,9 @@ class Enter extends PureComponent {
 								<div className="">
 									<Button type="submit"><Fa icon="sign-in" /> &nbsp; { this.txt.enter }</Button>
 									<Tooltip id="tooltip-icon" title={ this.txt.createAnAccaunt }>
-										<Button tag="a" floating gradient="peach" size="sm" onClick={ () => this.props.set() }>
+										<Link to="/user/register" className="btn-floating peach-gradient btn-sm waves-effect waves-light loginbtn">
 											<Fa icon="plus-circle" />
-										</Button>
+										</Link>
 									</Tooltip>
 									<Social />
 								</div>
@@ -106,8 +113,15 @@ class Enter extends PureComponent {
 				</div>
 				<ToastContainer />
 			</div>
+			</Wrapper>
 		);
 	}
 }
 
-export default Enter;
+function mapStateToProps(state) {
+	return {
+		lang: state.locale.lang
+	}
+}
+
+export default connect(mapStateToProps, { enter })(Enter);

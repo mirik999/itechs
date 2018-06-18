@@ -19,8 +19,34 @@ Modal.setAppElement('#root');
 class ChatModal extends PureComponent {
 	constructor(props) {
 		super(props);
+		this.state = {
+			data: {
+				chatInput: '',
+				disChatInput: false
+			}
+		}
 
 		this.closeModal = this.closeModal.bind(this);
+		this.onChange = this.onChange.bind(this);
+		this.onClick = this.onClick.bind(this);
+	}
+
+	onChange = (e) => {
+		this.setState({ [e.target.name]: e.target.value })
+	}
+
+	onClick = (mySocket, userSocket) => {
+		const data = {
+			text: this.state.chatInput,
+			author: mySocket,
+			reciever: userSocket
+		}
+
+		this.props.socket.emit('privateMessage', data)
+		this.setState({ message: '', disChatInput: true })
+		setTimeout(() => {
+			this.setState({ disChatInput: false })
+		}, 2000);
 	}
 
 	closeModal = () => {
@@ -28,15 +54,24 @@ class ChatModal extends PureComponent {
 	}
 
 	render() {
-		const { open, chatHistory, profile } = this.props;
-		
-		const outsideMsgs = chatHistory.map(msgs => msgs.message).filter(msg => msg.reciever.username === profile.username);
-		const myMsgs = chatHistory.map(msgs => msgs.message).filter(msg => msg.author.username === profile.username);
+		const { chatInput, disChatInput } = this.state;
+		const { open, chatHistory, profile, sobesednik, onlineUsers } = this.props;
 
-		const TThistory = outsideMsgs.concat(myMsgs);
+		const privateChatHistory = chatHistory.filter(history => history.message.author.username === sobesednik || 
+			history.message.author.username === this.props.profile.username).filter(subhistory => subhistory.message.reciever.username 
+			=== sobesednik || subhistory.message.reciever.username === this.props.profile.username)
 
-		console.log(chatHistory)
-		
+		const mySocket = onlineUsers.filter(user => user.username === profile.username)
+											.reduce((result, item, index) => {
+																result[index] = item;
+																return result[0];
+															}, {})
+
+		const userSocket = onlineUsers.filter(user => user.username === sobesednik)
+												.reduce((result, item, index) => {
+																result[index] = item;
+																return result[0];
+															}, {})
 		
 		return (
 			<Modal
@@ -49,47 +84,49 @@ class ChatModal extends PureComponent {
 				<div className="chatting-wrap d-flex flex-column">
 
 					{
-						TThistory.map((chat, idx) => {
+						privateChatHistory.map((chat, idx) => {
 							
 							return (
 								<div className={classNames({
 									"each-sms row no-gutters": true,
-									"justify-content-start": chat.author.username !== profile.username,
-									"justify-content-end": chat.author.username === profile.username,
+									"justify-content-start": chat.message.author.username !== profile.username,
+									"justify-content-end": chat.message.author.username === profile.username,
 								})} key={idx}>
 									
 									<div className={classNames({
 										"col-2 text-center": true,
-										"order-1": true,
-										"order-2": false
+										"order-1": chat.message.author.username !== profile.username,
+										"order-2": chat.message.author.username === profile.username
 									})}>
-										<img src={chat.author.useravatar} alt="user-logo" className="userlogo" />
+										<img src={chat.message.author.useravatar} alt="user-logo" className="userlogo" />
 									</div>
 									
 									<div className={classNames({
-										"col-7 text-left sms-bg d-flex align-items-center": true,
-										"order-1": false,
-										"order-2": true
+										"col-7 sms-bg d-flex align-items-center": true,
+										"order-1 justify-content-end": chat.message.author.username === profile.username,
+										"order-2": chat.message.author.username !== profile.username
 									})}>
-										<span className="sms-text">{ `asd` }</span>
+										<span className="sms-text">{ chat.message.text }</span>
 									</div>
 									
 								</div>
 							)
 						})
 					}
-
-					<div className="fixed-bottom chatbox-inputarea d-flex justify-content-between">
-						<div className="d-flex align-items-center">
-							<input type="text" className="chatbox-input" />
-						</div>
-						<div className="d-flex align-items-center">
-							<span className="cursor-pointer hoverme text-secondary chatbox-sendbtn">
-								<small><Fa icon="send"/> send</small>
-							</span>
-						</div>
+				</div>
+				<div className="chatbox-inputarea d-flex justify-content-between">
+					<div className="d-flex align-items-center">
+						<input type="text" className="chatbox-input" name="chatInput" value={chatInput || ' '} onChange={this.onChange} 
+									 disabled={disChatInput}
+						/>
 					</div>
-
+					<div className="d-flex align-items-center">
+						<span className="cursor-pointer hoverme text-secondary chatbox-sendbtn" 
+									onClick={() => this.onClick(mySocket, userSocket)}
+						>
+							<small><Fa icon="send"/> send</small>
+						</span>
+					</div>
 				</div>
 			</Modal>
 		);

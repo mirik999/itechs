@@ -1,4 +1,6 @@
 import React, {PureComponent} from 'react';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import validator from 'validator';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
@@ -7,6 +9,9 @@ import Tooltip from '@material-ui/core/Tooltip';
 import { ToastContainer, toast } from 'react-toastify';
 //user components
 import UserInput from '../Utils/UserInput';
+import Wrapper from '../Utils/Wrapper';
+//actions
+import { register } from '../../actions/user';
 
 
 class Register extends PureComponent {
@@ -44,7 +49,8 @@ class Register extends PureComponent {
 		this.setState({ errors });
 		if (Object.keys(errors).length === 0) {
 			try {
-				await this.props.submit(this.state.data)
+				await this.props.register(this.state.data)
+				window.location.href = '/';
 			} catch(err) {
 				this.setState({ errors: err.response.data.errors })
 			}
@@ -81,6 +87,7 @@ class Register extends PureComponent {
 		errors.global && (errors.global.username && toast.warn(this.txt.globalUnameErr))
 
 		return (
+			<Wrapper>
 			<div className={!this.props.toggle ? "row justify-content-center" : "d-none"}>
 				<div className="col-12 col-sm-10 col-md-8 col-xl-6 mt-5">
 					<form onSubmit={this.onSubmit}>
@@ -104,9 +111,9 @@ class Register extends PureComponent {
 								<div className="">
 									<Button type="submit"><Fa icon="sign-in" />&nbsp; { this.txt.register }</Button>
 									<Tooltip id="tooltip-icon" title={ this.txt.haveAnAccaunt }>
-										<Button tag="a" floating gradient="purple" size="sm" onClick={ () => this.props.set() }>
-											<Fa icon="check-circle" />
-										</Button>
+										<Link to="/user/enter" className="btn-floating purple-gradient btn-sm waves-effect waves-light loginbtn">
+											<Fa icon="plus-circle" />
+										</Link>
 									</Tooltip>
 								</div>
 							</CardBody>
@@ -115,6 +122,7 @@ class Register extends PureComponent {
 				</div>
 				<ToastContainer />
 			</div>
+			</Wrapper>
 		);
 	}
 }
@@ -126,4 +134,11 @@ Register.propTypes = {
 	lang: PropTypes.string,
 };
 
-export default Register;
+
+function mapStateToProps(state) {
+	return {
+		lang: state.locale.lang
+	}
+}
+
+export default connect(mapStateToProps,  { register })(Register);

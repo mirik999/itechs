@@ -13,7 +13,8 @@ import ArticlesPage from './components/ArticlesPage/ArticlesPage';
 import ArticleContent from './components/ArticlesPage/ArticleContent';
 import ArticleCreate from './components/ArticlesPage/ArticleCreate';
 import ArticleEdit from './components/ArticlesPage/ArticleEdit';
-import AuthPage from './components/AuthPage/AuthPage';
+import Enter from './components/AuthPage/Enter';
+import Register from './components/AuthPage/Register';
 import DocumentationPage from './components/DocumentationPage/DocumentationPage';
 import ProfilePage from './components/ProfilePage/ProfilePage';
 import ChatBox from './components/ChatBox/ChatBox';
@@ -64,7 +65,8 @@ class App extends PureComponent {
 						<Route location={location} path="/article/read/:id" component={ArticleContent} />
 						<UserNotAuth location={location} path="/article/create" component={ArticleCreate} />
 						<UserNotAuth location={location} path="/article/edit/:id" component={ArticleEdit} />
-						<UserIsAuth exact location={location} path="/authorization" component={AuthPage} />
+						<UserIsAuth exact location={location} path="/user/enter" component={Enter} />
+						<UserIsAuth exact location={location} path="/user/register" component={Register} />
 						<UserNotAuth exact location={location} path="/profile/:name" component={ProfilePage} />
 						<UserNotAuth exact location={location} path="/documentation" component={DocumentationPage} />
 						<Route exact location={location} path="*" component={NotFound} />

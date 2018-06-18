@@ -275,7 +275,7 @@ class PrivateProfile extends PureComponent {
 									<small><Fa icon="sign-out" /> {this.txt.exit}</small>
 								</span>
 							</section>
-
+							
 							{/* mobile */}
 
 							<section className="float-right d-block d-sm-none" style={styles.edit}>

@@ -128,7 +128,7 @@ class Settings extends PureComponent {
 								onDrop={this.uploadFile}
 								maxSize={1240000}
 								multiple={false}>
-								<span className="cursor-pointer hoverme p-2 text-secondary art-create-text">
+								<span className="cursor-pointer hoverme p-2 text-secondary art-create-text art-create-logo">
 									<small><Fa icon="image" /> {this.txt.selectThumbShort}</small>
 								</span>
 							</Dropzone>

@@ -28,3 +28,8 @@ code {
 .cursor-pointer {
 	cursor: pointer;
 }
+
+.art-create-logo {
+	position: relative;
+	top: 10px;
+}

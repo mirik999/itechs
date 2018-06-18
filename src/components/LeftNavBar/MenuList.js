@@ -74,7 +74,7 @@ class MenuList extends PureComponent {
 						</li>) :
 							(<li style={styles.li}>
 							<Fa icon="sign-in" className="ml-2 mr-3"/>
-							<NavLink to="/authorization"><span className="text-light" style={styles.link}>{ this.txt.auth }</span></NavLink>
+							<NavLink to="/user/enter"><span className="text-light" style={styles.link}>{ this.txt.auth }</span></NavLink>
 							</li>)
 					}
 				</ul>

@@ -99,7 +99,7 @@ class ArticleContent extends PureComponent {
 					<meta property="og:image:url" content={article.thumbnail} itemProp="image" />
 					<meta property="og:image:width" content="700" />
 					<meta property="og:image:height" content="400" />
-					<meta property="og:title" content={`iTechs Article - ${article.title}`} itemProp="name" />
+					<meta property="og:title" content="Developers Community" itemProp="name" />
 					<meta property="og:type" content="website" />
 					<meta property="og:description" content="1 person wants answer to this question. Be the first one to respond." />
 					<meta property="fb:app_id" content="128678167815456" />

@@ -20,6 +20,7 @@ class ChatBox extends PureComponent {
 			lastMessageAuthor: [],
 			open: false,
 			showChatList: false,
+			sobesednik: ''
 		}
 
 		this.fireSockets = this.fireSockets.bind(this);
@@ -49,7 +50,7 @@ class ChatBox extends PureComponent {
 	}
 
 	onOpenChat = (author) => {
-		this.setState({ open: !this.state.open })
+		this.setState({ open: !this.state.open, sobesednik: author })
 		if (this.state.lastMessageAuthor.includes(author)) {
 			const lastMessageAuthor = this.state.lastMessageAuthor.filter(uname => uname !== author)
 			this.setState({ lastMessageAuthor }, () => localStorage.setItem('lastAuthors', JSON.stringify(lastMessageAuthor)))
@@ -57,8 +58,8 @@ class ChatBox extends PureComponent {
 	}
 
 	render() {
-		const { chatHistory, lastMessageAuthor, open } = this.state;
-		const { profile } = this.props;
+		const { chatHistory, lastMessageAuthor, open, sobesednik } = this.state;
+		const { profile, onlineUsers, socket } = this.props;
 
 		const myMessages = chatHistory.map(msgs => msgs.message).filter(msg => msg.reciever.username === profile.username);
 
@@ -106,8 +107,8 @@ class ChatBox extends PureComponent {
 						}
 					</div>
 				</div>
-				<ChatModal open={open} chatHistory={chatHistory} lastMessageAuthor={lastMessageAuthor}
-				           closeChatModal={this.closeChatModal} profile={profile}
+				<ChatModal open={open} chatHistory={chatHistory} closeChatModal={this.closeChatModal} profile={profile} 
+				sobesednik={sobesednik} onlineUsers={onlineUsers} socket={socket}
 				/>
 			</Fragment>
 		);
@@ -125,7 +126,8 @@ class ChatBox extends PureComponent {
 		socket.on('privateMessageResponse', message => {
 			const msg =  {id: Date.now(), message};
 			this.setState({
-				lastMessageAuthor: this.state.lastMessageAuthor.concat(message.author.username),
+				lastMessageAuthor: message.author.username !== this.props.profile.username ? 
+													 this.state.lastMessageAuthor.concat(message.author.username) : [],
 				chatHistory: this.state.chatHistory.concat(msg)
 			}, () => localStorage.setItem('lastAuthors', JSON.stringify(this.state.lastMessageAuthor)))
 		})
