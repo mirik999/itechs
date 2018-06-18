@@ -59,7 +59,7 @@ class App extends PureComponent {
 			<IntlProvider locale={lang} messages={messages[lang]}>
 				<div className="container-fluid grey-skin" style={{ backgroundColor: "#DEE1E5", minHeight: "100%" }}>
 					<LeftNavBar />
-					{ Object.keys(profile).length !== 0 && <ChatBox profile={profile} socket={socket} /> }
+					{/*{ Object.keys(profile).length !== 0 && <ChatBox profile={profile} socket={socket} /> }*/}
 					<Switch>
 						<Route exact location={location} path="/" component={ArticlesPage} />
 						<Route location={location} path="/article/read/:id" component={ArticleContent} />
