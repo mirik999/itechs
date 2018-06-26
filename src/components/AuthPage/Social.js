@@ -33,6 +33,16 @@ class Social extends PureComponent {
 		return (
 			<div className="pb-2 d-inline-flex float-right wp">
 				<div className="d-inline-flex">
+					<FacebookLogin
+						appId="128678167815456"
+						fields="name,email,picture.width(100).height(100)"
+						callback={this.responseFacebook}
+						cssClass="btn-floating peach-gradient btn-sm waves-effect waves-light loginbtn"
+						textButton=" "
+						icon="fa fa-facebook left"
+					/>
+				</div>
+				<div className="d-inline-flex">
 					<GoogleLogin
 						clientId="383895273891-2anvbeo2f2e0188hlnv8sinuksg2ru82.apps.googleusercontent.com"
 						onSuccess={this.responseGoogle}

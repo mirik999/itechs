@@ -37,9 +37,10 @@ class ChatBox extends PureComponent {
 	}
 
 	removeDuplicatesBy = (filterBy, array) => {
-		const mySet = new Set(); // es6 drop duplicates
+		const mySet = new Set();
 		return array.filter(x => {
-			const key = filterBy(x), isNew = !mySet.has(key);
+			const key = filterBy(x);
+			const isNew = !mySet.has(key);
 			if (isNew) mySet.add(key);
 			return isNew;
 		});
@@ -115,11 +116,12 @@ class ChatBox extends PureComponent {
 	}
 
 	fireSockets = () => {
-		const { socket } = this.props;
+		const { socket, profile } = this.props;
 
-		socket.emit('loadChatHistory')
+		socket.emit('loadChatHistory', { myID: profile._id })
 
 		socket.on('loadChatHistory', data => {
+			console.log(data)
 			this.setState({ chatHistory: data })
 		})
 

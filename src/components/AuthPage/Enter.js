@@ -105,7 +105,7 @@ class Enter extends PureComponent {
 											<Fa icon="plus-circle" />
 										</Link>
 									</Tooltip>
-									<Social />
+									{/*<Social />*/}
 								</div>
 							</CardBody>
 						</Card>
