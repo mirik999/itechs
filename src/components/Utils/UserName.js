@@ -3,45 +3,49 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
+import NProgress from 'nprogress';
 import { Fa, Button } from 'mdbreact';
 import Popover from 'react-popover';
 import Tooltip from 'material-ui/Tooltip';
 import { FormattedMessage } from 'react-intl';
-import io from 'socket.io-client';
+import _ from 'lodash';
 //user components
 import UserImage from './UserImage';
+//direct api requests
+import api from '../../api';
+//selectors
+import {profileSelector} from "../../reducer/profile";
 //css
 import './style.css';
-//socket setting
-let socket;
-if (process.env.NODE_ENV === 'production') {
-	socket = io('https://itechs.info');
-} else {
-	socket = io('http://localhost:4000');
-}
+
+
 
 class UserName extends PureComponent {
 	constructor(props) {
 		super(props);
 		this.state = {
+			me: props.profile,
 			message: '',
-			privateMessages: [],
 			info: null,
 			showPopover: false,
 			disChatInput: false
 		}
 
-		this.onMessage = this.onMessage.bind(this)
-		this.onChange = this.onChange.bind(this)
-		this.onShowInfo = this.onShowInfo.bind(this)
-		this.onShowPopover = this.onShowPopover.bind(this)
-		this.onShowPopover = this.onShowPopover.bind(this)
+		this.onMessage = this.onMessage.bind(this);
+		this.onChange = this.onChange.bind(this);
+		this.onShowInfo = this.onShowInfo.bind(this);
+		this.onShowPopover = this.onShowPopover.bind(this);
+		this.onShowPopover = this.onShowPopover.bind(this);
+		this.onFollow = this.onFollow.bind(this);
+		this.unFollow = this.unFollow.bind(this);
 
 		this.txt = {
 			about: <FormattedMessage id="profile.about" />,
 			github: <FormattedMessage id="profile.git" />,
 			contact: <FormattedMessage id="profile.contact" />,
 			portfolio: <FormattedMessage id="profile.ptf" />,
+			follow: <FormattedMessage id="button.follow" />,
+			unFollow: <FormattedMessage id="button.unfollow" />,
 		}
 
 	}
@@ -69,7 +73,7 @@ class UserName extends PureComponent {
 				author,
 				reciever
 			}
-			socket.emit('privateMessage', data)
+			this.props.socket.emit('privateMessage', data)
 			this.setState({ message: '', disChatInput: true })
 			setTimeout(() => {
 				this.setState({ disChatInput: false })
@@ -77,10 +81,49 @@ class UserName extends PureComponent {
 		}
 	}
 
+	onFollow = async () => {
+		NProgress.start();
+		if (_.isEmpty(this.state.me)) {
+			NProgress.done()
+			return null;
+		}
+		if (this.props.userSocket._id === this.state.me._id) {
+			NProgress.done()
+			return null;
+		}
+		const data = {
+			followUserID: this.props.userSocket._id,
+			myID: this.state.me._id,
+		}
+		await	api.user.follow(data)
+		NProgress.done();
+	}
+
+	unFollow = async (id) => {
+		NProgress.start();
+		const data = {
+			followUserID: id,
+			myID: this.props.profile._id,
+		}
+		const delFollowUser = await api.user.follow(data)
+		const myFollows = await this.state.me.myFollows.filter(user => user.user._id !== delFollowUser._id)
+		this.setState({ ...this.state, me: { ...this.state.me, myFollows } })
+		NProgress.done();
+	}
+
 	renderPopoverContent = (state, props) => {
 
-		const { message, info, disChatInput } = state;
-		const { userprofile, me, userSocket } = props;
+		const { message, info, disChatInput, me } = state;
+		const { userprofile, userSocket } = props;
+		
+		console.log(this.props.me)
+
+		// check if user is in my follow
+		const inMyFollow = me.myFollows.filter(user => {
+			return user.user._id === userSocket._id
+		});
+		
+		console.log(inMyFollow)
 
 		const load2image = "http://res.cloudinary.com/developers/image/upload/v1524312085/load2image_b3hqn9.jpg";
 
@@ -96,6 +139,26 @@ class UserName extends PureComponent {
 						"user-offline": !userSocket.online,
 					})}></span>
 					{/* online / offline circle */}
+
+					{/* unFollow button */}
+						{
+							inMyFollow.length !== 0 ? (
+								<Tooltip title={this.txt.unFollow}>
+									<span className="unfollow-button" onClick={ () => this.unFollow(userSocket._id) }>
+										<Fa icon="user-times" />
+									</span>
+								</Tooltip>
+							) : (
+								<Tooltip title={this.txt.follow}>
+									<span className="unfollow-button" onClick={ () => this.onFollow(userSocket._id) }>
+										<Fa icon="user-plus" />
+									</span>
+								</Tooltip>
+							)
+						}
+
+					{/* unFollow ======== */}
+
 					<div className="text-center text-cardlight font-weight-bold mt-2">
 						<span>{userprofile.username}</span>
 					</div>
@@ -162,7 +225,7 @@ class UserName extends PureComponent {
 	}
 
 	render() {
-		const { showPopover, privateMessages } = this.state;
+		const { showPopover } = this.state;
 		const { userprofile, me, userSocket } = this.props;
 
 		// if (Object.keys(userSocket).length === 0 && Object.keys(me).length === 0) return <div></div>
@@ -201,7 +264,8 @@ UserName.propTypes = {
 
 function mapStateToProps(state) {
 	return {
-		lang: state.locale.lang
+		lang: state.locale.lang,
+		profile: profileSelector(state)
 	}
 }
 

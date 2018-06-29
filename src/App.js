@@ -67,7 +67,7 @@ class App extends PureComponent {
 						<UserNotAuth location={location} path="/article/edit/:id" component={ArticleEdit} />
 						<UserIsAuth exact location={location} path="/user/enter" component={Enter} />
 						<UserIsAuth exact location={location} path="/user/register" component={Register} />
-						<UserNotAuth exact location={location} path="/profile/:name" component={ProfilePage} />
+						<UserNotAuth exact location={location} path="/profile/:name" socket={socket} component={ProfilePage} />
 						<UserNotAuth exact location={location} path="/documentation" component={DocumentationPage} />
 						<Route exact location={location} path="*" component={NotFound} />
 					</Switch>

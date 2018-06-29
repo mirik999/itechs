@@ -1,4 +1,4 @@
-import React, {PureComponent} from 'react';
+import React, {PureComponent, Fragment} from 'react';
 import { NavLink } from 'react-router-dom';
 import { Fa } from 'mdbreact';
 import PropTypes from 'prop-types';
@@ -68,13 +68,19 @@ class MenuList extends PureComponent {
 					</li>
 
 					{
-						isAuth ? (<li style={styles.li}>
-						<Fa icon="user-circle" className="ml-2 mr-3"/>
-						<NavLink to={`/profile/@${profile.username}`}><span className="text-light" style={styles.link}>{ this.txt.profile }</span></NavLink>
-						</li>) :
+						isAuth ? (
+							<li style={styles.li}>
+								<Fa icon="user-circle" className="ml-2 mr-3"/>
+								<NavLink to={`/profile/@${profile.username}`}>
+									<span className="text-light" style={styles.link}>{ this.txt.profile }</span>
+								</NavLink>
+							</li>
+							) :
 							(<li style={styles.li}>
 							<Fa icon="sign-in" className="ml-2 mr-3"/>
-							<NavLink to="/user/enter"><span className="text-light" style={styles.link}>{ this.txt.auth }</span></NavLink>
+								<NavLink to="/user/enter">
+									<span className="text-light" style={styles.link}>{ this.txt.auth }</span>
+								</NavLink>
 							</li>)
 					}
 				</ul>

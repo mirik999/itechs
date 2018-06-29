@@ -16,3 +16,37 @@
 .SocialMediaShareButton {
 	outline: none !important;
 }
+
+.hoverme:hover {
+	background-color: #f0f0f0;
+}
+
+.word-wrap {
+	display: inline-block;
+	word-wrap: break-word;
+	word-break: break-all;
+	width: 100%;
+}
+
+.user-avatar {
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+}
+
+.fixed-height {
+	height: 100%;
+	width: 100%;
+}
+
+/*@media screen and (max-width: 1545px) {*/
+	/*.resp-font-size {*/
+		/*font-size: 14px;*/
+	/*}*/
+/*}*/
+
+/*@media screen and (max-width: 1411px) {*/
+	/*.resp-font-size {*/
+		/*font-size: 13px;*/
+	/*}*/
+/*}*/

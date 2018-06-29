@@ -1,0 +1,12 @@
+.profile-wrapper {
+	background-color: white;
+}
+
+.profile-picture {
+	width: 150px;
+	height: 150px;
+}
+
+.change-avatar {
+	padding: 11px;
+}

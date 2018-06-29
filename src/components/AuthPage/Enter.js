@@ -98,13 +98,13 @@ class Enter extends PureComponent {
 								<UserInput label="input.pass" icon="lock" type="password" name="pass"
 								           onChange={this.onChange} value={data.pass} />
 
-								<div className="">
+								<div className="text-center">
 									<Button type="submit"><Fa icon="sign-in" /> &nbsp; { this.txt.enter }</Button>
-									<Tooltip id="tooltip-icon" title={ this.txt.createAnAccaunt }>
-										<Link to="/user/register" className="btn-floating peach-gradient btn-sm waves-effect waves-light loginbtn">
-											<Fa icon="plus-circle" />
-										</Link>
-									</Tooltip>
+									<Link to="/user/register">
+										<Button type="button">
+												<Fa icon="plus-circle" /> &nbsp; { this.txt.createAnAccaunt }
+										</Button>
+									</Link>
 									{/*<Social />*/}
 								</div>
 							</CardBody>

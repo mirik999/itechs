@@ -89,7 +89,7 @@ class Register extends PureComponent {
 		return (
 			<Wrapper>
 			<div className={!this.props.toggle ? "row justify-content-center" : "d-none"}>
-				<div className="col-12 col-sm-10 col-md-8 col-xl-6 mt-5">
+				<div className="col-12 col-sm-12 col-md-10 col-xl-6 mt-5">
 					<form onSubmit={this.onSubmit}>
 						<Card cascade>
 							<CardImage tag="div">
@@ -108,13 +108,13 @@ class Register extends PureComponent {
 								<UserInput label="input.pass" icon="lock" type="password" name="pass"
 								           onChange={this.onChange} value={data.pass} />
 
-								<div className="">
+								<div className="text-center">
 									<Button type="submit"><Fa icon="sign-in" />&nbsp; { this.txt.register }</Button>
-									<Tooltip id="tooltip-icon" title={ this.txt.haveAnAccaunt }>
-										<Link to="/user/enter" className="btn-floating purple-gradient btn-sm waves-effect waves-light loginbtn">
-											<Fa icon="plus-circle" />
-										</Link>
-									</Tooltip>
+									<Link to="/user/enter">
+										<Button type="button">
+											<Fa icon="plus-circle" /> &nbsp; { this.txt.haveAnAccaunt }
+										</Button>
+									</Link>
 								</div>
 							</CardBody>
 						</Card>

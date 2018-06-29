@@ -6,6 +6,8 @@ import PrivateProfile from './PrivateProfile';
 import Wrapper from '../Utils/Wrapper';
 //direct api requests
 import api from '../../api';
+//css
+import './ProfilePage.css';
 
 
 class ProfilePage extends PureComponent {
@@ -29,14 +31,14 @@ class ProfilePage extends PureComponent {
 	}
 
 	render() {
-		const { lang } = this.props;
+		const { lang, socket } = this.props;
 		const { articles, profile } = this.state;
 
 		if (articles.length === 0 && Object.keys(profile).length === 0) return <div></div>
 
 		return (
 			<Wrapper>
-				<PrivateProfile articles={articles} profile={profile} lang={lang} />
+				<PrivateProfile articles={articles} profile={profile} socket={socket} lang={lang} />
 			</Wrapper>
 		);
 

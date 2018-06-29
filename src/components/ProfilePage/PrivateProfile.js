@@ -1,8 +1,6 @@
 import React, {PureComponent} from 'react';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
-import { Button, Card, CardImage, CardBody, CardTitle, CardText, Fa } from 'mdbreact';
-import io from 'socket.io-client';
+import { Fa } from 'mdbreact';
 import { FormattedMessage } from 'react-intl';
 import Dropzone from 'react-dropzone';
 import sha1 from 'sha1';
@@ -10,48 +8,29 @@ import superagent from 'superagent';
 import NProgress from 'nprogress';
 import validator from 'validator';
 import { ToastContainer, toast } from 'react-toastify';
-//user components
+//user componenets
 import UserImage from '../Utils/UserImage';
-import StatisticPanel from './Sections/StatisticPanel';
-import Inputs from './Sections/Inputs';
-import MyArticles from './Sections/MyArticles';
-import MyComments from './Sections/MyComments';
-import MyFollows from './Sections/MyFollows';
-import MyFollowers from './Sections/MyFollowers';
+import Information from './Sections/Information';
+import Articles from './Sections/Articles';
+import Following from './Sections/Following';
+import Followers from './Sections/Followers';
 //actions
-import { logout } from '../../actions/user'
+import { logout } from '../../actions/user';
 //direct api requests
 import api from '../../api';
-//css
-import './Sections/style.css';
-//socket setting
-let socket;
-if (process.env.NODE_ENV === 'production') {
-	socket = io('https://itechs.info');
-} else {
-	socket = io('http://localhost:4000');
-}
 
 
-class PrivateProfile extends PureComponent {
+class ProfileTestPage extends PureComponent {
 	constructor(props) {
 		super(props);
 
 		this.state = {
-			articles: [],
-			profile: {
-				about: '',
-				contact: '',
-				portfolio: '',
-				github: '',
-				bgImg: null,
-			},
-			edit: true,
-			target: "edit",
+			articles: props.articles,
+			profile: props.profile,
 			tableNumber: 1,
 			errors: {}
 		}
-		
+
 		this.txt = {
 			edit: <FormattedMessage id="edit" />,
 			delete: <FormattedMessage id="delete" />,
@@ -62,6 +41,7 @@ class PrivateProfile extends PureComponent {
 			contactError: <FormattedMessage id="error.contact" />,
 			ptfError: <FormattedMessage id="error.ptf" />,
 			githubError: <FormattedMessage id="error.github" />,
+			imageError: <FormattedMessage id="error.imageSize" />,
 			articles: <FormattedMessage id="profile.articles" />,
 			noArticles: <FormattedMessage id="article.empty" />,
 			noComments: <FormattedMessage id="comment.empty" />,
@@ -72,31 +52,38 @@ class PrivateProfile extends PureComponent {
 			unFollow: <FormattedMessage id="button.unfollow" />,
 			nofollowing: <FormattedMessage id="profile.nofollowing" />,
 			nofollowers: <FormattedMessage id="profile.nofollowers" />,
+			publishedOn: <FormattedMessage id="date.publish" />,
 		}
 
-		this.handleLogout = this.handleLogout.bind(this);
 		this.uploadFile = this.uploadFile.bind(this);
-		this.onSave = this.onSave.bind(this);
-		this.onChange = this.onChange.bind(this);
+		this.onLogout = this.onLogout.bind(this);
 		this.onChangeTable = this.onChangeTable.bind(this);
-		this.onRemoveFromArticles = this.onRemoveFromArticles.bind(this);
+		this.onDelete = this.onDelete.bind(this);
 		this.onRemoveFollows = this.onRemoveFollows.bind(this);
 	}
 
-	static getDerivedStateFromProps(nextProps, prevState) {
-		if (nextProps.profile !== prevState.profile || nextProps.articles !== prevState.articles) {
-			return {
-				...prevState,
-				profile: { ...nextProps.profile },
-				articles: nextProps.articles
-			}
-		}
-		return null;
+	onChangeTable = (num) => {
+		if ( this.state.tableNumber === num ) num = 1;
+		this.setState({ ...this.state, tableNumber: num })
 	}
 
-	componentDidMount() {
-		const { profile, articles } = this.props;
-		this.setState({ profile, articles })
+	onDelete = async (article) => {
+		const articles = await this.state.articles.filter(art => art._id !== article._id)
+		this.setState({ articles })
+		NProgress.done();
+	}
+
+	onRemoveFollows = async (deletedFollower) => {
+		const myFollows = await this.state.profile.myFollows.filter(user => user.user._id !== deletedFollower._id)
+		this.setState({ ...this.state, profile: { ...this.state.profile, myFollows } })
+	}
+
+	onLogout = () => {
+		this.props.logout()
+		window.location.href = '/';
+		this.props.socket.emit('userOffline', {
+			myID: this.state.profile._id
+		})
 	}
 
 	uploadFile = (files) => {
@@ -126,269 +113,102 @@ class PrivateProfile extends PureComponent {
 		uploadRequest.end(async (err, res) => {
 			if (err) {
 				NProgress.done();
+				toast.warn(this.txt.imageError)
 				return this.setState({ errors: { image: "error" } })
 			}
-			const bgImg = res.body.secure_url;
-			const smallImage = res.body.secure_url.replace("/image/upload/", "/image/upload/w_200,h_100/")
+			const avatar = res.body.secure_url;
+			const sAvatar = res.body.secure_url.replace("/image/upload/", "/image/upload/w_10,h_10/")
 			const data = {
-				bgImg,
-				smallImage,
-				email: this.state.profile.email
+				avatar,
+				sAvatar,
+				email: this.props.profile.email
 			}
-			
+
 			if (Object.keys(this.state.errors).length === 0) {
-				const profile = await api.user.changeCover(data)
+				const profile = await api.user.changeAvatar(data)
 				this.setState({ profile }, () => NProgress.done())
 			}
 		})
 	}
 
-	handleLogout = () => {
-		this.props.logout()
-		window.location.href = '/';
-		socket.emit('userOffline', {
-			myID: this.state.profile._id
-		})
-	}
-
-	onSave = async (e) => {
-		const { email, about, contact, portfolio, github } = this.state.profile;
-		this.setState((prevState) => {
-			return { edit: !prevState.edit, target: "save" }
-		})
-		if (this.state.target === "save") {
-			const errors = await this.validate(this.state.profile);
-			this.setState({ errors });
-			if (Object.keys(errors).length === 0) {
-				const data = { email, about, contact, portfolio, github}
-				try {
-					await api.user.editProfile(data)
-					await api.user.getProfile(data.email)
-				} catch(err) {
-					this.setState({ target: "edit", errors: {global: err.message}})
-				}
-			}
-		}
-	}
-
-	validate = (profile) => {
-		const errors = {};
-		if (profile.about && !validator.isLength(JSON.stringify(profile.about), {min:0, max: 35})) {
-			toast.warn(this.txt.aboutError)
-			errors.about = this.txt.aboutError;
-		}
-		if (profile.contact && !validator.isLength(JSON.stringify(profile.contact), {min:0, max: 35})) {
-			toast.warn(this.txt.contactError)
-			errors.contact = this.txt.contactError;
-		}
-		if (profile.portfolio && (!validator.isURL(profile.portfolio))) {
-			toast.warn(this.txt.ptfError)
-			errors.portfolio = this.txt.ptfError;
-		}
-		if (profile.github && (!validator.isURL(profile.github))) {
-			toast.warn(this.txt.githubError)
-			errors.github = this.txt.githubError;
-		}
-		if (profile.github && (!validator.contains(profile.github, "github.com"))) {
-			toast.warn(this.txt.githubError)
-			errors.github = this.txt.githubError;
-		}
-		return errors;
-	}
-
-	onChange = (e) => {
-		this.setState({
-			...this.state,
-			profile: { ...this.state.profile, [e.target.name]: e.target.value },
-			errors: { ...this.state.errors, [e.target.name]: '' }
-		})
-	}
-
-	onChangeTable = (num) => {
-		if ( this.state.tableNumber === num ) num = 1;
-		this.setState({ ...this.state, tableNumber: num })
-	}
-
-	onRemoveFromArticles = async (deletedArticle) => {
-		const articles = await this.state.articles.filter(art => art._id !== deletedArticle._id)
-		this.setState({ articles })
-	}
-
-	onRemoveFollows = async (deletedFollower) => {
-		const myFollows = await this.state.profile.myFollows.filter(user => user.user._id !== deletedFollower._id)
-		this.setState({ ...this.state, profile: { ...this.state.profile, myFollows } })
-	}
-
 	render() {
-		const { edit, articles, profile, tableNumber, errors } = this.state;
-		const { lang } = this.props;
-
-		if (Object.keys(profile).length === 0 && Object.keys(articles).length === 0) return <div></div>
-
-		const editable = edit && (Object.keys(errors).length === 0);
+		const { lang, socket } = this.props;
+		const { articles, profile, tableNumber } = this.state;
 
 		return (
-			<div className="row justify-content-center">
-				<div className="col-12 col-lg-10 col-xl-8" style={styles.profileInfoWrap}>
-					<Card reverse className="mt-3">
-						<section>
-							<UserImage className="img-fluid w-100"
-							           image={profile.bgImg}
-							           load2image={profile.smallImage}
-							           style={styles.img}
+			<div className="row justify-content-center mt-3">
+				<div className="profile-wrapper col-12 col-lg-10 col-xl-8">
+					<div className="profile-header row justify-content-center mb-4 py-4">
+						<div className="col-5 col-md-4 d-flex">
+							<UserImage className="profile-picture img-thumbnail mr-3"
+							           image={profile.useravatar}
 							/>
-						</section>
-						<Dropzone
-							className="dzone"
-							onDrop={this.uploadFile}
-							maxSize={1240000}
-							multiple={false}
-						>
-							<Fa className="position-absolute" icon="camera" style={styles.camera}/>
-						</Dropzone>
-						<CardBody>
-							<section className="float-left " style={styles.profileImageWrapper}>
-								<UserImage image={profile.useravatar}
-								           load2image=" "
-								           alt="user profile"
-								           className="img-thumbnail"
-								           style={styles.profileImage}
+							<div className="d-flex flex-column justify-content-between">
+								<div className="user-info">
+									<span><h3 className="m-0">{ profile.username }</h3></span>
+									<span>{ profile.email }</span>
+								</div>
+								<div className="change-picture mb-2">
+									<Dropzone
+										className="dzone"
+										onDrop={this.uploadFile}
+										maxSize={1240000}
+										multiple={false}
+									>
+										<span className="text-secondary hoverme cursor-pointer change-avatar">
+											<Fa icon="camera" /> <small>Picture</small>
+										</span>
+									</Dropzone>
+								</div>
+							</div>
+						</div>
+						<div className="col-7 col-md-6 d-flex flex-column justify-content-end align-items-end">
+							<span className="text-secondary hoverme cursor-pointer p-2" onClick={this.onLogout}>
+								<Fa icon="power-off" /> <small>{ this.txt.exit }</small>
+							</span>
+						</div>
+					</div>
+
+					<div className="profile-sections row justify-content-center mb-5">
+						<div className="col-12 col-md-8 d-flex justify-content-center">
+							<span className="text-secondary hoverme cursor-pointer p-2" onClick={() => this.onChangeTable(2)}>
+								<Fa icon="newspaper-o" /> <small>{this.txt.articles}</small>
+							</span>
+							<span className="text-secondary hoverme cursor-pointer p-2 mx-1" onClick={() => this.onChangeTable(3)}>
+								<Fa icon="user-plus" /> <small>{this.txt.following}</small>
+							</span>
+							<span className="text-secondary hoverme cursor-pointer p-2 mx-1" onClick={() => this.onChangeTable(4)}>
+								<Fa icon="users" /> <small>{this.txt.followers}</small>
+							</span>
+						</div>
+					</div>
+
+					<div className="profile-body row justify-content-center mb-5">
+						<div className="col-12 col-md-10">
+
+							{ tableNumber === 1 && <Information txt={this.txt} profile={profile} lang={lang} /> }
+							{ tableNumber === 2 && <Articles txt={this.txt} profile={profile} articles={articles}
+							                                 deletedArticle={this.onDelete} lang={lang}
 								/>
-							</section>
-							<section className="float-left" style={styles.contact}>
-								<span className="text-secondary"><Fa icon="at"/>{profile.username}</span><br/>
-								<small className="text-secondary font-weight-bold">{profile.email}</small>
-							</section>
-							<section className="float-right d-none d-sm-block" style={styles.edit}>
-								{
-									!editable ? (
-										<span className="cursor-pointer hoverme p-2 text-secondary" onClick={this.onSave}>
-											<small><Fa icon="save" /> {this.txt.save}</small>
-										</span>
-									) : (
-										<span className="cursor-pointer hoverme p-2 text-secondary" onClick={this.onSave}>
-											<small><Fa icon="pencil" /> {this.txt.edit}</small>
-										</span>
-									)
-								}
-								<span className="cursor-pointer hoverme p-2 text-secondary" onClick={this.handleLogout}>
-									<small><Fa icon="sign-out" /> {this.txt.exit}</small>
-								</span>
-							</section>
-							
-							{/* mobile */}
-
-							<section className="float-right d-block d-sm-none" style={styles.edit}>
-								{
-									!editable ? (
-										<span className="cursor-pointer hoverme p-2 text-secondary" onClick={this.onSave}>
-											<small><Fa icon="save" /></small>
-										</span>
-									) : (
-										<span className="cursor-pointer hoverme p-2 text-secondary" onClick={this.onSave}>
-											<small><Fa icon="pencil" /></small>
-										</span>
-									)
-								}
-								<span className="cursor-pointer hoverme p-2 text-secondary" onClick={this.handleLogout}>
-									<small><Fa icon="sign-out" /></small>
-								</span>
-							</section>
-
-							{/* mobile end */}
-
-							<StatisticPanel articles={articles} profile={profile} style={styles.counts}
-							                txt={this.txt} getNumberOfTables={this.onChangeTable} lang={lang}
-							/>
-
-							{
-								tableNumber === 1 &&
-								<Inputs profile={profile} editable={editable} getValue={this.onChange}
-								        style={styles.counts} lang={lang} />
+							}
+							{ tableNumber === 3 && <Following txt={this.txt} profile={profile} articles={articles} lang={lang}
+							                                  deleteFollower={this.onRemoveFollows} socket={socket}
+								/>
+							}
+							{ tableNumber === 4 && <Followers txt={this.txt} profile={profile} articles={articles} lang={lang}
+							                                  socket={socket}
+								/>
 							}
 
-							{
-								tableNumber === 2 &&
-								<MyArticles articles={articles} profile={profile} txt={this.txt}
-							            lang={lang} deletedArticle={this.onRemoveFromArticles} />
-							}
+						</div>
+					</div>
 
-							{
-								tableNumber === 3 &&
-								<MyComments articles={articles} profile={profile} txt={this.txt} lang={lang} />
-							}
-
-							{
-								tableNumber === 4 &&
-								<MyFollows profile={profile} txt={this.txt} lang={lang} deleteFollower={this.onRemoveFollows} />
-							}
-
-							{
-								tableNumber === 5 &&
-								<MyFollowers profile={profile} txt={this.txt} lang={lang} />
-							}
-
-						</CardBody>
-					</Card>
 				</div>
-				<ToastContainer />
 			</div>
-		)
+		);
 	}
 }
 
-const styles = {
-	profileImageWrapper: {
-		position: "relative",
-		bottom: "80px",
-		left: "20px"
-	},
-	profileImage: {
-		width: "110px",
-		height: "110px"
-	},
-	contact: {
-		position: "relative",
-		bottom: "25px",
-		left: "30px",
-	},
-	edit: {
-		position: "relative",
-		bottom: "15px"
-	},
-	img: {
-		maxWidth: "930px",
-		maxHeight: "344px"
-	},
-	uploadCover: {
-		position: "relative",
-		bottom: "330px",
-		left: "880px",
-		fontSize: "24px",
-		color: "silver",
-		cursor: "pointer"
-	},
-	camera: {
-		top: "10px",
-		right: "10px",
-		cursor: "pointer",
-		color: "silver"
-	},
-	counts: {
-		position: "relative",
-		bottom: "40px"
-	},
-	profileInfoWrap: {
-		overflow: "auto"
-	}
-}
+ProfileTestPage.propTypes = {};
 
-PrivateProfile.propTypes = {
-	logout: PropTypes.func,
-	changeCover: PropTypes.func,
-	getProfile: PropTypes.func,
-	profile: PropTypes.object.isRequired,
-	articles: PropTypes.array.isRequired,
-};
-
-export default connect(null, { logout })(PrivateProfile);
+export default connect(null, { logout })(ProfileTestPage);

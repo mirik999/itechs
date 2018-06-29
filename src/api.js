@@ -23,8 +23,8 @@ export default {
 		getProfileByName: (email) => {
 			return axios.get(`/api/profile/get-profile-by-name/${email}`).then(res => res.data.userprofile)
 		},
-		changeCover: (data) => {
-			return axios.put('/api/profile/change-cover/:email', { data }).then(res => res.data.userprofile)
+		changeAvatar: (data) => {
+			return axios.put('/api/profile/change-avatar/:email', { data }).then(res => res.data.userprofile)
 		},
 		follow: (data) => {
 			return axios.post('/api/profile/follow-user', { data }).then(res => res.data.userprofile)

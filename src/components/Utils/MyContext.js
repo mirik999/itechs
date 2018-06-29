@@ -1,8 +1,8 @@
 import React, {PureComponent} from 'react';
-import { conntect } from 'react-redux';
+import { connect } from 'react-redux';
 import api from '../../api';
 //actions
-import { getProfile } from '../actions/profile';
+import { getProfile } from '../../actions/profile';
 
 export const Context = React.createContext();
 
